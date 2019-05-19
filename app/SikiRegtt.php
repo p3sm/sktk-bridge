@@ -1,0 +1,22 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class SikiRegtt extends Model
+{
+  protected $connection = 'mysql2';
+  protected $table = 'personal_reg_tt';
+  protected $primaryKey = 'ID_Registrasi_TK_Trampil';
+    
+  public function personal()
+  {
+    return $this->belongsTo('App\SikiPersonal', 'ID_Personal');
+  }
+    
+  public function sync()
+  {
+    return $this->hasOne('App\PersonalRegTtSync', 'registrasi_tk_trampil_id');
+  }
+}
