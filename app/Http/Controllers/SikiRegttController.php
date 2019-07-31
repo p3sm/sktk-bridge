@@ -18,7 +18,7 @@ class SikiRegttController extends Controller
      */
     public function index()
     {
-        $data['regtts'] = SikiRegtt::take(100)->groupBy('tahap1')->orderByDesc("ID_Registrasi_TK_Trampil")->get();
+        $data['regtts'] = SikiRegtt::take(100)->groupBy('tahap1')->orderByDesc("tgl_thp")->get();
 
         return view('siki/regtt/index')->with($data);
     }
@@ -119,8 +119,8 @@ class SikiRegttController extends Controller
           "id_asosiasi_profesi"      => $reg->ID_Asosiasi_Profesi,
           "id_kualifikasi"           => $reg->ID_Kualifikasi,
           "tgl_registrasi"           => $reg->Tgl_Registrasi,
-          "id_propinsi_reg"          => $reg->ID_Propinsi_reg,
-          "no_reg_asosiasi"          => $reg->No_Reg_Asosiasi,
+          "id_propinsi_reg"          => $reg->ID_propinsi_reg,
+          "no_reg_asosiasi"          => "-",
           "id_unit_sertifikasi"      => $reg->id_unit_sertifikasi,
           "id_permohonan"            => $reg->id_permohonan,
           "url_pdf_surat_permohonan"          => asset("uploads/source/dokumen-upload/surat_permohonan-" . $reg->ID_Personal . ".pdf"),
@@ -133,7 +133,7 @@ class SikiRegttController extends Controller
         $header[] = "X-Api-Key:Dev-Rest-API-2019";
         $header[] = "content-type:application/json";
         curl_setopt_array($curl, array(
-        CURLOPT_URL => "http://202.152.17.10/rest-api/Service/Klasifikasi-TT/" . ($reg->sync ? "Ubah" : "Tambah"),
+            CURLOPT_URL => "http://202.152.17.10/rest-api/Service/Klasifikasi/" . ($reg->sync ? "Ubah" : "Tambah") . "-TT/",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
         CURLOPT_POSTFIELDS => json_encode($postData),

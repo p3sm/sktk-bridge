@@ -68,7 +68,10 @@
           <td>{{$pendidikan->No_Ijazah}}</td>
           <td>{{$pendidikan->sync ? $pendidikan->sync->updated_at : "-"}}</td>
           <td>{{$pendidikan->sync ? $pendidikan->sync->id : "-"}}</td>
-          <td><a href="{{url("siki_pendidikan") . "/" . $pendidikan->ID_Personal_Pendidikan . "/sync"}}" class="btn btn-warning btn-xs">Sync</a></td>
+          <td><a href="#" data-url="{{url("siki_pendidikan") . "/" . $pendidikan->ID_Personal_Pendidikan . "/sync"}}" class="btn btn-warning btn-xs pendidikan-sync">Sync</a>
+          <span class="btn btn-default btn-xs syncing" style="display:none;"><i class="fa fa-spinner fa-spin"></i> Syncing...</span>
+          <span class="btn btn-success btn-xs sync-success" style="display:none;"><i class="fa fa-check"></i> Success</span>
+          <span class="btn btn-danger btn-xs sync-fail" style="display:none;"><i class="fa fa-times"></i> Fail</span></td>
         </tr>
         @endforeach
     </tbody>
@@ -98,7 +101,7 @@
         <td>{{$proyek->Lokasi}}</td>
         <td>{{$proyek->Jabatan}}</td>
         <td>{{\Carbon\Carbon::parse($proyek->Tgl_Mulai)->format("d F Y")}} - {{\Carbon\Carbon::parse($proyek->Tgl_Selesai)->format("d F Y")}}</td>
-        <td>{{number_format($proyek->Nilai, 0, ",", ".")}}</td>
+        <td>{{$proyek->Nilai ? number_format($proyek->Nilai, 0, ",", ".") : '-'}}</td>
         <td>{{$proyek->sync ? $proyek->sync->updated_at : "-"}}</td>
         <td>{{$proyek->sync ? $proyek->sync->id : "-"}}</td>
         <td><a href="{{url("siki_proyek") . "/" . $proyek->id_personal_proyek . "/sync"}}" class="btn btn-warning btn-xs">Sync</a></td>
@@ -107,3 +110,32 @@
     </tbody>
   </table>
 </div>
+<script>
+$(function(){
+  $('.pendidikan-sync').on("click", function(e){
+    e.preventDefault();
+    $sync        = $(this);
+    $syncing     = $sync.parent().find(".syncing");
+    $syncSuccess = $sync.parent().find(".sync-success");
+    $syncFail = $sync.parent().find(".sync-fail");
+
+    $url = $(this).data("url");
+    $sync.hide();
+    $syncing.show();
+
+    $.get($url, function(data, status){
+      $syncing.hide();
+
+      if(data.code == 200){
+        $syncSuccess.fadeIn().delay(1000).fadeOut(100, function() {
+          $sync.show();
+        });
+      } else {
+        $syncFail.fadeIn().delay(1000).fadeOut(100, function() {
+          $sync.show();
+        });
+      }
+    });
+  })
+});
+</script>

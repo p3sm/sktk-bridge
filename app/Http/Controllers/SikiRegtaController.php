@@ -18,7 +18,7 @@ class SikiRegtaController extends Controller
      */
     public function index()
     {
-        $data['regtas'] = SikiRegta::take(100)->groupBy('tahap1')->orderByDesc("ID_Registrasi_TK_Ahli")->get();
+        $data['regtas'] = SikiRegta::take(100)->groupBy('tahap1')->orderByDesc("tgl_thp")->get();
 
     	return view('siki/regta/index')->with($data);
     }
@@ -120,20 +120,20 @@ class SikiRegtaController extends Controller
           "id_kualifikasi"        => $reg->ID_Kualifikasi,
           "tgl_registrasi"        => $reg->Tgl_Registrasi,
           "id_propinsi_reg"       => $reg->ID_Propinsi_reg,
-          "no_reg_asosiasi"       => $reg->No_Reg_Asosiasi,
+          "no_reg_asosiasi"       => "-",
           "id_unit_sertifikasi"   => $reg->id_unit_sertifikasi,
           "id_permohonan"         => $reg->id_permohonan,
-          "url_pdf_surat_permohonan"          => asset("uploads/source/dokumen-upload/surat_permohonan-" . $reg->ID_Registrasi_TK_Ahli . ".pdf"),
-          "url_pdf_berita_acara_vva"          => asset("uploads/source/dokumen-upload/berita_acara_vva-" . $reg->ID_Registrasi_TK_Ahli . ".pdf"),
-          "url_pdf_surat_permohonan_asosiasi" => asset("uploads/source/dokumen-upload/surat_permohonan_asosiasi-" . $reg->ID_Registrasi_TK_Ahli . ".pdf"),
-          "url_pdf_penilaian_mandiri_f19"     => asset("uploads/source/dokumen-upload/penilaian_mandiri_f19-" . $reg->ID_Registrasi_TK_Ahli . ".pdf"),
+          "url_pdf_surat_permohonan"          => asset("uploads/source/dokumen-upload/surat_permohonan-" . $reg->ID_Personal . ".pdf"),
+          "url_pdf_berita_acara_vva"          => asset("uploads/source/dokumen-upload/berita_acara_vva-" . $reg->ID_Personal . ".pdf"),
+          "url_pdf_surat_permohonan_asosiasi" => asset("uploads/source/dokumen-upload/surat_permohonan_asosiasi-" . $reg->ID_Personal . ".pdf"),
+          "url_pdf_penilaian_mandiri_f19"     => asset("uploads/source/dokumen-upload/penilaian_mandiri_f19-" . $reg->ID_Personal . ".pdf"),
         ];
 
         $curl = curl_init();
         $header[] = "X-Api-Key:Dev-Rest-API-2019";
         $header[] = "content-type:application/json";
         curl_setopt_array($curl, array(
-        CURLOPT_URL => "http://202.152.17.10/rest-api/Service/Klasifikasi-TA/" . ($reg->sync ? "Ubah" : "Tambah"),
+            CURLOPT_URL => "http://202.152.17.10/rest-api/Service/Klasifikasi/" . ($reg->sync ? "Ubah" : "Tambah") . "-TA/",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
         CURLOPT_POSTFIELDS => json_encode($postData),

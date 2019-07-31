@@ -114,9 +114,10 @@ class SikiPersonalController extends Controller
     public function sync($id)
     {
         $personal = SikiPersonal::find($id);
+        dd($personal);
 
         $postData = [
-        "id_personal"         => $personal->id_personal,
+        "id_personal"         => (string) $personal->id_personal,
         "no_ktp"              => $personal->No_KTP,
         "nama"                => $personal->Nama,
         "nama_tanpa_gelar"    => $personal->nama_tanpa_gelar,
@@ -132,24 +133,29 @@ class SikiPersonalController extends Controller
         "email"               => $personal->email,
         "no_hp"               => $personal->hp_personal,
         "id_negara"           => $personal->nm_ibu_kandung,
-        "url_pdf_ktp"                             => asset("uploads/source/dokumen-upload/ktp-" . $personal->id_personal . ".pdf"),
-        "url_pdf_npwp"                            => asset("uploads/source/dokumen-upload/npwp-" . $personal->id_personal . ".pdf"),
-        "url_pdf_photo"                           => asset("uploads/source/dokumen-upload/foto-" . $personal->id_personal . ".pdf"),
-        "url_pdf_surat_pernyataan_kebenaran_data" => asset("uploads/source/dokumen-upload/spkd-" . $personal->id_personal . ".pdf"),
-        "url_pdf_daftar_riwayat_hidup"            => asset("uploads/source/dokumen-upload/drh-" . $personal->id_personal . ".pdf")
+        "url_pdf_ktp"                             => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/ktp.pdf")),
+        "url_pdf_npwp"                            => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/npwp.pdf")),
+        "url_pdf_photo"                           => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/foto.pdf")),
+        "url_pdf_surat_pernyataan_kebenaran_data" => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/skpd.pdf")),
+        "url_pdf_daftar_riwayat_hidup"            => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/drh.pdf"))
         ];
+        
+        // dd($postData);
 
         $curl = curl_init();
-        $header[] = "X-Api-Key:Dev-Rest-API-2019";
-        $header[] = "content-type:application/json";
+        $header[] = "X-Api-Key:ASTEKINDO-API";
+        $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlka3d4aDluTUlzWlBUQ21Jcm9XR3JSQU1DNGFiTVBMOS82WllHY3lCVWttSw==";
+        $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
-        CURLOPT_URL => "http://202.152.17.10/rest-api/Service/Biodata/Tambah",
+        CURLOPT_URL => "http://dev.lpjk.net/slim-api/Service/Biodata/Tambah",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => json_encode($postData),
+        CURLOPT_POSTFIELDS => $postData,
         CURLOPT_HTTPHEADER => $header,
         ));
         $response = curl_exec($curl);
+
+        // dd($response);
         
 		if($obj = json_decode($response)){
 			if($obj->response) {

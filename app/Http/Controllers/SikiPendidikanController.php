@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\SikiPersonalPendidikan;
 use App\PersonalPendidikanSync;
 use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Storage;
@@ -136,15 +137,19 @@ class SikiPendidikanController extends Controller
         CURLOPT_HTTPHEADER => $header,
         ));
         $response = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $httpstatus = Response::$statusTexts[$httpcode];
         
-        if($obj = json_decode($response)){
-            if($obj->response) {
-                if($this->createSyncLog($pendidikan, $obj))
-                    return redirect()->back()->with('success', $obj->message);
+        if($httpcode == Response::HTTP_OK){
+            if($obj = json_decode($response)){
+                if($obj->response) {
+                    if($this->createSyncLog($pendidikan, $obj))
+                        return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => $obj]);
+                }
+                return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => $obj]);
             }
-            return redirect()->back()->with('error', $obj->message);
         }
 
-        return redirect()->back()->with('error', "An error has occurred");
+        return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => '']);
     }
 }

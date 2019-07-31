@@ -63,7 +63,10 @@
                             <td>{{$pendidikan->No_Ijazah}}</td>
                             <td>{{$pendidikan->sync ? $pendidikan->sync->updated_at : "-"}}</td>
                             <td>{{$pendidikan->sync ? $pendidikan->sync->id : "-"}}</td>
-                            <td><a href="{{url("siki_pendidikan") . "/" . $pendidikan->ID_Personal_Pendidikan . "/sync"}}" class="btn btn-warning btn-xs">Sync</a></td>
+                            <td><a href="{{url("siki_pendidikan") . "/" . $pendidikan->ID_Personal_Pendidikan . "/sync"}}" class="btn btn-warning btn-xs sync"><i class="fa fa-refresh"></i> Sync</a>
+                            <span class="btn btn-default btn-xs syncing" style="display:none;"><i class="fa fa-spinner fa-spin"></i> Syncing...</span>
+                            <span class="btn btn-success btn-xs sync-success" style="display:none;"><i class="fa fa-check"></i> Success</span>
+                            <span class="btn btn-danger btn-xs sync-fail" style="display:none;"><i class="fa fa-times"></i> Fail</span></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -87,6 +90,32 @@
 <script>
 $(function(){
   $('#table-personals').DataTable();
+
+  $('.sync').on("click", function(e){
+    e.preventDefault();
+    $sync        = $(this);
+    $syncing     = $sync.parent().find(".syncing");
+    $syncSuccess = $sync.parent().find(".sync-success");
+    $syncFail = $sync.parent().find(".sync-fail");
+
+    $url = $(this).attr("href");
+    $sync.hide();
+    $syncing.show();
+
+    $.get($url, function(data, status){
+      $syncing.hide();
+
+      if(data.code == 200){
+        $syncSuccess.fadeIn().delay(1000).fadeOut(100, function() {
+          $sync.show();
+        });
+      } else {
+        $syncFail.fadeIn().delay(1000).fadeOut(100, function() {
+          $sync.show();
+        });
+      }
+    });
+  })
 });
 </script>
 @endpush
