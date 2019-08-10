@@ -103,7 +103,7 @@
                     <td>{{$pendidikan->No_Ijazah}}</td>
                     <td>{{$pendidikan->sync ? $pendidikan->sync->updated_at : "-"}}</td>
                     <td>{{$pendidikan->sync ? $pendidikan->sync->sync_id : "-"}}</td>
-                    <td><a href="{{url("siki_pendidikan") . "/" . $pendidikan->ID_Personal_Pendidikan . "/sync"}}" class="btn btn-warning btn-xs">Sync</a></td>
+                    <td><a href="{{url("siki_pendidikan") . "/" . $pendidikan->ID_Personal_Pendidikan . "/sync"}}" class="btn btn-warning btn-xs">{{$pendidikan->sync ? "Sync Ulang" : "Sync"}}</a></td>
                     {{-- <td><a href="#" data-url="{{url("siki_pendidikan") . "/" . $pendidikan->ID_Personal_Pendidikan . "/sync"}}" class="btn btn-warning btn-xs pendidikan-sync">Sync</a>
                     <span class="btn btn-default btn-xs syncing" style="display:none;"><i class="fa fa-spinner fa-spin"></i> Syncing...</span>
                     <span class="btn btn-success btn-xs sync-success" style="display:none;"><i class="fa fa-check"></i> Success</span>
@@ -140,7 +140,7 @@
                   <td>{{$proyek->Nilai ? number_format((int) $proyek->Nilai, 0, ",", ".") : '-'}}</td>
                   <td>{{$proyek->sync ? $proyek->sync->updated_at : "-"}}</td>
                   <td>{{$proyek->sync ? $proyek->sync->sync_id : "-"}}</td>
-                  <td><a href="{{url("siki_proyek") . "/" . $proyek->id_personal_proyek . "/sync"}}" class="btn btn-warning btn-xs">Sync</a></td>
+                  <td><a href="{{url("siki_proyek") . "/" . $proyek->id_personal_proyek . "/sync"}}" class="btn btn-warning btn-xs">{{$proyek->sync ? "Sync Ulang" : "Sync"}}</a></td>
                 </tr>
                 @endforeach
               </tbody>

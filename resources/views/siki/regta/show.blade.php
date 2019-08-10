@@ -175,7 +175,7 @@
                         <td>
                           <a href="{{url("siki_personal")."/".$regta->ID_Personal."/plain?ta"}}" target="_blank" class="btn btn-success btn-xs">Lihat Data</a>
                           {{-- <a href="#" data-url="{{url("siki_personal")."/".$regta->ID_Personal."/plain"}}" class="btn btn-success btn-xs viewDetail">Lihat Data</a> --}}
-                          <a href="{{url("siki_regta/".$regta->ID_Registrasi_TK_Ahli."/sync")}}" class="btn btn-warning btn-xs">Sync</a>
+                          <a href="{{url("siki_regta/".$regta->ID_Registrasi_TK_Ahli."/sync")}}" class="btn btn-warning btn-xs">{{$regta->sync ? "Sync Ulang" : "Sync"}}</a>
                           @if($regta->sync)
                             <a href="{{url("siki_regta/".$regta->ID_Registrasi_TK_Ahli."/approve")}}" class="btn btn-primary btn-xs">Approve</a>
                           @endif
