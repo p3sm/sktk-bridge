@@ -120,23 +120,28 @@ class SikiRegttController extends Controller
           "id_kualifikasi"           => $reg->ID_Kualifikasi,
           "tgl_registrasi"           => $reg->Tgl_Registrasi,
           "id_propinsi_reg"          => $reg->ID_propinsi_reg,
-          "no_reg_asosiasi"          => "-",
+          "no_sk"                    => $reg->no_sk ? $reg->no_sk : "-",
           "id_unit_sertifikasi"      => $reg->id_unit_sertifikasi,
           "id_permohonan"            => $reg->id_permohonan,
-          "url_pdf_surat_permohonan"          => asset("uploads/source/dokumen-upload/surat_permohonan-" . $reg->ID_Personal . ".pdf"),
-          "url_pdf_berita_acara_vva"          => asset("uploads/source/dokumen-upload/berita_acara_vva-" . $reg->ID_Personal . ".pdf"),
-          "url_pdf_surat_permohonan_asosiasi" => asset("uploads/source/dokumen-upload/surat_permohonan_asosiasi-" . $reg->ID_Personal . ".pdf"),
-          "url_pdf_penilaian_mandiri_f19"     => asset("uploads/source/dokumen-upload/penilaian_mandiri_f19-" . $reg->ID_Personal . ".pdf"),
+          "url_pdf_berita_acara_vva"          => curl_file_create(realpath("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/VVA_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")),
+          "url_pdf_surat_permohonan_asosiasi" => curl_file_create(realpath("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/SPENG_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")),
+          "url_pdf_surat_permohonan"          => curl_file_create(realpath("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/SUB_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")),
+        //   "url_pdf_penilaian_mandiri_f19"     => curl_file_create(realpath("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/SA_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")),
         ];
 
+        // dd($reg);
+
         $curl = curl_init();
-        $header[] = "X-Api-Key:Dev-Rest-API-2019";
-        $header[] = "content-type:application/json";
+        $header[] = "X-Api-Key:" . env("LPJK_KEY");
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
+        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
+        $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://202.152.17.10/rest-api/Service/Klasifikasi/" . ($reg->sync ? "Ubah" : "Tambah") . "-TT/",
+            CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Klasifikasi/" . ($reg->sync ? "Ubah" : "Tambah") . "-TT",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => json_encode($postData),
+        CURLOPT_POSTFIELDS => $postData,
         CURLOPT_HTTPHEADER => $header,
         ));
         $response = curl_exec($curl);
@@ -145,6 +150,55 @@ class SikiRegttController extends Controller
             if($obj->response) {
                 if($this->createSyncLog($reg, $obj))
                     return redirect()->back()->with('success', $obj->message);
+            }
+            return redirect()->back()->with('error', $obj->message);
+        }
+
+        return redirect()->back()->with('error', "An error has occurred");
+    }
+
+    public function approve($id)
+    {
+        $reg = SikiRegtt::find($id);
+
+        $postData = [
+          "id_personal"           => $reg->ID_Personal,
+          "id_sub_bidang"         => $reg->ID_Sub_Bidang,
+          "id_kualifikasi"        => $reg->ID_Kualifikasi,
+          "id_unit_sertifikasi"   => $reg->id_unit_sertifikasi,
+          "tahun"                 => Carbon::parse($reg->Tgl_Registrasi)->format("Y"),
+          "tgl_permohonan"        => Carbon::parse($reg->Tgl_Registrasi)->format("Y-m-d"), 
+          "id_provinsi"           => $reg->ID_propinsi_reg,
+          "id_permohonan"         => $reg->id_permohonan,
+          "id_status"             => 99,
+          "catatan"               => ""
+        ];
+
+        // dd($postData);
+
+        $curl = curl_init();
+        $header[] = "X-Api-Key:" . env("LPJK_KEY");
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
+        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
+        $header[] = "Content-Type:multipart/form-data";
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/History/TT",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => $header,
+        ));
+        $response = curl_exec($curl);
+
+        // dd($response);
+
+        // echo $response;
+        // exit;
+        
+        if($obj = json_decode($response)){
+            if($obj->response) {
+                return redirect()->back()->with('success', $obj->message);
             }
             return redirect()->back()->with('error', $obj->message);
         }

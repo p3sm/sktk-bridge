@@ -53,7 +53,11 @@
                         <tr>
                             <th>No.</th>
                             <th>Nama</th>
+                            <th>Asosiasi</th>
                             <th>Sub Bidang</th>
+                            <th>Kualifikasi</th>
+                            <th>Provinsi</th>
+                            <th>USTK</th>
                             <th>Admin</th>
                             <th>No Tahap</th>
                             <th>Tgl Tahap</th>
@@ -68,7 +72,11 @@
                         <tr>
                           <td>{{$k + 1}}</td>
                           <td>{{$regtt->personal->Nama}}</td>
+                          <td>{{$regtt->ID_Asosiasi_Profesi}}</td>
                           <td>{{$regtt->ID_Sub_Bidang}}</td>
+                          <td>{{$regtt->kualifikasi->Deskripsi_trampil}}</td>
+                          <td>{{$regtt->ID_propinsi_reg}}</td>
+                          <td>{{$regtt->id_unit_sertifikasi}}</td>
                           <td>{{$regtt->id_user}}</td>
                           <td>{{$regtt->tahap1}}</td>
                           <td>{{$regtt->tgl_thp}}</td>
@@ -76,8 +84,12 @@
                           <td>{{$regtt->sync ? $regtt->sync->updated_at : "-"}}</td>
                           <td>{{$regtt->sync ? $regtt->sync->id : "-"}}</td>
                         <td>
-                          <a href="#" data-url="{{url("siki_personal")."/".$regtt->ID_Personal."/plain"}}" class="btn btn-success btn-xs viewDetail">Lihat Data</a>
+                          <a href="{{url("siki_personal")."/".$regtt->ID_Personal."/plain?tt"}}" target="_blank" class="btn btn-success btn-xs">Lihat Data</a>
+                          {{-- <a href="#" data-url="{{url("siki_personal")."/".$regtt->ID_Personal."/plain"}}" class="btn btn-success btn-xs viewDetail">Lihat Data</a> --}}
                           <a href="{{url("siki_regtt/".$regtt->ID_Registrasi_TK_Trampil."/sync")}}" class="btn btn-warning btn-xs">Sync</a>
+                          @if($regtt->sync)
+                            <a href="{{url("siki_regtt/".$regtt->ID_Registrasi_TK_Trampil."/approve")}}" class="btn btn-primary btn-xs">Approve</a>
+                          @endif
                         </td>
                         </tr>
                         @endforeach

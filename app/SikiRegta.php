@@ -19,4 +19,9 @@ class SikiRegta extends Model
   {
     return $this->hasOne('App\PersonalRegTaSync', 'registrasi_tk_ahli_id');
   }
+    
+  public function kualifikasi()
+  {
+    return $this->belongsTo('App\SikiKualifikasi', 'ID_Kualifikasi');
+  }
 }

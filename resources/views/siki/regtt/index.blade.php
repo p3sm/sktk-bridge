@@ -25,7 +25,6 @@
                     <thead>
                         <tr>
                             <th>No.</th>
-                            <th>Sub Bidang</th>
                             <th>Admin</th>
                             <th>No Tahap</th>
                             <th>Tgl Tahap</th>
@@ -37,7 +36,6 @@
                         @foreach($regtts as $k => $regtt)
                         <tr>
                             <td>{{$k + 1}}</td>
-                            <td>{{$regtt->ID_Sub_Bidang}}</td>
                             <td>{{$regtt->id_user}}</td>
                             <td>{{$regtt->tahap1}}</td>
                             <td>{{$regtt->tgl_thp}}</td>

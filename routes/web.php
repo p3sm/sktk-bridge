@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 		Route::group(['prefix' => 'siki_regta'] , function(){
 			Route::get('{id}/sync', 'SikiRegtaController@sync');
+			Route::get('{id}/approve', 'SikiRegtaController@approve');
 		});
 
 		Route::resources([
@@ -56,6 +57,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 		Route::group(['prefix' => 'siki_regtt'] , function(){
 			Route::get('{id}/sync', 'SikiRegttController@sync');
+			Route::get('{id}/approve', 'SikiRegttController@approve');
 		});
 
 		Route::resources([

@@ -142,7 +142,11 @@
                         <tr>
                             <th>No.</th>
                             <th>Nama</th>
+                            <th>Asosiasi</th>
                             <th>Sub Bidang</th>
+                            <th>Kualifikasi</th>
+                            <th>Provinsi</th>
+                            <th>USTK</th>
                             <th>Admin</th>
                             <th>No Tahap</th>
                             <th>Tgl Tahap</th>
@@ -157,16 +161,24 @@
                         <tr>
                           <td>{{$k + 1}}</td>
                           <td>{{$regta->personal->Nama}}</td>
+                          <td>{{$regta->ID_Asosiasi_Profesi}}</td>
                           <td>{{$regta->ID_Sub_Bidang}}</td>
+                          <td>{{$regta->kualifikasi->Deskripsi_ahli}}</td>
+                          <td>{{$regta->ID_Propinsi_reg}}</td>
+                          <td>{{$regta->id_unit_sertifikasi}}</td>
                           <td>{{$regta->id_user}}</td>
                           <td>{{$regta->tahap1}}</td>
                           <td>{{$regta->tgl_thp}}</td>
                           <td>{{$regta->jam_thp}}</td>
                           <td>{{$regta->sync ? $regta->sync->updated_at : "-"}}</td>
-                          <td>{{$regta->sync ? $regta->sync->id : "-"}}</td>
+                          <td>{{$regta->sync ? $regta->sync->sync_id : "-"}}</td>
                         <td>
-                          <a href="#" data-url="{{url("siki_personal")."/".$regta->ID_Personal."/plain"}}" class="btn btn-success btn-xs viewDetail">Lihat Data</a>
+                          <a href="{{url("siki_personal")."/".$regta->ID_Personal."/plain?ta"}}" target="_blank" class="btn btn-success btn-xs">Lihat Data</a>
+                          {{-- <a href="#" data-url="{{url("siki_personal")."/".$regta->ID_Personal."/plain"}}" class="btn btn-success btn-xs viewDetail">Lihat Data</a> --}}
                           <a href="{{url("siki_regta/".$regta->ID_Registrasi_TK_Ahli."/sync")}}" class="btn btn-warning btn-xs">Sync</a>
+                          @if($regta->sync)
+                            <a href="{{url("siki_regta/".$regta->ID_Registrasi_TK_Ahli."/approve")}}" class="btn btn-primary btn-xs">Approve</a>
+                          @endif
                         </td>
                         </tr>
                         @endforeach

@@ -81,14 +81,14 @@
           <ul class="treeview-menu">
             <li class="{{Request::is('siki_regta*') ? 'active' : ''}}"> <a href="{{ url('siki_regta') }}"><span>Registrasi Tenaga Ahli</span> </a> </li>
             <li class="{{Request::is('siki_regtt*') ? 'active' : ''}}"> <a href="{{ url('siki_regtt') }}"><span>Registrasi Tenaga Trampil</span> </a> </li>
-            <li class="{{Request::is('siki_personal') ? 'active' : ''}}"> <a href="{{ url('siki_personal') }}"><span>Personal</span> </a> </li>
+            {{-- <li class="{{Request::is('siki_personal') ? 'active' : ''}}"> <a href="{{ url('siki_personal') }}"><span>Personal</span> </a> </li> --}}
           </ul>
         </li>
-        <li class="{{Request::is('pemohon') ? 'active' : ''}}">
+        {{-- <li class="{{Request::is('pemohon') ? 'active' : ''}}">
           <a href="{{ url('pemohon') }}">
             <i class="fa fa-user"></i> <span>Pemohon</span>
           </a>
-        </li>
+        </li> --}}
         @endif
 
         @if(Auth::user()->role_id==1)

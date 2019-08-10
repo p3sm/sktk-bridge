@@ -107,6 +107,7 @@ class SikiPendidikanController extends Controller
 
     public function sync($id)
     {
+        $date = Carbon::now();
         $pendidikan = SikiPersonalPendidikan::find($id);
 
         $postData = [
@@ -114,42 +115,55 @@ class SikiPendidikanController extends Controller
             "id_personal"                                => $pendidikan->ID_Personal,
             "nama_sekolah"                               => $pendidikan->Nama_Sekolah,
             "alamat_sekolah"                             => $pendidikan->Alamat1,
-            "id_propinsi_sekolah"                        => "05",
-            "id_kabupaten_sekolah"                       => "1505",
+            "id_propinsi_sekolah"                        => 99,
+            "id_kabupaten_sekolah"                       => 9999,
             "id_negara_sekolah"                          => $pendidikan->ID_Countries,
             "tahun"                                      => $pendidikan->Tahun,
             "jenjang"                                    => $pendidikan->Jenjang,
             "jurusan"                                    => $pendidikan->Jurusan,
             "no_ijazah"                                  => $pendidikan->No_Ijazah,
-            "url_pdf_ijazah"                             => asset("uploads/source/dokumen-upload/ijazah-" . $pendidikan->ID_Personal . ".pdf"),
-            "url_pdf_data_pendidikan"                    => asset("uploads/source/dokumen-upload/data-pendidikan-" . $pendidikan->ID_Personal . ".pdf"),
-            "url_pdf_data_surat_keterangan_dari_sekolah" => asset("uploads/source/dokumen-upload/sk_sekolah-" . $pendidikan->ID_Personal . ".pdf"),
+            "url_pdf_ijazah"                             => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $pendidikan->ID_Personal . "/IJZ.pdf")),
+            "url_pdf_data_pendidikan"                    => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $pendidikan->ID_Personal . "/IJZ.pdf")),
+            "url_pdf_data_surat_keterangan_dari_sekolah" => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $pendidikan->ID_Personal . "/IJZ.pdf")),
         ];
 
         $curl = curl_init();
-        $header[] = "X-Api-Key:Dev-Rest-API-2019";
-        $header[] = "content-type:application/json";
+        $header[] = "X-Api-Key:" . env("LPJK_KEY");
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
+        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
+        $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
-        CURLOPT_URL => "http://202.152.17.10/rest-api/Service/Pendidikan/" . ($pendidikan->sync ? "Ubah" : "Tambah"),
+        CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Pendidikan/" . ($pendidikan->sync ? "Ubah" : "Tambah"),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => json_encode($postData),
+        CURLOPT_POSTFIELDS => $postData,
         CURLOPT_HTTPHEADER => $header,
         ));
         $response = curl_exec($curl);
-        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $httpstatus = Response::$statusTexts[$httpcode];
+        // $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        // $httpstatus = Response::$statusTexts[$httpcode];
         
-        if($httpcode == Response::HTTP_OK){
-            if($obj = json_decode($response)){
-                if($obj->response) {
-                    if($this->createSyncLog($pendidikan, $obj))
-                        return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => $obj]);
-                }
-                return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => $obj]);
+        // if($httpcode == Response::HTTP_OK){
+        //     if($obj = json_decode($response)){
+        //         if($obj->response) {
+        //             if($this->createSyncLog($pendidikan, $obj))
+        //                 return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => $obj]);
+        //         }
+        //         return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => $obj]);
+        //     }
+        // }
+
+        // return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => '']);
+        
+        if($obj = json_decode($response)){
+            if($obj->response) {
+                if($this->createSyncLog($pendidikan, $obj))
+                    return redirect()->back()->with('success', $obj->message);
             }
+            return redirect()->back()->with('error', $obj->message);
         }
 
-        return response()->json(['code' => $httpcode, 'status' => $httpstatus, 'data' => '']);
+        return redirect()->back()->with('error', "An error has occurred");
     }
 }

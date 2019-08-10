@@ -106,6 +106,7 @@ class SikiProyekController extends Controller
 
     public function sync($id)
     {
+        $date = Carbon::now();
         $proyek = SikiPersonalProyek::find($id);
 
         $postData = [
@@ -117,20 +118,26 @@ class SikiProyekController extends Controller
             "tgl_selesai"                           => $proyek->Tgl_Selesai,
             "jabatan"                               => $proyek->Jabatan,
             "nilai_proyek"                          => $proyek->Nilai,
-            "url_pdf_persyaratan_pengalaman_proyek" => asset("uploads/source/dokumen-upload/ijazah-" . $proyek->id_personal . ".pdf"),
+            "url_pdf_persyaratan_pengalaman_proyek" => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $proyek->id_personal . "/IJZ.pdf")),
         ];
 
         $curl = curl_init();
-        $header[] = "X-Api-Key:Dev-Rest-API-2019";
-        $header[] = "content-type:application/json";
+        $header[] = "X-Api-Key:" . env("LPJK_KEY");
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
+        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
+        $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
-        CURLOPT_URL => "http://202.152.17.10/rest-api/Service/Proyek/" . ($proyek->sync ? "Ubah" : "Tambah"),
+        CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Proyek/" . ($proyek->sync ? "Ubah" : "Tambah"),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => json_encode($postData),
+        CURLOPT_POSTFIELDS => $postData,
         CURLOPT_HTTPHEADER => $header,
         ));
         $response = curl_exec($curl);
+
+        // echo $response;
+        // exit;
         
         if($obj = json_decode($response)){
             if($obj->response) {

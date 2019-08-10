@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\SikiPersonal;
 use App\SikiPersonalProyek;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use \Illuminate\Http\Request;
+use Carbon\Carbon;
 use Storage;
 
 class SikiPersonalController extends Controller
@@ -90,8 +91,13 @@ class SikiPersonalController extends Controller
         //
     }
 
-    public function plain($id)
+    public function plain(Request $request, $id)
     {
+        if(!$request->exists("ta") && !$request->exists("tt")){
+            return redirect("/");
+        }
+
+        $data['sertifikatType'] = $request->exists("ta") ? "ta" : "tt";
         $data['personal'] = SikiPersonal::find($id);
 
         return view('siki/personal/plain')->with($data);
@@ -111,10 +117,10 @@ class SikiPersonalController extends Controller
     	return view('siki/personal/pendidikan')->with($data);
     }
 
-    public function sync($id)
+    public function sync(Request $request, $id)
     {
+        $date = Carbon::now();
         $personal = SikiPersonal::find($id);
-        dd($personal);
 
         $postData = [
         "id_personal"         => (string) $personal->id_personal,
@@ -133,29 +139,47 @@ class SikiPersonalController extends Controller
         "email"               => $personal->email,
         "no_hp"               => $personal->hp_personal,
         "id_negara"           => $personal->nm_ibu_kandung,
-        "url_pdf_ktp"                             => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/ktp.pdf")),
-        "url_pdf_npwp"                            => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/npwp.pdf")),
-        "url_pdf_photo"                           => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/foto.pdf")),
-        "url_pdf_surat_pernyataan_kebenaran_data" => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/skpd.pdf")),
-        "url_pdf_daftar_riwayat_hidup"            => curl_file_create(realpath("uploads/source/dokumen-upload/" . $personal->id_personal . "/drh.pdf"))
+        "jenis_tenaga_kerja"  => $request->query("type") == "ta" ? "tenaga_ahli" : "tenaga_terampil",
+        "url_pdf_ktp"                             => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/KTP.pdf")),
+        "url_pdf_npwp"                            => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/NPWP.pdf")),
+        "url_pdf_photo"                           => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/FOTO.png")),
+        "url_pdf_surat_pernyataan_kebenaran_data" => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/SKEB.pdf")),
+        "url_pdf_daftar_riwayat_hidup"            => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/CV.pdf"))
         ];
-        
         // dd($postData);
 
         $curl = curl_init();
-        $header[] = "X-Api-Key:ASTEKINDO-API";
-        $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlka3d4aDluTUlzWlBUQ21Jcm9XR3JSQU1DNGFiTVBMOS82WllHY3lCVWttSw==";
+        $header[] = "X-Api-Key:" . env("LPJK_KEY");
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
+        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
+        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
         $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
-        CURLOPT_URL => "http://dev.lpjk.net/slim-api/Service/Biodata/Tambah",
+        CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Biodata/Tambah",
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_CUSTOMREQUEST => "POST",
         CURLOPT_POSTFIELDS => $postData,
         CURLOPT_HTTPHEADER => $header,
         ));
         $response = curl_exec($curl);
+        
+        if($objResponse = json_decode($response)){
+            if($objResponse->message == "Data Biodata Tersebut Sudah Pernah Didaftarkan !"){
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Biodata/Ubah",
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $postData,
+                    CURLOPT_HTTPHEADER => $header,
+                ));
+                $response = curl_exec($curl);
+            }
+        }
 
         // dd($response);
+
+        // echo $response;
+        // exit;
         
 		if($obj = json_decode($response)){
 			if($obj->response) {
