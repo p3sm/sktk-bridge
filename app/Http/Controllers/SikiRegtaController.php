@@ -7,6 +7,7 @@ use App\PersonalRegTaSync;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Storage;
 
 class SikiRegtaController extends Controller
@@ -102,6 +103,26 @@ class SikiRegtaController extends Controller
 
         $data->registrasi_tk_ahli_id = $reg->ID_Registrasi_TK_Ahli;
         $data->sync_id = $sync->ID_Registrasi_TK_Ahli;
+        $data->approved_by = Auth::id();
+
+        if($data->save())
+            return true;
+        else
+            return false;
+    }
+
+    public function createApproveLog($reg)
+    {
+        if($reg->sync){
+            $data = PersonalRegTaApprove::find($reg->sync->id);
+            $data->updated_at = Carbon::now();
+        } else {
+            $data = new PersonalRegTaApprove();
+        }
+
+        $data->registrasi_tk_ahli_id = $reg->ID_Registrasi_TK_Ahli;
+        $data->approved_by = Auth::id();
+
         if($data->save())
             return true;
         else
@@ -111,6 +132,19 @@ class SikiRegtaController extends Controller
     public function sync($id)
     {
         $reg = SikiRegta::find($id);
+
+        if(!file_exists("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/VVA_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")){
+            return redirect()->back()->with('error', 'File VVA tidak tersedia');
+        }
+        if(!file_exists("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/SPENG_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")){
+            return redirect()->back()->with('error', 'File SPENG tidak tersedia');
+        }
+        if(!file_exists("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/SUB_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")){
+            return redirect()->back()->with('error', 'File SUB tidak tersedia');
+        }
+        if(!file_exists("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/SA_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")){
+            return redirect()->back()->with('error', 'File SA tidak tersedia');
+        }
 
         $postData = [
           "id_registrasi_tk_ahli" => $reg->sync ? $reg->sync->sync_id : 0,
@@ -203,7 +237,8 @@ class SikiRegtaController extends Controller
         
         if($obj = json_decode($response)){
             if($obj->response) {
-                return redirect()->back()->with('success', $obj->message);
+                if($this->createApproveLog($reg))
+                    return redirect()->back()->with('success', $obj->message);
             }
             return redirect()->back()->with('error', $obj->message);
         }

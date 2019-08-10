@@ -137,7 +137,7 @@
                   <td>{{$proyek->Lokasi}}</td>
                   <td>{{$proyek->Jabatan}}</td>
                   <td>{{\Carbon\Carbon::parse($proyek->Tgl_Mulai)->format("d F Y")}} - {{\Carbon\Carbon::parse($proyek->Tgl_Selesai)->format("d F Y")}}</td>
-                  <td>{{$proyek->Nilai ? number_format($proyek->Nilai, 0, ",", ".") : '-'}}</td>
+                  <td>{{$proyek->Nilai ? number_format((int) $proyek->Nilai, 0, ",", ".") : '-'}}</td>
                   <td>{{$proyek->sync ? $proyek->sync->updated_at : "-"}}</td>
                   <td>{{$proyek->sync ? $proyek->sync->sync_id : "-"}}</td>
                   <td><a href="{{url("siki_proyek") . "/" . $proyek->id_personal_proyek . "/sync"}}" class="btn btn-warning btn-xs">Sync</a></td>

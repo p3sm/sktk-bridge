@@ -7,6 +7,7 @@ use App\PersonalProyekSync;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Storage;
 
 class SikiProyekController extends Controller
@@ -98,6 +99,8 @@ class SikiProyekController extends Controller
 
         $data->personal_proyek_id = $proyek->id_personal_proyek;
         $data->sync_id = $sync->id_personal_proyek;
+        $data->synced_by = Auth::id();
+        
         if($data->save())
             return true;
         else
@@ -108,6 +111,10 @@ class SikiProyekController extends Controller
     {
         $date = Carbon::now();
         $proyek = SikiPersonalProyek::find($id);
+
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $pendidikan->ID_Personal . "/IJZ.pdf")){
+            return redirect()->back()->with('error', 'File Ijazah tidak tersedia');
+        }
 
         $postData = [
             "id_personal_proyek"                    => $proyek->sync ? $proyek->sync->sync_id : 0,

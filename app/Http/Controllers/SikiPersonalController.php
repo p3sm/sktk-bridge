@@ -6,6 +6,7 @@ use App\SikiPersonal;
 use App\SikiPersonalProyek;
 use App\Http\Controllers\Controller;
 use \Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Storage;
 
@@ -121,31 +122,62 @@ class SikiPersonalController extends Controller
     {
         $date = Carbon::now();
         $personal = SikiPersonal::find($id);
+        $no_npwp = false;
+        $is_tt = $request->query("type") == "tt";
 
-        $postData = [
-        "id_personal"         => (string) $personal->id_personal,
-        "no_ktp"              => $personal->No_KTP,
-        "nama"                => $personal->Nama,
-        "nama_tanpa_gelar"    => $personal->nama_tanpa_gelar,
-        "alamat"              => $personal->Alamat1,
-        "kodepos"             => "-",
-        "id_kabupaten_alamat" => $personal->ID_Kabupaten_Alamat,
-        "tgl_lahir"           => $personal->Tgl_Lahir,
-        "jenis_kelamin"       => $personal->jenis_kelamin == "PRIA" ? "L" : "P",
-        "tempat_lahir"        => $personal->Tempat_Lahir,
-        "id_kabupaten_lahir"  => $personal->ID_Kabupaten_Alamat,
-        "id_propinsi"         => $personal->ID_Propinsi,
-        "npwp"                => $personal->npwp,
-        "email"               => $personal->email,
-        "no_hp"               => $personal->hp_personal,
-        "id_negara"           => $personal->nm_ibu_kandung,
-        "jenis_tenaga_kerja"  => $request->query("type") == "ta" ? "tenaga_ahli" : "tenaga_terampil",
-        "url_pdf_ktp"                             => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/KTP.pdf")),
-        "url_pdf_npwp"                            => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/NPWP.pdf")),
-        "url_pdf_photo"                           => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/FOTO.png")),
-        "url_pdf_surat_pernyataan_kebenaran_data" => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/SKEB.pdf")),
-        "url_pdf_daftar_riwayat_hidup"            => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/CV.pdf"))
-        ];
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/KTP.pdf")){
+            return redirect()->back()->with('error', 'File KTP tidak tersedia');
+        }
+
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/NPWP.pdf")){
+            if($is_tt){
+                $no_npwp = true;
+            } else {
+                return redirect()->back()->with('error', 'File NPWP tidak tersedia');
+            }
+        }
+
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/FOTO.png")){
+            return redirect()->back()->with('error', 'File FOTO tidak tersedia (format .png)');
+        }
+
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/SKEB.pdf")){
+            return redirect()->back()->with('error', 'File SKEB tidak tersedia');
+        }
+
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/CV.pdf")){
+            return redirect()->back()->with('error', 'File CV tidak tersedia');
+        }
+
+        try{
+            $postData = [
+            "id_personal"         => (string) $personal->id_personal,
+            "no_ktp"              => $personal->No_KTP,
+            "nama"                => $personal->Nama,
+            "nama_tanpa_gelar"    => $personal->nama_tanpa_gelar,
+            "alamat"              => $personal->Alamat1,
+            "kodepos"             => "-",
+            "id_kabupaten_alamat" => $personal->ID_Kabupaten_Alamat,
+            "tgl_lahir"           => $personal->Tgl_Lahir,
+            "jenis_kelamin"       => $personal->jenis_kelamin == "PRIA" ? "L" : "P",
+            "tempat_lahir"        => $personal->Tempat_Lahir,
+            "id_kabupaten_lahir"  => $personal->ID_Kabupaten_Alamat,
+            "id_propinsi"         => $personal->ID_Propinsi,
+            "npwp"                => $personal->npwp,
+            "email"               => $personal->email,
+            "no_hp"               => $personal->hp_personal,
+            "id_negara"           => $personal->nm_ibu_kandung,
+            "jenis_tenaga_kerja"  => $request->query("type") == "ta" ? "tenaga_ahli" : "tenaga_terampil",
+            "url_pdf_ktp"                             => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/KTP.pdf")),
+            "url_pdf_npwp"                            => $is_tt && $no_npwp ? "" : curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/NPWP.pdf")),
+            "url_pdf_photo"                           => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/FOTO.png")),
+            "url_pdf_surat_pernyataan_kebenaran_data" => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/SKEB.pdf")),
+            "url_pdf_daftar_riwayat_hidup"            => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/CV.pdf"))
+            ];
+        } catch(Exception $error) {
+            return redirect()->back()->with('error', $error);
+        }
+
         // dd($postData);
 
         $curl = curl_init();

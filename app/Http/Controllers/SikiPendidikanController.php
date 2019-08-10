@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Storage;
 
 class SikiPendidikanController extends Controller
@@ -99,6 +100,8 @@ class SikiPendidikanController extends Controller
 
         $data->personal_pendidikan_id = $pendidikan->ID_Personal_Pendidikan;
         $data->sync_id = $sync->ID_Personal_Pendidikan;
+        $data->synced_by = Auth::id();
+
         if($data->save())
             return true;
         else
@@ -109,6 +112,10 @@ class SikiPendidikanController extends Controller
     {
         $date = Carbon::now();
         $pendidikan = SikiPersonalPendidikan::find($id);
+
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $pendidikan->ID_Personal . "/IJZ.pdf")){
+            return redirect()->back()->with('error', 'File Ijazah tidak tersedia');
+        }
 
         $postData = [
             "id_personal_pendidikan"                     => $pendidikan->sync ? $pendidikan->sync->sync_id : 0,
