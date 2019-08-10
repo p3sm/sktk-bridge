@@ -17,9 +17,32 @@ class SikiRegtaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['regtas'] = SikiRegta::take(100)->groupBy('tahap1')->orderByDesc("tgl_thp")->get();
+        $user = Auth::user();
+        
+        $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
+        $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
+
+        if($user->role->id == 1){
+            $data['regtas'] = SikiRegta::whereDate("tgl_thp", ">=", $from->format('Y-m-d'))
+            ->whereDate("tgl_thp", "<=", $to->format('Y-m-d'))
+            // ->take(100)
+            ->groupBy('tahap1')
+            ->orderByDesc("tgl_thp")
+            ->get();
+        } else {
+            $data['regtas'] = SikiRegta::where("id_user", $user->username)
+            ->whereDate("tgl_thp", ">=", $from->format('Y-m-d'))
+            ->whereDate("tgl_thp", "<=", $to->format('Y-m-d'))
+            // ->take(100)
+            ->groupBy('tahap1')
+            ->orderByDesc("tgl_thp")
+            ->get();
+        }
+
+        $data['from'] = $from;
+        $data['to'] = $to;
 
     	return view('siki/regta/index')->with($data);
     }
@@ -53,7 +76,13 @@ class SikiRegtaController extends Controller
      */
     public function show($id)
     {
-        $data['regtas'] = SikiRegta::where("tahap", $id)->orderByDesc("ID_Registrasi_TK_Ahli")->get();
+        $user = Auth::user();
+
+        if($user->role->id == 1){
+            $data['regtas'] = SikiRegta::where("tahap", $id)->orderByDesc("ID_Registrasi_TK_Ahli")->get();
+        } else {
+            $data['regtas'] = SikiRegta::where("tahap", $id)->where("id_user", $user->username)->orderByDesc("ID_Registrasi_TK_Ahli")->get();
+        }
 
     	return view('siki/regta/show')->with($data);
     }

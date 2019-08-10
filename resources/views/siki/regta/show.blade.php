@@ -17,13 +17,13 @@
     <section class="content-header">
       <h1>
         <a href="{{url("siki_regta")}}" class="btn btn-danger btn-sm"><i class="fa fa-arrow-left"></i> kembali</a> 
-        Data Registrasi Tenaga Ahli - Tahap {{$regtas[0]->tahap1}}
+        Data Registrasi Tenaga Ahli - Tahap {{count($regtas) > 0 ? $regtas[0]->tahap1 : "-"}}
         {{--  <small>it all starts here</small>  --}}
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
         <li><a href="{{url("siki_regta")}}">Reg TA</a></li>
-        <li class="active"><a href="#">{{$regtas[0]->tahap1}}</a></li>
+        <li class="active"><a href="#">{{count($regtas) > 0 ? $regtas[0]->tahap1 : "-"}}</a></li>
       </ol>
     </section>
 

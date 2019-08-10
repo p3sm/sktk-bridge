@@ -17,9 +17,32 @@ class SikiRegttController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data['regtts'] = SikiRegtt::take(100)->groupBy('tahap1')->orderByDesc("tgl_thp")->get();
+        $user = Auth::user();
+        
+        $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
+        $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
+
+        if($user->role->id == 1){
+            $data['regtts'] = SikiRegtt::whereDate("tgl_thp", ">=", $from->format('Y-m-d'))
+            ->whereDate("tgl_thp", "<=", $to->format('Y-m-d'))
+            // ->take(100)
+            ->groupBy('tahap1')
+            ->orderByDesc("tgl_thp")
+            ->get();
+        } else {
+            $data['regtts'] = SikiRegtt::where("id_user", $user->username)
+            ->whereDate("tgl_thp", ">=", $from->format('Y-m-d'))
+            ->whereDate("tgl_thp", "<=", $to->format('Y-m-d'))
+            // ->take(100)
+            ->groupBy('tahap1')
+            ->orderByDesc("tgl_thp")
+            ->get();
+        }
+
+        $data['from'] = $from;
+        $data['to'] = $to;
 
         return view('siki/regtt/index')->with($data);
     }
@@ -53,7 +76,13 @@ class SikiRegttController extends Controller
      */
     public function show($id)
     {
-        $data['regtts'] = SikiRegtt::where("tahap", $id)->orderByDesc("ID_Registrasi_TK_Trampil")->get();
+        $user = Auth::user();
+
+        if($user->role->id == 1){
+            $data['regtts'] = SikiRegtt::where("tahap", $id)->orderByDesc("ID_Registrasi_TK_Trampil")->get();
+        } else {
+            $data['regtts'] = SikiRegtt::where("tahap", $id)->where("id_user", $user->username)->orderByDesc("ID_Registrasi_TK_Trampil")->get();
+        }
 
         return view('siki/regtt/show')->with($data);
     }
