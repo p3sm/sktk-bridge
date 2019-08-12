@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\SikiRegta;
 use App\PersonalRegTaSync;
+use App\PersonalRegTaApprove;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -132,7 +133,7 @@ class SikiRegtaController extends Controller
 
         $data->registrasi_tk_ahli_id = $reg->ID_Registrasi_TK_Ahli;
         $data->sync_id = $sync->ID_Registrasi_TK_Ahli;
-        $data->approved_by = Auth::id();
+        $data->synced_by = Auth::id();
 
         if($data->save())
             return true;
@@ -142,8 +143,8 @@ class SikiRegtaController extends Controller
 
     public function createApproveLog($reg)
     {
-        if($reg->sync){
-            $data = PersonalRegTaApprove::find($reg->sync->id);
+        if($reg->approve){
+            $data = PersonalRegTaApprove::find($reg->approve->id);
             $data->updated_at = Carbon::now();
         } else {
             $data = new PersonalRegTaApprove();

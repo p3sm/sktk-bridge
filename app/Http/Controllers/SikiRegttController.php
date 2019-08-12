@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\SikiRegtt;
 use App\PersonalRegTtSync;
+use App\PersonalRegTtApprove;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -132,7 +133,7 @@ class SikiRegttController extends Controller
 
         $data->registrasi_tk_trampil_id = $reg->ID_Registrasi_TK_Trampil;
         $data->sync_id = $sync->ID_Registrasi_TK_Trampil;
-        $data->approved_by = Auth::id();
+        $data->synced_by = Auth::id();
 
         if($data->save())
             return true;
@@ -142,8 +143,8 @@ class SikiRegttController extends Controller
 
     public function createApproveLog($reg)
     {
-        if($reg->sync){
-            $data = PersonalRegTtApprove::find($reg->sync->id);
+        if($reg->approve){
+            $data = PersonalRegTtApprove::find($reg->approve->id);
             $data->updated_at = Carbon::now();
         } else {
             $data = new PersonalRegTtApprove();

@@ -112,7 +112,7 @@ class SikiProyekController extends Controller
         $date = Carbon::now();
         $proyek = SikiPersonalProyek::find($id);
 
-        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $pendidikan->ID_Personal . "/IJZ.pdf")){
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $proyek->id_personal . "/IJZ.pdf")){
             return redirect()->back()->with('error', 'File Ijazah tidak tersedia');
         }
 
