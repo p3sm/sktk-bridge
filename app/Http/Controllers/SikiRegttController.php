@@ -193,10 +193,8 @@ class SikiRegttController extends Controller
         // dd($reg);
 
         $curl = curl_init();
-        $header[] = "X-Api-Key:" . env("LPJK_KEY");
-        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
-        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
-        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
+        $header[] = "X-Api-Key:" . $reg->asosiasi->apikey->lpjk_key;
+        $header[] = "Token:" . $reg->asosiasi->apikey->token;
         $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
             CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Klasifikasi/" . ($reg->sync ? "Ubah" : "Tambah") . "-TT",
@@ -238,10 +236,8 @@ class SikiRegttController extends Controller
         // dd($postData);
 
         $curl = curl_init();
-        $header[] = "X-Api-Key:" . env("LPJK_KEY");
-        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
-        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
-        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
+        $header[] = "X-Api-Key:" . $reg->asosiasi->apikey->lpjk_key;
+        $header[] = "Token:" . $reg->asosiasi->apikey->token;
         $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
             CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/History/TT",

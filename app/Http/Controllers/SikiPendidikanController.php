@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\SikiAsosiasi;
 use App\SikiPersonalPendidikan;
 use App\PersonalPendidikanSync;
 use App\Http\Controllers\Controller;
@@ -108,8 +109,13 @@ class SikiPendidikanController extends Controller
             return false;
     }
 
-    public function sync($id)
+    public function sync(Request $request, $id)
     {
+        $asosiasi = SikiAsosiasi::find($request->query("as"));
+        
+        if(!$asosiasi)
+            return redirect("/");
+
         $date = Carbon::now();
         $pendidikan = SikiPersonalPendidikan::find($id);
 
@@ -135,11 +141,10 @@ class SikiPendidikanController extends Controller
         ];
 
         $curl = curl_init();
-        $header[] = "X-Api-Key:" . env("LPJK_KEY");
-        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
-        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
-        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
+        $header[] = "X-Api-Key:" . $asosiasi->apikey->lpjk_key;
+        $header[] = "Token:" . $asosiasi->apikey->token;
         $header[] = "Content-Type:multipart/form-data";
+
         curl_setopt_array($curl, array(
         CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Pendidikan/" . ($pendidikan->sync ? "Ubah" : "Tambah"),
         CURLOPT_RETURNTRANSFER => true,

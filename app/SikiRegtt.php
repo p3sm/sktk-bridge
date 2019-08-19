@@ -29,4 +29,9 @@ class SikiRegtt extends Model
   {
     return $this->belongsTo('App\SikiKualifikasi', 'ID_Kualifikasi');
   }
+    
+  public function asosiasi()
+  {
+    return $this->belongsTo('App\SikiAsosiasi', 'ID_Asosiasi_Profesi');
+  }
 }

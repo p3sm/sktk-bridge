@@ -173,12 +173,12 @@
                           <td>{{$regta->sync ? $regta->sync->updated_at : "-"}}</td>
                           <td>{{$regta->sync ? $regta->sync->sync_id : "-"}}</td>
                         <td>
-                          <a href="{{url("siki_personal")."/".$regta->ID_Personal."/plain?ta"}}" target="_blank" class="btn btn-success btn-xs">Lihat Data</a>
+                          <a href="{{url("siki_personal")."/".$regta->ID_Personal."/plain?ty=ta&th=".$regta->tahap}}" target="_blank" class="btn btn-success btn-xs">Lihat Data</a>
                           {{-- <a href="#" data-url="{{url("siki_personal")."/".$regta->ID_Personal."/plain"}}" class="btn btn-success btn-xs viewDetail">Lihat Data</a> --}}
                           <a href="{{url("siki_regta/".$regta->ID_Registrasi_TK_Ahli."/sync")}}" class="btn btn-warning btn-xs">{{$regta->sync ? "Sync Ulang" : "Sync"}}</a>
-                          @if($regta->sync)
+                          {{-- @if($regta->sync)
                             <a href="{{url("siki_regta/".$regta->ID_Registrasi_TK_Ahli."/approve")}}" class="btn btn-primary btn-xs">Approve</a>
-                          @endif
+                          @endif --}}
                         </td>
                         </tr>
                         @endforeach

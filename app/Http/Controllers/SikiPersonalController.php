@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\SikiRegta;
+use App\SikiRegtt;
 use App\SikiPersonal;
 use App\SikiPersonalProyek;
+use App\AsosiasiKey;
 use App\Http\Controllers\Controller;
 use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -94,11 +97,19 @@ class SikiPersonalController extends Controller
 
     public function plain(Request $request, $id)
     {
-        if(!$request->exists("ta") && !$request->exists("tt")){
+        if(!$request->query("ty") || !$request->query("th")){
             return redirect("/");
         }
 
-        $data['sertifikatType'] = $request->exists("ta") ? "ta" : "tt";
+        if($request->query("ty") == "ta"){
+            $reg = SikiRegta::where("tahap", $request->query("th"))->first();
+        } else if ($request->query("ty") == "tt") {
+            $reg = SikiRegtt::where("tahap", $request->query("th"))->first();
+        }
+
+        $data['asosiasi'] = $reg->asosiasi->ID_Asosiasi_Profesi;
+        $data['sertifikatType'] = $request->query("ty");
+        $data['tahap'] = $request->query("th");
         $data['personal'] = SikiPersonal::find($id);
 
         return view('siki/personal/plain')->with($data);
@@ -120,10 +131,18 @@ class SikiPersonalController extends Controller
 
     public function sync(Request $request, $id)
     {
+        if($request->query("ty") == "ta"){
+            $reg = SikiRegta::where("tahap", $request->query("th"))->first();
+        } else if ($request->query("ty") == "tt") {
+            $reg = SikiRegtt::where("tahap", $request->query("th"))->first();
+        } else {
+            return redirect("/");
+        }
+
         $date = Carbon::now();
         $personal = SikiPersonal::find($id);
         $no_npwp = false;
-        $is_tt = $request->query("type") == "tt";
+        $is_tt = $request->query("ty") == "tt";
 
         if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/KTP.pdf")){
             return redirect()->back()->with('error', 'File KTP tidak tersedia');
@@ -167,7 +186,7 @@ class SikiPersonalController extends Controller
             "email"               => $personal->email,
             "no_hp"               => $personal->hp_personal,
             "id_negara"           => $personal->nm_ibu_kandung,
-            "jenis_tenaga_kerja"  => $request->query("type") == "ta" ? "tenaga_ahli" : "tenaga_terampil",
+            "jenis_tenaga_kerja"  => $request->query("ty") == "ta" ? "tenaga_ahli" : "tenaga_terampil",
             "url_pdf_ktp"                             => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/KTP.pdf")),
             "url_pdf_npwp"                            => $is_tt && $no_npwp ? "" : curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/NPWP.pdf")),
             "url_pdf_photo"                           => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/FOTO.png")),
@@ -181,10 +200,8 @@ class SikiPersonalController extends Controller
         // dd($postData);
 
         $curl = curl_init();
-        $header[] = "X-Api-Key:" . env("LPJK_KEY");
-        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQ04xb1RyU3UwZDVIZmJ6OG81cTZ0Vg==";
-        // $header[] = "Token:Rm1ydmpGbGQzcUxqR0J0Vis4cTlkZ1lKMUMzTDZDeEV5N2hZbVNSKzdGQk9JMm50Z1dKdW5SZlJLc1h0c0gyRA==";
-        $header[] = "Token:Q0lLNkJYNHdqK3FxS0tZeEdUR2FYcTJRRWpiZ0N3ejhvcGRlRjd5blNrUlpGb0pBUi93MStNZkZzdTJMdTliOHZQV0JiTkp1UDZpOWxSdkVoVjM5YXc9PQ==";
+        $header[] = "X-Api-Key:" . $reg->asosiasi->apikey->lpjk_key;
+        $header[] = "Token:" . $reg->asosiasi->apikey->token;
         $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
         CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Biodata/Tambah",

@@ -18,13 +18,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::group(['middleware' => 'auth.input'], function(){
 		Route::get('', 'HomeController@index');
 
-		Route::resources([
-		    'file_manager' => 'FileManagerController',
-		]);
+		Route::resources(['file_manager' => 'FileManagerController']);
 
-		Route::resources([
-		    'pemohon' => 'PemohonController',
-		]);
+		Route::resources(['pemohon' => 'PemohonController']);
 
 		Route::group(['prefix' => 'siki_personal'] , function(){
 			Route::get('{id}/plain', 'SikiPersonalController@plain');
@@ -33,10 +29,7 @@ Route::group(['middleware' => 'auth'], function(){
 			Route::get('{id}/pendidikan', 'SikiPersonalController@pendidikan');
 			Route::get('{id}/pendidikan', 'SikiPersonalController@pendidikan');
 		});
-
-		Route::resources([
-		    'siki_personal' => 'SikiPersonalController',
-		]);
+		Route::resources(['siki_personal' => 'SikiPersonalController']);
 
 		Route::group(['prefix' => 'siki_pendidikan'] , function(){
 			Route::get('{id}/sync', 'SikiPendidikanController@sync');
@@ -50,19 +43,23 @@ Route::group(['middleware' => 'auth'], function(){
 			Route::get('{id}/sync', 'SikiRegtaController@sync');
 			Route::get('{id}/approve', 'SikiRegtaController@approve');
 		});
-
-		Route::resources([
-		    'siki_regta' => 'SikiRegtaController',
-		]);
+		Route::resources(['siki_regta' => 'SikiRegtaController']);
 
 		Route::group(['prefix' => 'siki_regtt'] , function(){
 			Route::get('{id}/sync', 'SikiRegttController@sync');
 			Route::get('{id}/approve', 'SikiRegttController@approve');
 		});
+		Route::resources(['siki_regtt' => 'SikiRegttController']);
 
-		Route::resources([
-		    'siki_regtt' => 'SikiRegttController',
-		]);
+		Route::group(['prefix' => 'approval_regta'] , function(){
+			Route::get('{id}/approve', 'ApprovalRegtaController@approve');
+		});
+		Route::resources(['approval_regta' => 'ApprovalRegtaController']);
+
+		Route::group(['prefix' => 'approval_regtt'] , function(){
+			Route::get('{id}/approve', 'ApprovalRegttController@approve');
+		});
+		Route::resources(['approval_regtt' => 'ApprovalRegttController']);
 	});
 
 	Route::group(['middleware' => 'auth.admin'], function(){
