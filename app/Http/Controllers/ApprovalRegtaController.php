@@ -18,56 +18,7 @@ class ApprovalRegtaController extends Controller
      */
     public function index(Request $request)
     {
-        $asosiasiId = 142;
-        $asosiasi = SikiAsosiasi::find($asosiasiId);
-
-        $user = Auth::user();
-        
-        $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
-        $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
-
-        // $postData = [
-        //     "status_99" => 0,
-        //   ];
-
-        // $curl = curl_init();
-        // $header[] = "X-Api-Key:" . $asosiasi->apikey->lpjk_key;
-        // $header[] = "Token:" . $asosiasi->apikey->token;
-        // $header[] = "Content-Type:multipart/form-data";
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Klasifikasi/Get-TA?status_99=0",
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_CUSTOMREQUEST => "POST",
-        //     CURLOPT_POSTFIELDS => $postData,
-        //     CURLOPT_HTTPHEADER => $header,
-        // ));
-        // $response = curl_exec($curl);
-
-        // $data['response'] = $response->response;
-        // $data['results'] = $response->result;
-
-        // dd($response);
-
-        // echo $response;
-        // exit;
-
-        if($user->role->id == 1){
-            $data['syncs'] = PersonalRegTaSync::whereDate("created_at", ">=", $from->format('Y-m-d'))
-            ->whereDate("created_at", "<=", $to->format('Y-m-d'))
-            ->orderByDesc("id")
-            ->get();
-        } else {
-            $data['syncs'] = PersonalRegTaSync::where("synced_by", $user->id)
-            ->whereDate("created_at", ">=", $from->format('Y-m-d'))
-            ->whereDate("created_at", "<=", $to->format('Y-m-d'))
-            ->orderByDesc("id")
-            ->get();
-        }
-
-        $data['from'] = $from;
-        $data['to'] = $to;
-
-    	return view('approval/regta/index')->with($data);
+    	return view('approval/regta/index');
     }
 
     /**
@@ -99,7 +50,31 @@ class ApprovalRegtaController extends Controller
      */
     public function show($id)
     {
-        //
+        $asosiasi = SikiAsosiasi::find($id);
+
+        $postData = [
+            "status_99" => 0,
+          ];
+
+        $curl = curl_init();
+        $header[] = "X-Api-Key:" . $asosiasi->apikey->lpjk_key;
+        $header[] = "Token:" . $asosiasi->apikey->token;
+        $header[] = "Content-Type:multipart/form-data";
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Klasifikasi/Get-TA?status_99=0",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => $header,
+        ));
+        $response = curl_exec($curl);
+
+        $obj = json_decode($response);
+
+        $data['response'] = $obj->response;
+        $data['results'] = $obj->response > 0 ? $obj->result : [];
+
+    	return view('approval/regta/list')->with($data);
     }
 
     /**
@@ -134,5 +109,56 @@ class ApprovalRegtaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function approve(Request $request, $id)
+    {
+        // dd($request);
+        // $asosiasiId = 142;
+        $asosiasi = SikiAsosiasi::find($id);
+        // $reg = SikiRegta::find($id);
+
+        $postData = [
+          "id_personal"           => $request->query('ID_Personal'),
+          "id_sub_bidang"         => $request->query('ID_Sub_Bidang'),
+          "id_kualifikasi"        => $request->query('ID_Kualifikasi'),
+          "id_unit_sertifikasi"   => $request->query('id_unit_sertifikasi'),
+          "tgl_permohonan"        => $request->query('Tgl_Registrasi'),
+          "tahun"                 => Carbon::parse($request->query('Tgl_Registrasi'))->format("Y"),
+          "id_provinsi"           => $request->query('ID_Propinsi_reg'),
+          "id_permohonan"         => $request->query('id_permohonan'),
+          "id_status"             => 99,
+          "catatan"               => ""
+        ];
+
+        // dd($postData);
+
+        $curl = curl_init();
+        $header[] = "X-Api-Key:" . $asosiasi->apikey->lpjk_key;
+        $header[] = "Token:" . $asosiasi->apikey->token;
+        $header[] = "Content-Type:multipart/form-data";
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/History/TA",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => $header,
+        ));
+        $response = curl_exec($curl);
+
+        // dd($response);
+
+        // echo $response;
+        // exit;
+        
+        if($obj = json_decode($response)){
+            if($obj->response) {
+                // if($this->createApproveLog($reg))
+                    return redirect()->back()->with('success', $obj->message);
+            }
+            return redirect()->back()->with('error', $obj->message);
+        }
+
+        return redirect()->back()->with('error', "An error has occurred");
     }
 }
