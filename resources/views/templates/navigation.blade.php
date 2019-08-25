@@ -70,7 +70,7 @@
           </a>
         </li>
 
-        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
+        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
         <li class="{{Request::is('file_manager') ? 'active' : ''}}">
             <a href="{{ url('file_manager') }}">
               <i class="fa fa-folder-open"></i> <span>File Manager</span>
@@ -84,6 +84,9 @@
             {{-- <li class="{{Request::is('siki_personal') ? 'active' : ''}}"> <a href="{{ url('siki_personal') }}"><span>Personal</span> </a> </li> --}}
           </ul>
         </li>
+        @endif
+
+        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
         <li class="treeview {{Request::is('approval*') ? 'active' : ''}}">
           <a href=""><i class="fa fa-tasks"></i><span>Approval</span> <i class="fa fa-angle-left pull-right"></i></a>
           <ul class="treeview-menu">

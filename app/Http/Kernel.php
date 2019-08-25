@@ -63,6 +63,7 @@ class Kernel extends HttpKernel
         'auth.admin' => \App\Http\Middleware\AdminMiddleware::class,
         'auth.manager' => \App\Http\Middleware\ManagerMiddleware::class,
         'auth.input' => \App\Http\Middleware\InputMiddleware::class,
+        'auth.input.provinsi' => \App\Http\Middleware\InputProvinsiMiddleware::class,
     ];
 
     /**

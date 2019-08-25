@@ -15,7 +15,7 @@ Route::auth();
 
 Route::group(['middleware' => 'auth'], function(){
 
-	Route::group(['middleware' => 'auth.input'], function(){
+	Route::group(['middleware' => 'auth.input.provinsi'], function(){
 		Route::get('', 'HomeController@index');
 
 		Route::resources(['file_manager' => 'FileManagerController']);
@@ -50,7 +50,9 @@ Route::group(['middleware' => 'auth'], function(){
 			Route::get('{id}/approve', 'SikiRegttController@approve');
 		});
 		Route::resources(['siki_regtt' => 'SikiRegttController']);
+	});
 
+	Route::group(['middleware' => 'auth.input'], function(){
 		Route::group(['prefix' => 'approval_regta'] , function(){
 			Route::get('{id}/approve', 'ApprovalRegtaController@approve');
 		});
