@@ -38,4 +38,9 @@ class User extends Authenticatable
     {
       return $this->belongsTo('App\Role');
     }
+    
+    public function asosiasi()
+    {
+      return $this->hasOne('App\UserAsosiasi');
+    }
 }

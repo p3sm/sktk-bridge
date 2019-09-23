@@ -54,12 +54,14 @@
                         <tr>
                           <th>No.</th>
                           <th>NIK</th>
+                          <th>Nama</th>
                           <th>Sub Bidang</th>
                           <th>Asosiasi</th>
                           <th>Kualifikasi</th>
                           <th>Tgl Registrasi</th>
                           <th>Provinsi</th>
                           <th>Unit Sertifikasi</th>
+                          <th>Team</th>
                           <th>Action</th>
                         </tr>
                     </thead>
@@ -68,6 +70,7 @@
                         <tr>
                           <td>{{$k + 1}}</td>
                           <td>{{$result->ID_Personal}}</td>
+                          <td>{{$result->Nama}}</td>
                           <td>{{$result->ID_Sub_Bidang}}</td>
                           <td>{{$result->ID_Asosiasi_Profesi}}</td>
                           <td>{{App\SikiKualifikasi::find($result->ID_Kualifikasi)->Deskripsi_trampil}}</td>
@@ -75,7 +78,20 @@
                           <td>{{App\SikiPropinsi::find($result->ID_propinsi_reg)->Nama_Singkat}}</td>
                           <td>{{$result->id_unit_sertifikasi}}</td>
                           <td>
-                              <a href="{{url("approval_regtt/" . $result->ID_Asosiasi_Profesi . "/approve") . '?' . http_build_query($result)}}" class="btn btn-primary btn-xs">Approve</a>
+                            <select class="team">
+                              <option>-- Select Team --</option>
+                              @foreach (App\TeamKontribusiTt::where("id_asosiasi_profesi", $result->ID_Asosiasi_Profesi)
+                              ->where("id_propinsi_reg", $result->ID_propinsi_reg)
+                              ->where("id_kualifikasi", $result->ID_Kualifikasi)
+                              ->get() as $item)
+
+                              <option value="{{$item->team_id}}" {{($role == 1 || $role == 2) && $item->team_id == 1 ? "selected" : ""}}>{{$item->team->name}}</option>
+
+                              @endforeach
+                            </select>
+                          </td>
+                          <td>
+                              <a data-team="{{($role == 1 || $role == 2) ? "1" : "0"}}"  href="{{url("approval_regtt/" . $result->ID_Asosiasi_Profesi . "/approve") . '?' . http_build_query($result)}}" class="btn btn-primary btn-xs approve">Approve</a>
                           </td>
                         </tr>
                       @endforeach
@@ -100,7 +116,21 @@
 <script>
 $(function(){
   $('.input-daterange').datepicker({format: 'dd/mm/yyyy'});
-  $('#datatable').DataTable();
+  $('#datatable').DataTable({"paging": false});
+
+  $('.team').on('change', function(){
+    $(this).parents("tr").find(".approve").data("team", $(this).val())
+  })
+
+  $('.approve').on("click", function(e){
+    e.preventDefault();
+
+    if($(this).data('team') == 0){
+      alert("Pilih team")
+    } else {
+      window.location = $(this).attr("href") + "&team=" + $(this).data("team")
+    }
+  })
 });
 </script>
 @endpush

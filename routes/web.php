@@ -14,60 +14,47 @@
 Route::auth();
 
 Route::group(['middleware' => 'auth'], function(){
+	Route::get('', 'HomeController@index');
 
 	Route::group(['middleware' => 'auth.input.provinsi'], function(){
-		Route::get('', 'HomeController@index');
 
 		Route::resources(['file_manager' => 'FileManagerController']);
 
 		Route::resources(['pemohon' => 'PemohonController']);
 
-		Route::group(['prefix' => 'siki_personal'] , function(){
-			Route::get('{id}/plain', 'SikiPersonalController@plain');
-			Route::get('{id}/sync', 'SikiPersonalController@sync');
-			Route::get('{id}/proyek', 'SikiPersonalController@proyek');
-			Route::get('{id}/pendidikan', 'SikiPersonalController@pendidikan');
-			Route::get('{id}/pendidikan', 'SikiPersonalController@pendidikan');
-		});
 		Route::resources(['siki_personal' => 'SikiPersonalController']);
+		Route::get('siki_personal/{id}/plain', 'SikiPersonalController@plain');
+		Route::get('siki_personal/{id}/sync', 'SikiPersonalController@sync');
+		Route::get('siki_personal/{id}/proyek', 'SikiPersonalController@proyek');
+		Route::get('siki_personal/{id}/pendidikan', 'SikiPersonalController@pendidikan');
+		Route::get('siki_personal/{id}/pendidikan', 'SikiPersonalController@pendidikan');
 
-		Route::group(['prefix' => 'siki_pendidikan'] , function(){
-			Route::get('{id}/sync', 'SikiPendidikanController@sync');
-		});
+		Route::get('siki_pendidikan/{id}/sync', 'SikiPendidikanController@sync');
 
-		Route::group(['prefix' => 'siki_proyek'] , function(){
-			Route::get('{id}/sync', 'SikiProyekController@sync');
-		});
+		Route::get('siki_proyek/{id}/sync', 'SikiProyekController@sync');
 
-		Route::group(['prefix' => 'siki_regta'] , function(){
-			Route::get('{id}/sync', 'SikiRegtaController@sync');
-			Route::get('{id}/approve', 'SikiRegtaController@approve');
-		});
 		Route::resources(['siki_regta' => 'SikiRegtaController']);
+		Route::get('siki_regta/{id}/sync', 'SikiRegtaController@sync');
+		Route::get('siki_regta/{id}/approve', 'SikiRegtaController@approve');
 
-		Route::group(['prefix' => 'siki_regtt'] , function(){
-			Route::get('{id}/sync', 'SikiRegttController@sync');
-			Route::get('{id}/approve', 'SikiRegttController@approve');
-		});
 		Route::resources(['siki_regtt' => 'SikiRegttController']);
+		Route::get('siki_regtt/{id}/sync', 'SikiRegttController@sync');
+		Route::get('siki_regtt/{id}/approve', 'SikiRegttController@approve');
 	});
 
-	Route::group(['middleware' => 'auth.input'], function(){
-		Route::group(['prefix' => 'approval_regta'] , function(){
-			Route::get('{id}/approve', 'ApprovalRegtaController@approve');
-		});
-		Route::resources(['approval_regta' => 'ApprovalRegtaController']);
+	Route::group(['middleware' => 'auth.approval'], function(){
+		Route::resources(['approval_report' => 'ApprovalController']);
+		Route::get('approval_detail', 'ApprovalController@detail');
 
-		Route::group(['prefix' => 'approval_regtt'] , function(){
-			Route::get('{id}/approve', 'ApprovalRegttController@approve');
-		});
+		Route::resources(['approval_regta' => 'ApprovalRegtaController']);
+		Route::get('approval_regta/{id}/approve', 'ApprovalRegtaController@approve');
+
 		Route::resources(['approval_regtt' => 'ApprovalRegttController']);
+		Route::get('approval_regtt/{id}/approve', 'ApprovalRegttController@approve');
 	});
 
 	Route::group(['middleware' => 'auth.admin'], function(){
-		Route::resources([
-		    'users' => 'UserController',
-		]);
+		Route::resources(['users' => 'UserController']);
 	});
 	
 });

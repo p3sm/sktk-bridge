@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\ApprovalTransaction;
 use App\SikiAsosiasi;
+use App\TeamKontribusiTa;
 use App\PersonalRegTaSync;
 use App\PersonalRegTaApprove;
 use Carbon\Carbon;
@@ -18,6 +20,10 @@ class ApprovalRegtaController extends Controller
      */
     public function index(Request $request)
     {
+        if(Auth::user()->asosiasi){
+            return redirect('/approval_regta/' . Auth::user()->asosiasi->asosiasi_id);
+        }
+        
     	return view('approval/regta/index');
     }
 
@@ -54,6 +60,7 @@ class ApprovalRegtaController extends Controller
 
         $postData = [
             "status_99" => 0,
+            // "limit" => 10
           ];
 
         $curl = curl_init();
@@ -61,7 +68,7 @@ class ApprovalRegtaController extends Controller
         $header[] = "Token:" . $asosiasi->apikey->token;
         $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
-            CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Klasifikasi/Get-TA?status_99=0",
+            CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Klasifikasi/Get-TA",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $postData,
@@ -73,6 +80,7 @@ class ApprovalRegtaController extends Controller
 
         $data['response'] = $obj->response;
         $data['results'] = $obj->response > 0 ? $obj->result : [];
+        $data['role'] = Auth::user()->role_id;
 
     	return view('approval/regta/list')->with($data);
     }
@@ -113,6 +121,7 @@ class ApprovalRegtaController extends Controller
 
     public function approve(Request $request, $id)
     {
+        // exit;
         // dd($request);
         // $asosiasiId = 142;
         $asosiasi = SikiAsosiasi::find($id);
@@ -153,12 +162,40 @@ class ApprovalRegtaController extends Controller
         
         if($obj = json_decode($response)){
             if($obj->response) {
+                $this->ApproveTransaction($request);
                 // if($this->createApproveLog($reg))
-                    return redirect()->back()->with('success', $obj->message);
+                return redirect()->back()->with('success', $obj->message);
             }
             return redirect()->back()->with('error', $obj->message);
         }
 
         return redirect()->back()->with('error', "An error has occurred");
+    }
+
+    public function ApproveTransaction($request){
+        
+        $teamKontribusi = TeamKontribusiTa::where("team_id", $request->query('team'))
+        ->where("id_asosiasi_profesi", $request->query('ID_Asosiasi_Profesi'))
+        ->where("id_propinsi_reg", $request->query('ID_Propinsi_reg'))
+        ->where("id_kualifikasi", $request->query('ID_Kualifikasi'))
+        ->first();
+        
+        $approvalTrx                      = new ApprovalTransaction();
+        $approvalTrx->id_asosiasi_profesi = $request->query('ID_Asosiasi_Profesi');
+        $approvalTrx->id_propinsi_reg     = $request->query('ID_Propinsi_reg');
+        $approvalTrx->team_id             = $request->query('team');
+        $approvalTrx->tipe_sertifikat     = "SKA";
+        $approvalTrx->id_personal         = $request->query('ID_Personal');
+        $approvalTrx->nama                = $request->query('Nama');
+        $approvalTrx->id_sub_bidang       = $request->query('ID_Sub_Bidang');
+        $approvalTrx->id_unit_sertifikasi = $request->query('id_unit_sertifikasi');
+        $approvalTrx->tgl_registrasi      = $request->query('Tgl_Registrasi');
+        $approvalTrx->id_kualifikasi      = $request->query('ID_Kualifikasi');
+        $approvalTrx->id_permohonan       = $request->query('id_permohonan');
+        $approvalTrx->dpp_adm_anggota     = 0;
+        $approvalTrx->dpp_kontribusi      = $teamKontribusi->kontribusi;
+        $approvalTrx->dpp_total           = $teamKontribusi->kontribusi;
+        $approvalTrx->created_by          = Auth::id();
+        $approvalTrx->save();
     }
 }

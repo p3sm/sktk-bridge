@@ -104,7 +104,12 @@ function initialized(){
             body += "<td>"+i+"</td>";
             body += "<td>"+data.name+"</td>";
             body += "<td>"+data.username+"</td>";
-            body += `<td> `+ (data.role_id == 1 ? "Admin" : data.role_id == 2 ? "Input Pusat" : data.role_id == 3 ? "Input Provinsi" : "-") +` </td>`;
+            body += `<td> `+ (
+                data.role_id == 1 ? "Admin" : 
+                data.role_id == 2 ? "Input Pusat" : 
+                data.role_id == 3 ? "Input Provinsi" : 
+                data.role_id == 4 ? "Approve" : 
+                "-") +` </td>`;
             body += "<td>"+data.created_at.substring(0, 10)+"</td>";
             body += "<td><input type='checkbox' "+ (data.is_active == 1 ? "checked" : "") +"></td>";
             body += `<td><a href='{{url('users')}}/`+data.id+`/edit' class='btn btn-xs btn-warning'><span class='glyphicon glyphicon-pencil'></span></a>

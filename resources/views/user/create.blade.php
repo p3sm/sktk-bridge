@@ -26,21 +26,26 @@
 	            <h3 class="box-title">Create User</h3>
 	          </div>
 	          <!-- /.box-header -->
+            @if(session()->get('error'))
+            <div class="alert alert-error">
+              {{ session()->get('error') }}  
+            </div><br />
+            @endif
 	          <!-- form start -->
 	          <form role="form" method="post" action="{{url("users")}}">
               @csrf
 	            <div class="box-body">
 	              <div class="form-group">
 	                <label for="name">Nama</label>
-	                <input type="text" class="form-control" name="name" id="name" placeholder="Enter name">
+	                <input type="text" class="form-control" name="name" id="name" placeholder="Enter name" required>
 	              </div>
 	              <div class="form-group">
 	                <label for="username">Username</label>
-	                <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
+	                <input type="text" class="form-control" name="username" id="username" placeholder="Enter username" required>
 	              </div>
 	              <div class="form-group">
 	                <label for="password">Password</label>
-	                <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+	                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
 	              </div>
 	              <div class="form-group">
                   <label>Role</label>
@@ -48,6 +53,14 @@
                     @foreach ($roles as $role)
                     <option value="{{$role->id}}">{{$role->name}}</option>
                     @endforeach
+                  </select>
+                </div>
+	              <div class="form-group">
+                  <label>Asosiasi</label>
+                  <select class="form-control" name="asosiasi" required>
+                    <option value="">-- Pilih Asosiasi --</option>
+                    <option value="142">ASTEKINDO</option>
+                    <option value="148">GATAKI</option>
                   </select>
                 </div>
 	              <div class="checkbox">
