@@ -51,6 +51,10 @@ Route::group(['middleware' => 'auth'], function(){
 
 		Route::resources(['approval_regtt' => 'ApprovalRegttController']);
 		Route::get('approval_regtt/{id}/approve', 'ApprovalRegttController@approve');
+
+		Route::resources(['team_kontribusi_ta' => 'TeamKontribusiTAController']);
+
+		Route::resources(['team_kontribusi_tt' => 'TeamKontribusiTTController']);
 	});
 
 	Route::group(['middleware' => 'auth.admin'], function(){

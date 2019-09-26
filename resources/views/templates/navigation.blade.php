@@ -96,6 +96,14 @@
             <li class="{{Request::is('approval_detail*') ? 'active' : ''}}"> <a href="{{ url('approval_detail') }}"><span>Report Detail</span> </a> </li>
           </ul>
         </li>
+        
+        <li class="treeview {{Request::is('team*') ? 'active' : ''}}">
+          <a href=""><i class="fa fa-tasks"></i><span>Team Produksi</span> <i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+            <li class="{{Request::is('team_kontribusi_ta*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_ta') }}"><span>Kontribusi Ahli</span> </a> </li>
+            <li class="{{Request::is('team_kontribusi_tt*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_tt') }}"><span>Kontribusi Trampil</span> </a> </li>
+          </ul>
+        </li>
         {{-- <li class="{{Request::is('pemohon') ? 'active' : ''}}">
           <a href="{{ url('pemohon') }}">
             <i class="fa fa-user"></i> <span>Pemohon</span>
