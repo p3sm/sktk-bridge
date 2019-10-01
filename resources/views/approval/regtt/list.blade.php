@@ -75,7 +75,13 @@
                           <td>{{$result->ID_Asosiasi_Profesi}}</td>
                           <td>{{App\SikiKualifikasi::find($result->ID_Kualifikasi)->Deskripsi_trampil}}</td>
                           <td>{{$result->Tgl_Registrasi}}</td>
-                          <td>{{App\SikiPropinsi::find($result->ID_propinsi_reg)->Nama_Singkat}}</td>
+                          <td>
+                            @if($prov = App\SikiPropinsi::find($result->ID_propinsi_reg))
+                            {{$prov->Nama_Singkat}}
+                            @else
+                            {{$result->ID_propinsi_reg}}
+                            @endif
+                          </td>
                           <td>{{$result->id_unit_sertifikasi}}</td>
                           <td>
                             <select class="team">
