@@ -128,6 +128,43 @@ class SikiPersonalController extends Controller
 
     	return view('siki/personal/pendidikan')->with($data);
     }
+    
+    private function createEmail($email){
+        $whmusername = "root";
+        $whmpassword = "Astek7744Fb";
+
+        $param = [
+            "cpanel_jsonapi_user"       => "csimandiri",
+            "cpanel_jsonapi_apiversion" => "2",
+            "cpanel_jsonapi_module"     => "Email",
+            "cpanel_jsonapi_func"       => "addpop",
+            "domain"                    => "csimandiri.com",
+            "email"                     => $email,
+            "password"                  => "1A2B3C4F5G",
+            "quota"                     => "1",
+            "send_welcome_email"        => "0"
+        ];
+        
+        $query = "https://mainland.csimandiri.com:2087/json-api/cpanel?";
+        $query .= http_build_query($param);
+        
+        $curl = curl_init();                                // Create Curl Object
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER,0);       // Allow self-signed certs
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST,0);       // Allow certs that do not match the hostname
+        curl_setopt($curl, CURLOPT_HEADER,0);               // Do not include header in output
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);       // Return contents of transfer on curl_exec
+        $header[0] = "Authorization: Basic " . base64_encode($whmusername.":".$whmpassword) . "\n\r";
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);    // set the username and password
+        curl_setopt($curl, CURLOPT_URL, $query);            // execute the query
+        $result = curl_exec($curl);
+        if ($result == false) {
+            error_log("curl_exec threw error \"" . curl_error($curl) . "\" for $query"); 
+            return false;  
+        }
+        curl_close($curl);
+        
+        return true;
+    }
 
     public function sync(Request $request, $id)
     {
@@ -143,6 +180,12 @@ class SikiPersonalController extends Controller
         $personal = SikiPersonal::find($id);
         $no_npwp = false;
         $is_tt = $request->query("ty") == "tt";
+
+        if (strpos($personal->email, 'csimandiri.com') !== false) {
+            if(!$this->createEmail($personal->email)){
+                return redirect()->back()->with('error', 'Email tidak berhasil didaftarkan ke csimandiri.com');
+            }
+        }
 
         if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $personal->id_personal . "/KTP.pdf")){
             return redirect()->back()->with('error', 'File KTP tidak tersedia');
