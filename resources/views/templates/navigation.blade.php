@@ -87,7 +87,7 @@
         @endif
 
         @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 4)
-        <li class="treeview {{Request::is('approval*') ? 'active' : ''}}">
+        <li class="treeview {{Request::is('approval_re*') || Request::is('approval_detail*') ? 'active' : ''}}">
           <a href=""><i class="fa fa-tasks"></i><span>Approval</span> <i class="fa fa-angle-left pull-right"></i></a>
           <ul class="treeview-menu">
             <li class="{{Request::is('approval_regta*') ? 'active' : ''}}"> <a href="{{ url('approval_regta') }}"><span>Tenaga Ahli</span> </a> </li>
@@ -95,6 +95,12 @@
             <li class="{{Request::is('approval_report*') ? 'active' : ''}}"> <a href="{{ url('approval_report') }}"><span>Report</span> </a> </li>
             <li class="{{Request::is('approval_detail*') ? 'active' : ''}}"> <a href="{{ url('approval_detail') }}"><span>Report Detail</span> </a> </li>
           </ul>
+        </li>
+
+        <li class="{{Request::is('approval_99*') ? 'active' : ''}}">
+            <a href="{{ url('approval_99') }}">
+              <i class="fa fa-tasks"></i> <span>Permohonan Approval 99</span>
+            </a>
         </li>
         
         <li class="treeview {{Request::is('team*') ? 'active' : ''}}">

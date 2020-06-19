@@ -68,11 +68,13 @@ class ApprovalRegtaController extends Controller
         $header[] = "Token:" . $asosiasi->apikey->token;
         $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
-            CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/Klasifikasi/Get-TA",
+            CURLOPT_URL => config("app.lpjk_endpoint") . "Service/Klasifikasi/Get-TA",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $postData,
             CURLOPT_HTTPHEADER => $header,
+            CURLOPT_SSL_VERIFYHOST => 0,
+            CURLOPT_SSL_VERIFYPEER => 0
         ));
         $response = curl_exec($curl);
 
@@ -147,7 +149,7 @@ class ApprovalRegtaController extends Controller
         $header[] = "Token:" . $asosiasi->apikey->token;
         $header[] = "Content-Type:multipart/form-data";
         curl_setopt_array($curl, array(
-            CURLOPT_URL => env("LPJK_ENDPOINT") . "Service/History/TA",
+            CURLOPT_URL => config("app.lpjk_endpoint") . "Service/History/TA",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => $postData,

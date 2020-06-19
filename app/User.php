@@ -39,6 +39,11 @@ class User extends Authenticatable
       return $this->belongsTo('App\Role');
     }
     
+    public function team()
+    {
+      return $this->belongsTo('App\Team', 'team_id');
+    }
+    
     public function asosiasi()
     {
       return $this->hasOne('App\UserAsosiasi');

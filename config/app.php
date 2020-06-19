@@ -226,4 +226,6 @@ return [
 
     ],
 
+    'lpjk_endpoint' => env('LPJK_ENDPOINT'),
+
 ];

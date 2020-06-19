@@ -55,6 +55,9 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::resources(['team_kontribusi_ta' => 'TeamKontribusiTAController']);
 
 		Route::resources(['team_kontribusi_tt' => 'TeamKontribusiTTController']);
+
+		Route::resources(['approval_99' => 'Approval99Controller']);
+		Route::get('approval_99/{id}/approve', 'Approval99Controller@approve');
 	});
 
 	Route::group(['middleware' => 'auth.admin'], function(){
