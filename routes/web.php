@@ -58,6 +58,9 @@ Route::group(['middleware' => 'auth'], function(){
 
 		Route::resources(['approval_99' => 'Approval99Controller']);
 		Route::get('approval_99/{id}/approve', 'Approval99Controller@approve');
+
+		Route::resources(['hapus_99' => 'Hapus99Controller']);
+		Route::get('hapus_99/{id}/approve', 'Hapus99Controller@approve');
 	});
 
 	Route::group(['middleware' => 'auth.admin'], function(){

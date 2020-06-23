@@ -102,6 +102,12 @@
               <i class="fa fa-tasks"></i> <span>Permohonan Approval 99</span>
             </a>
         </li>
+
+        <li class="{{Request::is('hapus_99*') ? 'active' : ''}}">
+            <a href="{{ url('hapus_99') }}">
+              <i class="fa fa-tasks"></i> <span>Permohonan Hapus 99</span>
+            </a>
+        </li>
         
         <li class="treeview {{Request::is('team*') ? 'active' : ''}}">
           <a href=""><i class="fa fa-tasks"></i><span>Team Produksi</span> <i class="fa fa-angle-left pull-right"></i></a>
