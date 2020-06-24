@@ -9,6 +9,8 @@ use App\ApprovalTransaction;
 use App\SikiAsosiasi;
 use App\TeamKontribusiTa;
 use App\TeamKontribusiTt;
+use App\PersonalRegTa;
+use App\PersonalRegTt;
 use App\PersonalRegTaSync;
 use App\PersonalRegTaApprove;
 use App\Pengajuan99;
@@ -215,6 +217,29 @@ class Approval99Controller extends Controller
         $pengajuanModel->approved_by = Auth::user()->id;
         $pengajuanModel->approved_at = Carbon::now();
         $pengajuanModel->save();
+        
+        if($pengajuan->tipe_sertifikat == "SKA"){
+            $data = PersonalRegTa::where("Tgl_Registrasi", $pengajuan->tgl_registrasi)
+            ->where("ID_Personal", $pengajuan->id_personal)
+            ->where("ID_Sub_Bidang", $pengajuan->sub_bidang)
+            ->where("ID_Asosiasi_Profesi", $pengajuan->asosiasi)->first();
+            
+            if($data){
+                $data->status_terbaru = 99;
+                $data->save();
+            }
+        } else {
+            $data = PersonalRegTt::where("Tgl_Registrasi", $pengajuan->tgl_registrasi)
+            ->where("ID_Personal", $pengajuan->id_personal)
+            ->where("ID_Sub_Bidang", $pengajuan->sub_bidang)
+            ->where("ID_Asosiasi_Profesi", $pengajuan->asosiasi)->first();
+            
+            if($data){
+                $data->status_terbaru = 99;
+                $data->save();
+            }
+        }
+
         
         if($pengajuan->tipe_sertifikat == "SKA"){
             $teamKontribusi = TeamKontribusiTa::where("team_id", $pengajuan->user->team_id)

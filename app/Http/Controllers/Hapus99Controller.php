@@ -11,7 +11,7 @@ use App\TeamKontribusiTa;
 use App\TeamKontribusiTt;
 use App\PersonalRegTaSync;
 use App\PersonalRegTaApprove;
-use App\Pengajuan99;
+use App\PengajuanHapus99;
 
 class Hapus99Controller extends Controller
 {
@@ -22,7 +22,7 @@ class Hapus99Controller extends Controller
      */
     public function index(Request $request)
     {
-      $data["results"] = Pengajuan99::whereNull('approved')->get();
+      $data["results"] = PengajuanHapus99::whereNull('deleted')->get();
 
     	return view('approval/hapus_99/list')->with($data);
     }

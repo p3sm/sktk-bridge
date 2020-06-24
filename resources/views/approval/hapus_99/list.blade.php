@@ -92,7 +92,7 @@
                             <td>{{$result->ustk}}</td>
                             <td>{{$result->user->team->name}}</td>
                             <td>
-                              <a href="{{url("approval_99/" . $result->id . "/approve")}}" class="btn btn-primary btn-xs approve">Approve</a>
+                              <a href="{{url("approval_99/" . $result->id . "/approve")}}" class="btn btn-danger btn-xs approve">Hapus</a>
                             </td>
                           </tr>
                         @endforeach
