@@ -277,6 +277,7 @@ class Approval99Controller extends Controller
             $approvalTrx->dpp_adm_anggota     = 0;
             $approvalTrx->dpp_kontribusi      = $teamKontribusi->kontribusi;
             $approvalTrx->dpp_total           = $teamKontribusi->kontribusi;
+            $approvalTrx->owner               = $pengajuan->created_by;
             $approvalTrx->created_by          = Auth::id();
             $approvalTrx->save();
         }
