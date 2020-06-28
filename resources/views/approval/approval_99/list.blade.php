@@ -16,9 +16,9 @@
 <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <a href="{{url("approval_regta")}}" class="btn btn-danger btn-sm"><i class="fa fa-arrow-left"></i> kembali</a> 
+        {{-- <a href="{{url("approval_regta")}}" class="btn btn-danger btn-sm"><i class="fa fa-arrow-left"></i> kembali</a>  --}}
         {{-- Data Registrasi Tenaga Ahli - Tahap {{count($regtas) > 0 ? $regtas[0]->tahap1 : "-"}} --}}
-        {{--  <small>it all starts here</small>  --}}
+         Permohonan Approval & Hapus 99
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -33,67 +33,101 @@
       <!-- Default box -->
       <div class="box">
         <div class="box-body">
-          @if(session()->get('success'))
-          <div class="alert alert-success alert-block">
-            <button type="button" class="close" data-dismiss="alert">×</button>   
-                  <strong>{{ session()->get('success') }}</strong>
-          </div>
-          @endif
+          <form method="get" style="margin-bottom: 20px" action="" class="form-inline float-right">
+            <label class="" for="inlineFormCustomSelectPref">filter: </label>
+            <div class="input-group input-daterange">
+              <input type="text" name="from" class="form-control input-sm" value="{{$from->format("d/m/Y")}}">
+              <div class="input-group-addon">to</div>
+              <input type="text" name="to" class="form-control input-sm" value="{{$to->format("d/m/Y")}}">
+            </div>
+            <select name="srtf" class="form-control input-sm">
+              <option value="">-- Pilih Sertifikat --</option>
+              <option value="SKA" {{$sertifikat == "SKA" ? "selected" : ""}}>SKA</option>
+              <option value="SKT" {{$sertifikat == "SKT" ? "selected" : ""}}>SKT</option>
+            </select>
+            <select name="prv" class="form-control input-sm">
+              <option value="">-- Pilih Provinsi --</option>
+              @foreach ($provinsi_data as $data)
+                <option value="{{str_pad((string)$data->id_provinsi, 2, '0', STR_PAD_LEFT)}}" {{$provinsi == $data->id_provinsi ? "selected" : ""}}>{{$data->nama}}</option>
+              @endforeach
+            </select>
+            <select name="aso" class="form-control input-sm">
+              <option value="">-- Pilih Asosiasi --</option>
+              <option value="142" {{$asosiasi == 142 ? "selected" : ""}}>ASTEKINDO</option>
+              <option value="148" {{$asosiasi == 148 ? "selected" : ""}}>GATAKI</option>
+            </select>
+            <select name="tim" class="form-control input-sm">
+              <option value="">-- Pilih Tim --</option>
+              @foreach ($tim_data as $data)
+                <option value="{{$data->id}}" {{$tim == $data->id ? "selected" : ""}}>{{$data->name}}</option>
+              @endforeach
+            </select>
+            <a href="/approval_99" class="btn btn-default btn-sm my-1">Reset</a>
+            <button type="submit" class="btn btn-primary btn-sm my-1">Filter</button>
+            <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus">Hapus</button>
+            <button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button>
 
-          @if(session()->get('error'))
-          <div class="alert alert-danger alert-block">
-            <button type="button" class="close" data-dismiss="alert">×</button>   
-                  <strong>{{ session()->get('error') }}</strong>
-          </div>
-          @endif
+            @if(session()->get('success'))
+            <div class="alert alert-success alert-block" style="margin-top: 10px;">
+              <button type="button" class="close" data-dismiss="alert">×</button>   
+                    <strong>{{ session()->get('success') }}</strong>
+            </div>
+            @endif
+
+            @if(session()->get('error'))
+            <div class="alert alert-danger alert-block" style="margin-top: 10px;">
+              <button type="button" class="close" data-dismiss="alert">×</button>   
+                    <strong>{{ session()->get('error') }}</strong>
+            </div>
+            @endif
+
+            <div class="clearfix">
+            </div>
 
             {{--  table data  --}}
             <div class="table-responsive" style="">
                 <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+                            <th><input id="check_all" type="checkbox"></th>
                             <th>No.</th>
-                            <th>NIK</th>
-                            <th>Nama</th>
-                            <th>Sub Bidang</th>
+                            <th>Sts Mohon</th>
+                            <th>Jns Mohon</th>
+                            <th>Tim Prod</th>
                             <th>Asosiasi</th>
-                            <th>Kualifikasi</th>
+                            <th>USTK</th>
+                            <th>Prov Reg</th>
+                            <th>Nama</th>
+                            <th>NIK</th>
+                            <th>Prov P</th>
+                            <th>Sub Klasfks</th>
+                            <th>Sub Kualfks</th>
+                            <th>Sts Akhir</th>
                             <th>Tgl Registrasi</th>
-                            <th>Provinsi</th>
-                            <th>Unit Sertifikasi</th>
-                            <th>Team</th>
-                            <th>Action</th>
+                            {{-- <th>Action</th> --}}
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($results as $k => $result)
                           <tr>
+                            <td><input class="check_item" type="checkbox" name="pilih_permohonan[]" value="<?php echo $result->id?>" /></td>
                             <td>{{$k + 1}}</td>
-                            <td>{{$result->id_personal}}</td>
-                            <td>{{$result->nama}}</td>
-                            <td>{{$result->sub_bidang}}</td>
-                            <td>{{$result->asosiasi}}</td>
-                            <td>
-                              @php
-                              if($result->tipe_sertifikat == "SKA")
-                                echo App\SikiKualifikasi::find($result->kualifikasi)->Deskripsi_ahli;
-                              else
-                                echo App\SikiKualifikasi::find($result->kualifikasi)->Deskripsi_trampil;
-                              @endphp
-                            </td>
-                            <td>{{$result->tgl_registrasi}}</td>
-                            <td>
-                              @if($prov = App\SikiPropinsi::find($result->provinsi))
-                              {{$prov->Nama_Singkat}}
-                              @else
-                              {{$result->ID_Propinsi_reg}}
-                              @endif
-                            </td>
-                            <td>{{$result->ustk}}</td>
+                            <td>{!!$result->diajukan_hapus == 1 ? "<span class='label label-danger'>Minta Hapus</span>" : ($result->diajukan == 1 && $result->status_terbaru == null ? '<span class="label label-primary">Minta Setuju</span>' : ($result->diajukan == 1 && $result->status_terbaru == 99 ? '<span class="label label-success">Setuju</span>' : ''))!!}</td>
+                            <td>{{$result->id_permohonan == 1 ? "Baru" : ($result->id_permohonan == 2 ? "Perpanjangan" : "Perubahan")}}</td>
                             <td>{{$result->user->team->name}}</td>
-                            <td>
+                            <td>{{$result->ID_Asosiasi_Profesi}}</td>
+                            <td>{{$result->id_unit_sertifikasi}}</td>
+                            <td>{{$result->provinsi->nama_singkat}}</td>
+                            <td>{{$result->personal->Nama}}</td>
+                            <td>{{$result->ID_Personal}}</td>
+                            <td>{{$result->personal->provinsi->nama_singkat}}</td>
+                            <td>{{$result->ID_Sub_Bidang}}</td>
+                            <td>{{$result->tipe_sertifikat == "SKA" ? $result->kualifikasi->deskripsi_ahli : $result->kualifikasi->deskripsi_trampil}}</td>
+                            <td>{{$result->status_terbaru}}</td>
+                            <td>{{$result->Tgl_Registrasi}}</td>
+                            {{-- <td>
                               <a href="{{url("approval_99/" . $result->id . "/approve")}}" class="btn btn-primary btn-xs approve">Approve</a>
-                            </td>
+                            </td> --}}
                           </tr>
                         @endforeach
                     </tbody>
@@ -101,6 +135,7 @@
                 </table>
             </div>
             {{--  end of data  --}}
+          </form>
 
         </div>
         <!-- /.box-body -->
@@ -116,8 +151,33 @@
 @push('script')
 <script>
 $(function(){
+	$("#check_all").on("click", function(e){
+		$(".check_item").each(function(i){
+			$(this).prop('checked', e.target.checked);;
+		})
+  })
+  
   $('.input-daterange').datepicker({format: 'dd/mm/yyyy'});
-  $('#datatable').DataTable({"paging": false});
+	
+  var dt = $('#datatable').DataTable( {
+      "lengthMenu": [[100, 200, 500],[100, 200, 500]],
+      "scrollX": true,
+      "scrollY": $( window ).height() - 255,
+      "scrollCollapse": true,
+      "autoWidth": false,
+      "columnDefs": [ {
+          "searchable": false,
+          "orderable": false,
+          "targets": [0,1]
+      } ],
+      "order": [[ 14, 'desc' ]]
+  } );
+  
+  dt.on( 'order.dt search.dt', function () {
+    dt.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+        cell.innerHTML = i+1;
+    } );
+} ).draw();
 });
 </script>
 @endpush
