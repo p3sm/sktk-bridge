@@ -75,15 +75,34 @@ class Approval99Controller extends Controller
             $result = $result->merge($pengajuan);
         }
 
-        if($request->pilih_permohonan && $request->setuju){
-            foreach($result as $res){
-                if (in_array($res->id, $request->pilih_permohonan)) {
-                    if(!$this->approveV2($res)){
-                        return redirect('approval_99?from='.$from->format("d/m/Y").'&to='.$to->format("d/m/Y").'&srtf='.$sertifikat.'&prv='.$provinsi.'&aso='.$asosiasi.'&tim=' . $tim)->with('error', $this->message);
+        if($request->setuju){
+            if($request->pilih_permohonan){
+                foreach($result as $res){
+                    if (in_array($res->id, $request->pilih_permohonan)) {
+                        if(!$this->approveV2($res)){
+                            return redirect('approval_99?from='.$from->format("d/m/Y").'&to='.$to->format("d/m/Y").'&srtf='.$sertifikat.'&prv='.$provinsi.'&aso='.$asosiasi.'&tim=' . $tim)->with('error', $this->message);
+                        }
                     }
                 }
+                return redirect('approval_99?from='.$from->format("d/m/Y").'&to='.$to->format("d/m/Y").'&srtf='.$sertifikat.'&prv='.$provinsi.'&aso='.$asosiasi.'&tim=' . $tim)->with('success', $this->message);
+            } else {
+                return redirect('approval_99?from='.$from->format("d/m/Y").'&to='.$to->format("d/m/Y").'&srtf='.$sertifikat.'&prv='.$provinsi.'&aso='.$asosiasi.'&tim=' . $tim)->with('error', 'Pilih data yang akan disetujui');
             }
-            return redirect('approval_99?from='.$from->format("d/m/Y").'&to='.$to->format("d/m/Y").'&srtf='.$sertifikat.'&prv='.$provinsi.'&aso='.$asosiasi.'&tim=' . $tim)->with('success', $this->message);
+        }
+
+        if($request->hapus){
+            if($request->pilih_permohonan){
+                foreach($result as $res){
+                    if (in_array($res->id, $request->pilih_permohonan)) {
+                        if(!$this->delete($res)){
+                            return redirect('approval_99?from='.$from->format("d/m/Y").'&to='.$to->format("d/m/Y").'&srtf='.$sertifikat.'&prv='.$provinsi.'&aso='.$asosiasi.'&tim=' . $tim)->with('error', $this->message);
+                        }
+                    }
+                }
+                return redirect('approval_99?from='.$from->format("d/m/Y").'&to='.$to->format("d/m/Y").'&srtf='.$sertifikat.'&prv='.$provinsi.'&aso='.$asosiasi.'&tim=' . $tim)->with('success', $this->message);
+            } else {                
+                return redirect('approval_99?from='.$from->format("d/m/Y").'&to='.$to->format("d/m/Y").'&srtf='.$sertifikat.'&prv='.$provinsi.'&aso='.$asosiasi.'&tim=' . $tim)->with('error', 'Pilih data yang akan dihapus');
+            }
         }
 
         $data['results'] = $result;
@@ -287,6 +306,8 @@ class Approval99Controller extends Controller
         $asosiasi = SikiAsosiasi::find(Auth::user()->asosiasi->asosiasi_id);
         // $reg = SikiRegta::find($id);
 
+        // dd($pengajuan);
+
         $postData = [
           "id_personal"           => $pengajuan->ID_Personal,
           "id_sub_bidang"         => $pengajuan->ID_Sub_Bidang,
@@ -295,7 +316,7 @@ class Approval99Controller extends Controller
           "tgl_permohonan"        => $pengajuan->Tgl_Registrasi,
           "tahun"                 => Carbon::parse($pengajuan->Tgl_Registrasi)->format("Y"),
           "id_provinsi"           => $pengajuan->tipe_sertifikat == "SKA" ? $pengajuan->ID_Propinsi_reg : $pengajuan->ID_propinsi_reg,
-          "id_permohonan"         => $pengajuan->id,
+          "id_permohonan"         => $pengajuan->id_permohonan,
           "id_status"             => 99,
           "catatan"               => ""
         ];
@@ -423,36 +444,28 @@ class Approval99Controller extends Controller
     }
 
     public function ApproveTransactionV2($pengajuan){
-        
-        // $pengajuanModel = Pengajuan99::find($pengajuan->id);
-        // $pengajuanModel->approved = 1;
-        // $pengajuanModel->approved_by = Auth::user()->id;
-        // $pengajuanModel->approved_at = Carbon::now();
-        // $pengajuanModel->save();
-        
-        // if($pengajuan->tipe_sertifikat == "SKA"){
-        //     $data = PersonalRegTa::where("Tgl_Registrasi", $pengajuan->tgl_registrasi)
-        //     ->where("ID_Personal", $pengajuan->id_personal)
-        //     ->where("ID_Sub_Bidang", $pengajuan->sub_bidang)
-        //     ->where("ID_Asosiasi_Profesi", $pengajuan->asosiasi)->first();
+
+        if($pengajuan->tipe_sertifikat == "SKA"){
+            $data = PersonalRegTa::find($pengajuan->id);
             
-        //     if($data){
-        //         $data->status_terbaru = 99;
-        //         $data->save();
-        //     }
-        // } else {
-        //     $data = PersonalRegTt::where("Tgl_Registrasi", $pengajuan->tgl_registrasi)
-        //     ->where("ID_Personal", $pengajuan->id_personal)
-        //     ->where("ID_Sub_Bidang", $pengajuan->sub_bidang)
-        //     ->where("ID_Asosiasi_Profesi", $pengajuan->asosiasi)->first();
+            if($data){
+                $data->approved = 1;
+                $data->approved_by = Auth::id();
+                $data->approved_at = Carbon::now();
+                $data->status_terbaru = 99;
+                $data->save();
+            }
+        } else {
+            $data = PersonalRegTt::find($pengajuan->id);
             
-        //     if($data){
-        //         $data->status_terbaru = 99;
-        //         $data->save();
-        //     }
-        // }
-        $pengajuan->status_terbaru = 99;
-        $pengajuan->save();
+            if($data){
+                $data->approved = 1;
+                $data->approved_by = Auth::id();
+                $data->approved_at = Carbon::now();
+                $data->status_terbaru = 99;
+                $data->save();
+            }
+        }
 
         
         if($pengajuan->tipe_sertifikat == "SKA"){
@@ -464,7 +477,7 @@ class Approval99Controller extends Controller
         } else {
             $teamKontribusi = TeamKontribusiTt::where("team_id", $pengajuan->user->team_id)
             ->where("id_asosiasi_profesi", $pengajuan->ID_Asosiasi_Profesi)
-            ->where("id_propinsi_reg", $pengajuan->ID_Propinsi_reg)
+            ->where("id_propinsi_reg", $pengajuan->ID_propinsi_reg)
             ->where("id_kualifikasi", $pengajuan->ID_Kualifikasi)
             ->first();
         }
@@ -478,7 +491,7 @@ class Approval99Controller extends Controller
         if(!$exist){
             $approvalTrx                      = new ApprovalTransaction();
             $approvalTrx->id_asosiasi_profesi = $pengajuan->ID_Asosiasi_Profesi;
-            $approvalTrx->id_propinsi_reg     = $pengajuan->ID_Propinsi_reg;
+            $approvalTrx->id_propinsi_reg     = $pengajuan->tipe_sertifikat == "SKA" ? $pengajuan->ID_Propinsi_reg : $pengajuan->ID_propinsi_reg;
             $approvalTrx->team_id             = $pengajuan->user->team_id;
             $approvalTrx->tipe_sertifikat     = $pengajuan->tipe_sertifikat;
             $approvalTrx->id_personal         = $pengajuan->ID_Personal;
@@ -495,5 +508,35 @@ class Approval99Controller extends Controller
             $approvalTrx->created_by          = Auth::id();
             $approvalTrx->save();
         }
+    }
+
+    public function delete($pengajuan){
+        if($pengajuan->tipe_sertdeleteifikat == "SKA"){
+            $data = PersonalRegTa::find($pengajuan->id);
+            
+            if($data){
+                $data->deleted = 1;
+                $data->deleted_by = Auth::id();
+                $data->deleted_at = Carbon::now();
+                if($data->save()){
+                    $this->message = "data berhasil dihapus";
+                    return true;
+                }
+            }
+        } else {
+            $data = PersonalRegTt::find($pengajuan->id);
+            
+            if($data){
+                $data->deleted = 1;
+                $data->deleted_by = Auth::id();
+                $data->deleted_at = Carbon::now();
+                if($data->save()){
+                    $this->message = "data berhasil dihapus";
+                    return true;
+                }
+            }
+        }
+        $this->message = "An error has occurred";
+        return false;
     }
 }

@@ -16,13 +16,11 @@
 <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        {{-- <a href="{{url("approval_regta")}}" class="btn btn-danger btn-sm"><i class="fa fa-arrow-left"></i> kembali</a>  --}}
-        {{-- Data Registrasi Tenaga Ahli - Tahap {{count($regtas) > 0 ? $regtas[0]->tahap1 : "-"}} --}}
-         Permohonan Approval & Hapus 99
+         Laporan SKA & SKT
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{url("approval_regta")}}">Approval 99</a></li>
+        <li><a href="{{url("approval_regta")}}">Laporan SKA & SKT</a></li>
         {{-- <li class="active"><a href="#">{{count($regtas) > 0 ? $regtas[0]->tahap1 : "-"}}</a></li> --}}
       </ol>
     </section>
@@ -64,8 +62,6 @@
             </select>
             <a href="/approval_99" class="btn btn-default btn-sm my-1">Reset</a>
             <button type="submit" class="btn btn-primary btn-sm my-1">Filter</button>
-            <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
-            <button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button>
 
             @if(session()->get('success'))
             <div class="alert alert-success alert-block" style="margin-top: 10px;">
@@ -91,20 +87,19 @@
                         <tr>
                             <th><input id="check_all" type="checkbox"></th>
                             <th>No.</th>
-                            <th>Sts Mohon</th>
-                            <th>Jns Mohon</th>
-                            <th>Tim Prod</th>
-                            <th>Asosiasi</th>
-                            <th>USTK</th>
-                            <th>Prov Reg</th>
+                            <th>Provinsi</th>
+                            <th>Tim Produksi</th>
+                            <th>Jenis SRTF</th>
+                            <th>No KTP</th>
                             <th>Nama</th>
-                            <th>NIK</th>
-                            <th>Prov P</th>
-                            <th>Sub Klasfks</th>
-                            <th>Sub Kualfks</th>
-                            <th>Sts Akhir</th>
+                            <th>Sub Klasifikasi</th>
+                            <th>ID USTK</th>
                             <th>Tgl Mohon</th>
-                            {{-- <th>Action</th> --}}
+                            <th>Tgl Approval</th>
+                            <th>Kualifikasi</th>
+                            <th>Jenis Mohon</th>
+                            <th>Kontribusi</th>
+                            <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,35 +107,19 @@
                           <tr>
                             <td><input class="check_item" type="checkbox" name="pilih_permohonan[]" value="<?php echo $result->id?>" /></td>
                             <td>{{$k + 1}}</td>
-                            <td>{!!
-                              $result->deleted == 1 ? 
-                              "<span class='label label-danger'>Dihapus</span>" :
-                              (
-                                $result->diajukan_hapus == 1 ? 
-                                "<span class='label label-warning'>Minta Hapus</span>" : 
-                                (
-                                  $result->diajukan == 1 && $result->status_terbaru == null ? 
-                                  '<span class="label label-primary">Minta Setuju</span>' : 
-                                  (
-                                    $result->diajukan == 1 && $result->status_terbaru == 99 ? 
-                                    '<span class="label label-success">Setuju</span>' : 
-                                    ''
-                                  )
-                                )
-                              )
-                            !!}</td>
-                            <td>{{$result->id_permohonan == 1 ? "Baru" : ($result->id_permohonan == 2 ? "Perpanjangan" : "Perubahan")}}</td>
-                            <td>{{$result->user->team->name}}</td>
-                            <td>{{$result->ID_Asosiasi_Profesi}}</td>
-                            <td>{{$result->id_unit_sertifikasi}}</td>
                             <td>{{$result->provinsi->nama_singkat}}</td>
-                            <td>{{$result->personal->Nama}}</td>
-                            <td>{{$result->ID_Personal}}</td>
-                            <td>{{$result->personal->provinsi->nama_singkat}}</td>
-                            <td>{{$result->ID_Sub_Bidang}}</td>
+                            <td>{{$result->team->name}}</td>
+                            <td>{{$result->tipe_sertifikat}}</td>
+                            <td>{{$result->id_personal}}</td>
+                            <td>{{$result->nama}}</td>
+                            <td>{{$result->id_sub_bidang}}</td>
+                            <td>{{$result->id_unit_sertifikasi}}</td>
+                            <td>{{$result->tgl_registrasi}}</td>
+                            <td>{{$result->created_at}}</td>
                             <td>{{$result->tipe_sertifikat == "SKA" ? $result->kualifikasi->deskripsi_ahli : $result->kualifikasi->deskripsi_trampil}}</td>
-                            <td>{{$result->status_terbaru}}</td>
-                            <td>{{$result->Tgl_Registrasi}}</td>
+                            <td>{{$result->id_permohonan == 1 ? "Baru" : ($result->id_permohonan == 2 ? "Perpanjangan" : "Perubahan")}}</td>
+                            <td>{{$result->dpp_kontribusi}}</td>
+                            <td>{{$result->dpp_total}}</td>
                             {{-- <td>
                               <a href="{{url("approval_99/" . $result->id . "/approve")}}" class="btn btn-primary btn-xs approve">Approve</a>
                             </td> --}}
@@ -186,7 +165,7 @@ $(function(){
           "orderable": false,
           "targets": [0,1]
       } ],
-      "order": [[ 14, 'desc' ]]
+      "order": [[ 9, 'desc' ]]
   } );
   
   dt.on( 'order.dt search.dt', function () {

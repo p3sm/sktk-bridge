@@ -17,11 +17,11 @@ class ApprovalTransaction extends Model
     
   public function provinsi()
   {
-    return $this->belongsTo('App\SikiPropinsi', 'id_propinsi_reg');
+    return $this->belongsTo('App\Provinsi', 'id_propinsi_reg');
   }
     
   public function kualifikasi()
   {
-    return $this->belongsTo('App\SikiKualifikasi', 'id_kualifikasi');
+    return $this->belongsTo('App\Kualifikasi', 'id_kualifikasi');
   }
 }
