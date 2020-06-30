@@ -511,7 +511,7 @@ class Approval99Controller extends Controller
     }
 
     public function delete($pengajuan){
-        if($pengajuan->tipe_sertdeleteifikat == "SKA"){
+        if($pengajuan->tipe_sertifikat == "SKA"){
             $data = PersonalRegTa::find($pengajuan->id);
             
             if($data){
