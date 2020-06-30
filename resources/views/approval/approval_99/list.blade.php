@@ -92,6 +92,7 @@
                             <th><input id="check_all" type="checkbox"></th>
                             <th>No.</th>
                             <th>Sts Mohon</th>
+                            <th>Tgl Mohon</th>
                             <th>Jns Mohon</th>
                             <th>Tim Prod</th>
                             <th>Asosiasi</th>
@@ -103,7 +104,6 @@
                             <th>Sub Klasfks</th>
                             <th>Sub Kualfks</th>
                             <th>Sts Akhir</th>
-                            <th>Tgl Mohon</th>
                             {{-- <th>Action</th> --}}
                         </tr>
                     </thead>
@@ -129,6 +129,7 @@
                                 )
                               )
                             !!}</td>
+                            <td>{{$result->Tgl_Registrasi}}</td>
                             <td>{{$result->id_permohonan == 1 ? "Baru" : ($result->id_permohonan == 2 ? "Perpanjangan" : "Perubahan")}}</td>
                             <td>{{$result->user->team->name}}</td>
                             <td>{{$result->ID_Asosiasi_Profesi}}</td>
@@ -140,7 +141,6 @@
                             <td>{{$result->ID_Sub_Bidang}}</td>
                             <td>{{$result->tipe_sertifikat == "SKA" ? $result->kualifikasi->deskripsi_ahli : $result->kualifikasi->deskripsi_trampil}}</td>
                             <td>{{$result->status_terbaru}}</td>
-                            <td>{{$result->Tgl_Registrasi}}</td>
                             {{-- <td>
                               <a href="{{url("approval_99/" . $result->id . "/approve")}}" class="btn btn-primary btn-xs approve">Approve</a>
                             </td> --}}
