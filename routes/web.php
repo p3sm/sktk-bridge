@@ -56,6 +56,14 @@ Route::group(['middleware' => 'auth'], function(){
 
 		Route::resources(['team_kontribusi_tt' => 'TeamKontribusiTTController']);
 
+		Route::resources(['produksi' => 'ProduksiController']);
+
+		Route::resources(['gol_harga_produksi' => 'ProduksiGolHargaController']);
+
+		Route::resources(['marketing' => 'MarketingController']);
+
+		Route::resources(['gol_harga_marketing' => 'MarketingGolHargaController']);
+
 		Route::resources(['approval_99' => 'Approval99Controller']);
 		Route::get('approval_99/{id}/approve', 'Approval99Controller@approve');
 

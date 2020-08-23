@@ -41,7 +41,12 @@ class User extends Authenticatable
     
     public function team()
     {
-      return $this->belongsTo('App\Team', 'team_id');
+      return $this->belongsTo('App\TimProduksi', 'team_id');
+    }
+    
+    public function marketing()
+    {
+      return $this->belongsTo('App\TimMarketing', 'marketing_id');
     }
     
     public function asosiasi()

@@ -48,6 +48,32 @@
 	                <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
 	              </div>
 	              <div class="form-group">
+                  <label>Tipe Akun</label>
+                  <select class="form-control" id="tipe_akun" name="tipe_akun">
+										<option value="1">Akun General</option>
+										<option value="2">Akun Tim Produksi</option>
+										<option value="3">Akun Tim Marketing</option>
+                  </select>
+                </div>
+	              <div class="form-group" id="block_tim_produksi">
+                  <label>Tim Produksi</label>
+                  <select class="form-control" name="team_id">
+										<option value="">-- pilih tim produksi --</option>
+                    @foreach ($tim_produksi as $team)
+                    <option value="{{$team->id}}">{{$team->nama}}</option>
+                    @endforeach
+                  </select>
+                </div>
+	              <div class="form-group" id="block_tim_marketing">
+                  <label>Tim Marketing</label>
+                  <select class="form-control" name="marketing_id">
+										<option value="">-- pilih tim marketing --</option>
+                    @foreach ($tim_marketing as $team)
+                    <option value="{{$team->id}}">{{$team->nama}}</option>
+                    @endforeach
+                  </select>
+                </div>
+	              <div class="form-group">
                   <label>Role</label>
                   <select class="form-control" name="role_id">
                     @foreach ($roles as $role)
@@ -57,10 +83,22 @@
                 </div>
 	              <div class="form-group">
                   <label>Asosiasi</label>
-                  <select class="form-control" name="asosiasi" required>
-                    <option value="">-- Pilih Asosiasi --</option>
-                    <option value="142">ASTEKINDO</option>
-                    <option value="148">GATAKI</option>
+                  <select class="form-control" name="asosiasi_id">
+										<option value="">-- pilih asosiasi --</option>
+                    @foreach ($asosiasi as $as)
+                    <option value="{{$as->id_asosiasi}}">{{$as->nama}}</option>
+                    @endforeach
+                  </select>
+                </div>
+	              <div class="form-group">
+                  <label>Provinsi</label>
+                  <select class="form-control" name="provinsi_id">
+										<option value="">-- pilih provinsi --</option>
+										@foreach ($provinsi as $prov)
+											@if($prov->id_provinsi == "04")
+												<option value="{{$prov->id_provinsi}}" {{$prov->id_provinsi == "04" ? "selected" : ""}}>{{$prov->nama}}</option>
+											@endif
+                    @endforeach
                   </select>
                 </div>
 	              <div class="checkbox">
@@ -84,3 +122,25 @@
     </section>
     <!-- /.content -->
 @endsection
+
+@push('script')
+	<script>
+		$(document).ready(function(){
+			$("#block_tim_produksi").hide();
+			$("#block_tim_marketing").hide();
+
+			$("#tipe_akun").on("change", function(){
+				if($(this).val() == "2"){
+					$("#block_tim_produksi").show();
+					$("#block_tim_marketing").hide();
+				} else if ($(this).val() == "3") {
+					$("#block_tim_produksi").hide();
+					$("#block_tim_marketing").show();
+				} else {
+					$("#block_tim_produksi").hide();
+					$("#block_tim_marketing").hide();
+				}
+			})
+		});
+	</script>
+@endpush

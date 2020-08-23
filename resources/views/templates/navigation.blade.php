@@ -115,9 +115,12 @@
           </a>
       </li>
         
-        <li class="treeview {{Request::is('team*') ? 'active' : ''}}">
-          <a href=""><i class="fa fa-tasks"></i><span>Team Produksi</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <li class="treeview {{Request::is('produksi*') || Request::is('marketing*') || Request::is('gol*') ? 'active' : ''}}">
+          <a href=""><i class="fa fa-tasks"></i><span>Tim</span> <i class="fa fa-angle-left pull-right"></i></a>
           <ul class="treeview-menu">
+            <li class="{{Request::is('produksi*') ? 'active' : ''}}"> <a href="{{ url('produksi') }}"><span>Tim Produksi</span> </a> </li>
+            <li class="{{Request::is('marketing*') ? 'active' : ''}}"> <a href="{{ url('marketing') }}"><span>Tim Marketing</span> </a> </li>
+            <li class="{{Request::is('gol_harga_produksi*') ? 'active' : ''}}"> <a href="{{ url('gol_harga_produksi') }}"><span>Gol Harga Produksi</span> </a> </li>
             <li class="{{Request::is('team_kontribusi_ta*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_ta') }}"><span>Kontribusi Ahli</span> </a> </li>
             <li class="{{Request::is('team_kontribusi_tt*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_tt') }}"><span>Kontribusi Trampil</span> </a> </li>
           </ul>
