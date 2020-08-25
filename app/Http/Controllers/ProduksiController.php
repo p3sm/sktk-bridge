@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\TeamKontribusiTa;
 use App\Provinsi;
 use App\Asosiasi;
+use App\BadanUsaha;
+use App\BentukUsaha;
+use App\JenisUsaha;
+use App\TimProduksiLevel;
+use App\PjkLpjk;
+use App\Bank;
 use App\Team;
 use App\TimProduksi;
 use App\TimProduksiGolHarga;
@@ -54,8 +60,14 @@ class ProduksiController extends Controller
       $data["teams"] = Team::all()->sortBy("name");
       $data['tim_produksi'] = TimProduksi::where("parent_id", null)->get()->sortBy("name");
       $data["tim_produksi_gol_harga"] = TimProduksiGolHarga::all()->sortBy("gol_harga");
+      $data["tim_produksi_level"] = TimProduksiLevel::all();
       $data["asosiasi"] = Asosiasi::all()->sortBy("nama");
-      $data["provinsi"] = Provinsi::all()->sortBy("nama");
+      $data["provinsi"] = Provinsi::all();
+      $data["badan_usaha"] = BadanUsaha::all();
+      $data["bentuk_usaha"] = BentukUsaha::all()->sortBy("nama");
+      $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
+      $data["pjk_lpjk"] = PjkLpjk::all();
+      $data["banks"] = Bank::all();
 
       return view('team/produksi/create')->with($data);
     }
@@ -82,22 +94,18 @@ class ProduksiController extends Controller
 
       $timProduksi = new TimProduksi();
 
-      $timProduksi->parent_id = $request->parent_id == null ? null : $request->parent_id;
-      // $timProduksi->parent_id = $request->parent_id;
+      $timProduksi->parent_id = $request->level_id == 1 ? null : $request->parent_id;
       $timProduksi->pjk_lpjk_id = $request->pjk3;
-      $timProduksi->jenis_usaha_id = "1";
-      // $timProduksi->jenis_usaha_id = $request->jenis_usaha;
-      $timProduksi->bentuk_usaha_id = "1";
-      // $timProduksi->bentuk_usaha_id = $request->badan_usaha;
-      $timProduksi->level_id = "1";
-      // $timProduksi->level_id = $request->level;
+      $timProduksi->jenis_usaha_id = $request->jenis_usaha;
+      $timProduksi->badan_usaha_id = $request->badan_usaha;
+      $timProduksi->bentuk_usaha_id = $request->bentuk_usaha;
+      $timProduksi->level_id = $request->level;
       $timProduksi->gol_harga = $request->gol_harga;
       $timProduksi->kode = $kode;
       $timProduksi->nama = $request->nama;
       $timProduksi->singkatan = $request->nama_singkat;
       $timProduksi->provinsi_id = $request->provinsi_id;
-      $timProduksi->kota_id = "1";
-      // $timProduksi->kota_id = $request->kota_id;
+      $timProduksi->kota_id = $request->kota_id;
       $timProduksi->alamat = $request->alamat;
       $timProduksi->no_tlp = $request->no_telp;
       $timProduksi->email = $request->email;

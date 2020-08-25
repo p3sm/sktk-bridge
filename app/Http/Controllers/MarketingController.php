@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\TeamKontribusiTa;
 use App\Provinsi;
 use App\Asosiasi;
+use App\BadanUsaha;
+use App\BentukUsaha;
+use App\JenisUsaha;
+use App\PjkLpjk;
+use App\Bank;
 use App\Team;
 use App\TimProduksi;
+use App\TimProduksiLevel;
 use App\TimMarketing;
+use App\TimMarketingLevel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -52,10 +59,17 @@ class MarketingController extends Controller
     public function create()
     {
       $data["teams"] = Team::all()->sortBy("name");
-      $data['tim_marketing'] = TimMarketing::where("parent_id", null)->get()->sortBy("name");
       $data['tim_produksi'] = TimProduksi::all()->sortBy("name");
+      $data["tim_produksi_level"] = TimProduksiLevel::all();
+      $data['tim_marketing'] = TimMarketing::where("parent_id", null)->get()->sortBy("name");
+      $data["tim_marketing_level"] = TimMarketingLevel::all();
       $data["asosiasi"] = Asosiasi::all()->sortBy("nama");
-      $data["provinsi"] = Provinsi::all()->sortBy("nama");
+      $data["provinsi"] = Provinsi::all();
+      $data["badan_usaha"] = BadanUsaha::all();
+      $data["bentuk_usaha"] = BentukUsaha::all()->sortBy("nama");
+      $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
+      $data["pjk_lpjk"] = PjkLpjk::all();
+      $data["banks"] = Bank::all();
 
       return view('team/marketing/create')->with($data);
     }
@@ -85,21 +99,19 @@ class MarketingController extends Controller
       $timProduksi = new TimMarketing();
 
       $timProduksi->tim_produksi_id = $request->tim_produksi_id;
-      $timProduksi->parent_id = $request->parent_id == null ? null : $request->parent_id;
-      // $timProduksi->parent_id = $request->parent_id;
-      $timProduksi->jenis_usaha_id = "1";
-      // $timProduksi->jenis_usaha_id = $request->jenis_usaha;
-      $timProduksi->bentuk_usaha_id = "1";
-      // $timProduksi->bentuk_usaha_id = $request->badan_usaha;
-      $timProduksi->level_id = "1";
-      // $timProduksi->level_id = $request->level;
-      $timProduksi->gol_harga = $request->gol_harga;
+      $timProduksi->parent_id = $request->level_id == 1 ? null : $request->parent_id;
+      $timProduksi->pjk_lpjk_id = $request->pjk3;
+      $timProduksi->jenis_usaha_id = $request->jenis_usaha;
+      $timProduksi->badan_usaha_id = $request->badan_usaha;
+      $timProduksi->bentuk_usaha_id = $request->bentuk_usaha;
+      $timProduksi->level_id = $request->level;
+      $timProduksi->gol_harga = NULL;
+      // $timProduksi->gol_harga = $request->gol_harga;
       $timProduksi->kode = $kode;
       $timProduksi->nama = $request->nama;
       $timProduksi->singkatan = $request->nama_singkat;
       $timProduksi->provinsi_id = $request->provinsi_id;
-      $timProduksi->kota_id = "1";
-      // $timProduksi->kota_id = $request->kota_id;
+      $timProduksi->kota_id = $request->kota_id;
       $timProduksi->alamat = $request->alamat;
       $timProduksi->no_tlp = $request->no_telp;
       $timProduksi->email = $request->email;

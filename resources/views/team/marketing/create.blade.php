@@ -41,20 +41,11 @@
                     <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan nama" required>
                   </div>
                   <div class="form-group">
-                    <label>Badan Usaha</label>
-                    <select class="form-control" name="badan_usaha">
+                    <label>Bentuk Usaha</label>
+                    <select class="form-control" name="bentuk_usaha">
                       <option value="">-- pilih badan usaha --</option>
-                      @foreach ($teams as $team)
-                      <option value="{{$team->id}}">{{$team->name}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Level</label>
-                    <select class="form-control" name="level">
-                      <option value="">-- pilih level --</option>
-                      @foreach ($teams as $team)
-                      <option value="{{$team->id}}">{{$team->name}}</option>
+                      @foreach ($bentuk_usaha as $bu)
+                      <option value="{{$bu->id}}">{{$bu->nama}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -62,8 +53,17 @@
                     <label>Jenis Usaha</label>
                     <select class="form-control" name="jenis_usaha">
                       <option value="">-- pilih jenis usaha --</option>
-                      @foreach ($teams as $team)
-                      <option value="{{$team->id}}">{{$team->name}}</option>
+                      @foreach ($jenis_usaha as $ju)
+                      <option value="{{$ju->id}}">{{$ju->nama}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Level</label>
+                    <select class="form-control" name="level">
+                      <option value="">-- pilih level --</option>
+                      @foreach ($tim_marketing_level as $lv)
+                      <option value="{{$lv->id}}">{{$lv->nama}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -72,6 +72,14 @@
                   <div class="form-group">
                     <label for="nama_singkat">Nama Singkat</label>
                     <input type="text" class="form-control" name="nama_singkat" id="nama_singkat" placeholder="Masukan Nama Singkat" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Badan Usaha</label>
+                    <select class="form-control" name="badan_usaha">
+                      @foreach ($badan_usaha as $bu)
+                      <option value="{{$bu->id}}">{{$bu->nama}}</option>
+                      @endforeach
+                    </select>
                   </div>
                   <div class="form-group">
                     <label>Tim Produksi</label>
@@ -101,10 +109,10 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Provinsi</label>
-                    <select class="form-control" name="provinsi_id">
+                    <select class="form-control" name="provinsi_id" id="provinsi">
                       <option value="">-- pilih provinsi --</option>
-                      @foreach ($teams as $team)
-                      <option value="{{$team->id}}">{{$team->name}}</option>
+                      @foreach ($provinsi as $prov)
+                      <option value="{{$prov->id}}">{{$prov->provinsi_id}} - {{$prov->nama}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -144,11 +152,8 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Kota</label>
-                    <select class="form-control" name="kota_id">
+                    <select class="form-control" name="kota_id" id="kota">
                       <option value="">-- pilih kota --</option>
-                      @foreach ($teams as $team)
-                      <option value="{{$team->id}}">{{$team->name}}</option>
-                      @endforeach
                     </select>
                   </div>
                   <div class="form-group">
@@ -189,8 +194,8 @@
                     <label>Nama Bank</label>
                     <select class="form-control" name="bank">
                       <option value="">-- pilih nama bank --</option>
-                      @foreach ($teams as $team)
-                      <option value="{{$team->id}}">{{$team->name}}</option>
+                      @foreach ($banks as $bank)
+                      <option value="{{$bank->id}}">{{$bank->nama}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -198,7 +203,7 @@
                     <label for="keterangan">Keterangan</label>
                     <input type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan">
                   </div>
-                  <div class="form-group">
+                  {{-- <div class="form-group">
                     <label>Golongan Harga Produksi</label>
                     <select class="form-control" name="gol_harga">
                       <option value="">-- pilih gol harga tim produksi --</option>
@@ -206,7 +211,7 @@
                       <option value="{{$team->id}}">{{$team->name}}</option>
                       @endforeach
                     </select>
-                  </div>
+                  </div> --}}
                 </div>
 	            </div>
 	            <!-- /.box-body -->
@@ -224,3 +229,19 @@
     </section>
     <!-- /.content -->
 @endsection
+
+@push('script')
+<script>
+$(function(){
+  $("#provinsi").on("change", function(){
+    $.getJSON("/api/v1/kota?provinsi=" + $(this).val(), function(result){
+      $('#kota').find('option').remove()
+      $('#kota').append(new Option("-- pilih kota --", ""))
+      result.forEach(function(val, i) {
+        $("#kota").append(new Option(val.nama, val.id));
+      })
+    });
+  })
+});
+</script>
+@endpush

@@ -18,11 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::group(['prefix' => 'v1'], function(){
-	Route::group(['prefix' => 'users'], function(){
-		Route::get('', 'UserController@getData');
-	});
-	Route::group(['prefix' => 'tasks'], function(){
-		Route::post('aprove/{id}', 'TaskController@aprove');
-		Route::post('cancel/{id}', 'TaskController@cancel');
-	});
+	Route::get('provinsi', 'ApiMasterController@provinsi');
+	Route::get('kota', 'ApiMasterController@kota');
+	// Route::group(['prefix' => 'users'], function(){
+	// 	Route::get('', 'UserController@getData');
+	// });
+	// Route::group(['prefix' => 'tasks'], function(){
+	// 	Route::post('aprove/{id}', 'TaskController@aprove');
+	// 	Route::post('cancel/{id}', 'TaskController@cancel');
+	// });
 });
