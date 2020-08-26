@@ -91,9 +91,9 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <label>PJK3</label>
+                    <label>PJS LPJK</label>
                     <select class="form-control" name="pjk3">
-                      <option value="">-- pilih pjk3 --</option>
+                      <option value="">-- pilih pjs lpjk --</option>
                       @foreach ($pjk_lpjk as $pjk3)
                       <option value="{{$pjk3->id}}">{{$pjk3->badanUsaha->nama}}</option>
                       @endforeach
