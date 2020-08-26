@@ -15,6 +15,7 @@ use App\TimProduksi;
 use App\TimProduksiLevel;
 use App\TimMarketing;
 use App\TimMarketingLevel;
+use App\TimMarketingGolHarga;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,6 +64,7 @@ class MarketingController extends Controller
       $data["tim_produksi_level"] = TimProduksiLevel::all();
       $data['tim_marketing'] = TimMarketing::where("parent_id", null)->get()->sortBy("name");
       $data["tim_marketing_level"] = TimMarketingLevel::all();
+      $data["tim_marketing_gol_harga"] = TimMarketingGolHarga::all()->sortBy("gol_harga");
       $data["asosiasi"] = Asosiasi::all()->sortBy("nama");
       $data["provinsi"] = Provinsi::all();
       $data["badan_usaha"] = BadanUsaha::all();

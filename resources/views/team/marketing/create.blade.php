@@ -203,15 +203,15 @@
                     <label for="keterangan">Keterangan</label>
                     <input type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan">
                   </div>
-                  {{-- <div class="form-group">
-                    <label>Golongan Harga Produksi</label>
+                  <div class="form-group">
+                    <label>Golongan Harga Marketing</label>
                     <select class="form-control" name="gol_harga">
-                      <option value="">-- pilih gol harga tim produksi --</option>
-                      @foreach ($teams as $team)
-                      <option value="{{$team->id}}">{{$team->name}}</option>
+                      <option value="">-- pilih gol harga tim marketing --</option>
+                      @foreach ($tim_marketing_gol_harga as $harga)
+                      <option value="{{$harga->id}}">{{$harga->gol_harga}}</option>
                       @endforeach
                     </select>
-                  </div> --}}
+                  </div>
                 </div>
 	            </div>
 	            <!-- /.box-body -->

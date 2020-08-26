@@ -19,4 +19,9 @@ class TimMarketing extends Model
   {
     return $this->belongsTo('App\TimProduksi', 'tim_produksi_id');
   }
+    
+  public function golHarga()
+  {
+    return $this->belongsTo('App\TimMarketingGolHarga', 'gol_harga_id');
+  }
 }

@@ -95,6 +95,7 @@
                             <th>Tgl Mohon</th>
                             <th>Jns Mohon</th>
                             <th>Tim Prod</th>
+                            <th>Tim Marketing</th>
                             <th>Asosiasi</th>
                             <th>USTK</th>
                             <th>Prov Reg</th>
@@ -131,7 +132,8 @@
                             !!}</td>
                             <td>{{$result->Tgl_Registrasi}}</td>
                             <td>{{$result->id_permohonan == 1 ? "Baru" : ($result->id_permohonan == 2 ? "Perpanjangan" : "Perubahan")}}</td>
-                            <td>{{$result->user->team->name}}</td>
+                            <td>{{$result->user->marketing_id ? $result->user->marketing->produksi->nama : ($result->user->team_id ? $result->user->team->nama : "-")}}</td>
+                            <td>{{$result->user->marketing_id ? $result->user->marketing->nama : "-"}}</td>
                             <td>{{$result->ID_Asosiasi_Profesi}}</td>
                             <td>{{$result->id_unit_sertifikasi}}</td>
                             <td>{{$result->provinsi->nama_singkat}}</td>

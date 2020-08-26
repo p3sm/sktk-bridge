@@ -208,7 +208,7 @@
                     <select class="form-control" name="gol_harga">
                       <option value="">-- pilih gol harga tim produksi --</option>
                       @foreach ($tim_produksi_gol_harga as $harga)
-                      <option value="{{$harga->gol_harga}}">{{$harga->gol_harga}}</option>
+                      <option value="{{$harga->id}}">{{$harga->gol_harga}}</option>
                       @endforeach
                     </select>
                   </div>
