@@ -112,7 +112,7 @@
                     <select class="form-control" name="provinsi_id" id="provinsi">
                       <option value="">-- pilih provinsi --</option>
                       @foreach ($provinsi as $prov)
-                      <option value="{{$prov->provinsi_id}}">{{$prov->provinsi_id}} - {{$prov->nama}}</option>
+                      <option value="{{$prov->id_provinsi}}">{{$prov->id_provinsi}} - {{$prov->nama}}</option>
                       @endforeach
                     </select>
                   </div>
