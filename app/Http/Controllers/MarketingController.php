@@ -107,7 +107,7 @@ class MarketingController extends Controller
       $timProduksi->badan_usaha_id = $request->badan_usaha;
       $timProduksi->bentuk_usaha_id = $request->bentuk_usaha;
       $timProduksi->level_id = $request->level;
-      $timProduksi->gol_harga = NULL;
+      $timProduksi->gol_harga_id = NULL;
       // $timProduksi->gol_harga = $request->gol_harga;
       $timProduksi->kode = $kode;
       $timProduksi->nama = $request->nama;
