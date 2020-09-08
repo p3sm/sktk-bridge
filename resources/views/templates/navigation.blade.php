@@ -70,38 +70,38 @@
           </a>
         </li>
 
-        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 3)
         <li class="{{Request::is('file_manager') ? 'active' : ''}}">
             <a href="{{ url('file_manager') }}">
               <i class="fa fa-folder-open"></i> <span>File Manager</span>
             </a>
         </li>
-        <li class="treeview {{Request::is('siki*') ? 'active' : ''}}">
-          <a href=""><i class="fa fa-tasks"></i><span>UPSIKI</span> <i class="fa fa-angle-left pull-right"></i></a>
-          <ul class="treeview-menu">
-            <li class="{{Request::is('siki_regta*') ? 'active' : ''}}"> <a href="{{ url('siki_regta') }}"><span>Registrasi Tenaga Ahli</span> </a> </li>
-            <li class="{{Request::is('siki_regtt*') ? 'active' : ''}}"> <a href="{{ url('siki_regtt') }}"><span>Registrasi Tenaga Trampil</span> </a> </li>
-            {{-- <li class="{{Request::is('siki_personal') ? 'active' : ''}}"> <a href="{{ url('siki_personal') }}"><span>Personal</span> </a> </li> --}}
-          </ul>
-        </li>
+
+        @if(Helpers::checkPermission('upsiki') )
+          <li class="treeview {{Request::is('siki*') ? 'active' : ''}}">
+            <a href=""><i class="fa fa-tasks"></i><span>UPSIKI</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+              <li class="{{Request::is('siki_regta*') ? 'active' : ''}}"> <a href="{{ url('siki_regta') }}"><span>Registrasi Tenaga Ahli</span> </a> </li>
+              <li class="{{Request::is('siki_regtt*') ? 'active' : ''}}"> <a href="{{ url('siki_regtt') }}"><span>Registrasi Tenaga Trampil</span> </a> </li>
+              {{-- <li class="{{Request::is('siki_personal') ? 'active' : ''}}"> <a href="{{ url('siki_personal') }}"><span>Personal</span> </a> </li> --}}
+            </ul>
+          </li>
         @endif
 
-        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 2 || Auth::user()->role_id == 4)
-        <li class="treeview {{Request::is('approval_re*') || Request::is('approval_detail*') ? 'active' : ''}}">
-          <a href=""><i class="fa fa-tasks"></i><span>Approval</span> <i class="fa fa-angle-left pull-right"></i></a>
-          <ul class="treeview-menu">
-            <li class="{{Request::is('approval_regta*') ? 'active' : ''}}"> <a href="{{ url('approval_regta') }}"><span>Tenaga Ahli</span> </a> </li>
-            <li class="{{Request::is('approval_regtt*') ? 'active' : ''}}"> <a href="{{ url('approval_regtt') }}"><span>Tenaga Trampil</span> </a> </li>
-            <li class="{{Request::is('approval_report*') ? 'active' : ''}}"> <a href="{{ url('approval_report') }}"><span>Report</span> </a> </li>
-            <li class="{{Request::is('approval_detail*') ? 'active' : ''}}"> <a href="{{ url('approval_detail') }}"><span>Report Detail</span> </a> </li>
-          </ul>
-        </li>
+        @if(Helpers::checkPermission('status_99') )
+          <li class="treeview {{Request::is('approval_re*') || Request::is('approval_detail*') ? 'active' : ''}}">
+            <a href=""><i class="fa fa-tasks"></i><span>Approval</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+              <li class="{{Request::is('approval_regta*') ? 'active' : ''}}"> <a href="{{ url('approval_regta') }}"><span>Tenaga Ahli</span> </a> </li>
+              <li class="{{Request::is('approval_regtt*') ? 'active' : ''}}"> <a href="{{ url('approval_regtt') }}"><span>Tenaga Trampil</span> </a> </li>
+            </ul>
+          </li>
 
-        <li class="{{Request::is('approval_99*') ? 'active' : ''}}">
-            <a href="{{ url('approval_99') }}">
-              <i class="fa fa-tasks"></i> <span>Approval & Hapus 99</span>
-            </a>
-        </li>
+          <li class="{{Request::is('approval_99*') ? 'active' : ''}}">
+              <a href="{{ url('approval_99') }}">
+                <i class="fa fa-tasks"></i> <span>Approval & Hapus 99</span>
+              </a>
+          </li>
+        @endif
 
         {{-- <li class="{{Request::is('hapus_99*') ? 'active' : ''}}">
             <a href="{{ url('hapus_99') }}">
@@ -109,30 +109,35 @@
             </a>
         </li> --}}
 
-        <li class="{{Request::is('laporan*') ? 'active' : ''}}">
-          <a href="{{ url('laporan') }}">
-            <i class="fa fa-tasks"></i> <span>Laporan SKA & SKT</span>
-          </a>
-      </li>
-        
-        <li class="treeview {{Request::is('produksi*') || Request::is('marketing*') || Request::is('gol*') ? 'active' : ''}}">
-          <a href=""><i class="fa fa-tasks"></i><span>Tim</span> <i class="fa fa-angle-left pull-right"></i></a>
-          <ul class="treeview-menu">
-            <li class="{{Request::is('produksi*') ? 'active' : ''}}"> <a href="{{ url('produksi') }}"><span>Tim Produksi</span> </a> </li>
-            <li class="{{Request::is('marketing*') ? 'active' : ''}}"> <a href="{{ url('marketing') }}"><span>Tim Marketing</span> </a> </li>
-            <li class="{{Request::is('gol_harga_produksi*') ? 'active' : ''}}"> <a href="{{ url('gol_harga_produksi') }}"><span>Gol Harga Produksi</span> </a> </li>
-            <li class="{{Request::is('team_kontribusi_ta*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_ta') }}"><span>Kontribusi Ahli</span> </a> </li>
-            <li class="{{Request::is('team_kontribusi_tt*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_tt') }}"><span>Kontribusi Trampil</span> </a> </li>
-          </ul>
-        </li>
+        @if(Helpers::checkPermission('report') )
+          <li class="{{Request::is('laporan*') ? 'active' : ''}}">
+            <a href="{{ url('laporan') }}">
+              <i class="fa fa-tasks"></i> <span>Laporan SKA & SKT</span>
+            </a>
+          </li>
+          <li class="{{Request::is('approval_report*') ? 'active' : ''}}"> <a href="{{ url('approval_report') }}"><span>Report</span> </a> </li>
+          <li class="{{Request::is('approval_detail*') ? 'active' : ''}}"> <a href="{{ url('approval_detail') }}"><span>Report Detail</span> </a> </li>
+        @endif
+
+        @if(Helpers::checkPermission('team') )
+          <li class="treeview {{Request::is('produksi*') || Request::is('marketing*') || Request::is('gol*') ? 'active' : ''}}">
+            <a href=""><i class="fa fa-tasks"></i><span>Tim</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+              <li class="{{Request::is('produksi*') ? 'active' : ''}}"> <a href="{{ url('produksi') }}"><span>Tim Produksi</span> </a> </li>
+              <li class="{{Request::is('marketing*') ? 'active' : ''}}"> <a href="{{ url('marketing') }}"><span>Tim Marketing</span> </a> </li>
+              <li class="{{Request::is('gol_harga_produksi*') ? 'active' : ''}}"> <a href="{{ url('gol_harga_produksi') }}"><span>Gol Harga Produksi</span> </a> </li>
+              <li class="{{Request::is('team_kontribusi_ta*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_ta') }}"><span>Kontribusi Ahli</span> </a> </li>
+              <li class="{{Request::is('team_kontribusi_tt*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_tt') }}"><span>Kontribusi Trampil</span> </a> </li>
+            </ul>
+          </li>
+        @endif
         {{-- <li class="{{Request::is('pemohon') ? 'active' : ''}}">
           <a href="{{ url('pemohon') }}">
             <i class="fa fa-user"></i> <span>Pemohon</span>
           </a>
         </li> --}}
-        @endif
 
-        @if(Auth::user()->role_id==1)
+        @if(Helpers::checkPermission('user') )
         <li class="{{Request::is('users') ? 'active' : ''}}">
             <a href="{{ url('users') }}">
               <i class="fa fa-users"></i> <span>Kelola User</span>

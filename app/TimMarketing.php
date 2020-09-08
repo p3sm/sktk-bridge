@@ -15,6 +15,11 @@ class TimMarketing extends Model
     return $this->belongsTo('App\TimMarketing', 'parent_id');
   }
     
+  public function provinsi()
+  {
+    return $this->belongsTo('App\Provinsi', 'provinsi_id');
+  }
+    
   public function produksi()
   {
     return $this->belongsTo('App\TimProduksi', 'tim_produksi_id');

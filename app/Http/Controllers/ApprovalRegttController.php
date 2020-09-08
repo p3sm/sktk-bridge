@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\ApprovalTransaction;
 use App\SikiAsosiasi;
+use App\PersonalRegTt;
 use App\PersonalRegTtSync;
 use App\PersonalRegTtApprove;
 use App\TeamKontribusiTt;
+use App\TimMarketingGolHarga;
+use App\TimMarketingGolHargaDetail;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -177,16 +180,25 @@ class ApprovalRegttController extends Controller
     }
 
     public function ApproveTransaction($request){
+        $regtt = PersonalRegTt::where("ID_Registrasi_TK_Trampil", $request->ID_Registrasi_TK_Trampil)->first();
+
         $teamKontribusi = TeamKontribusiTt::where("team_id", $request->query('team'))
         ->where("id_asosiasi_profesi", $request->query('ID_Asosiasi_Profesi'))
         ->where("id_propinsi_reg", $request->query('ID_propinsi_reg'))
         ->where("id_kualifikasi", $request->query('ID_Kualifikasi'))
         ->first();
+
+        if($regtt->user->tipe_akun == 2){
+            $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $regtt->user->marketing->gol_harga_id)->first();
+            $harga = $golharga->harga;
+        } else {
+            $harga = 0;
+        }
         
         $approvalTrx                      = new ApprovalTransaction();
         $approvalTrx->id_asosiasi_profesi = $request->query('ID_Asosiasi_Profesi');
         $approvalTrx->id_propinsi_reg     = $request->query('ID_propinsi_reg');
-        $approvalTrx->team_id             = $request->query('team');
+        $approvalTrx->team_id             = Auth::user()->myTeam()->id;
         $approvalTrx->tipe_sertifikat     = "SKT";
         $approvalTrx->id_personal         = $request->query('ID_Personal');
         $approvalTrx->nama                = $request->query('Nama');
@@ -196,8 +208,9 @@ class ApprovalRegttController extends Controller
         $approvalTrx->id_kualifikasi      = $request->query('ID_Kualifikasi');
         $approvalTrx->id_permohonan       = $request->query('id_permohonan');
         $approvalTrx->dpp_adm_anggota     = 0;
-        $approvalTrx->dpp_kontribusi      = $teamKontribusi->kontribusi;
-        $approvalTrx->dpp_total           = $teamKontribusi->kontribusi;
+        $approvalTrx->dpp_kontribusi      = $harga;
+        $approvalTrx->dpp_total           = $harga;
+        $approvalTrx->owner               = $regtt->created_by;
         $approvalTrx->created_by          = Auth::id();
         $approvalTrx->save();
     }

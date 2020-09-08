@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\SikiRegtt;
+use App\PersonalRegTt;
 use App\PersonalRegTtSync;
 use App\PersonalRegTtApprove;
 use App\Http\Controllers\Controller;
@@ -122,6 +123,30 @@ class SikiRegttController extends Controller
         //
     }
 
+    public function storeLocalRegTT($request, $id)
+    {
+        $user = User::find(Auth::user()->id);
+        $data = PersonalRegTt::find($id);
+        
+        if(!$data){
+            $data = new PersonalRegTt();
+            $data->ID_Registrasi_TK_Trampil = $id;
+            $data->ID_Personal = $request->ID_Personal;
+            $data->created_by = Auth::user()->id;
+        }
+
+        $data->ID_Sub_Bidang = $request->ID_Sub_Bidang;
+        $data->ID_Kualifikasi = $request->ID_Kualifikasi;
+        $data->ID_Asosiasi_Profesi = $request->ID_Asosiasi_Profesi;
+        $data->id_unit_sertifikasi = $request->id_unit_sertifikasi;
+        $data->id_permohonan = $request->id_permohonan;
+        $data->Tgl_Registrasi = $request->Tgl_Registrasi;
+        $data->ID_propinsi_reg = $user->ID_propinsi_reg;
+        $data->updated_by = Auth::user()->id;
+
+        $data->save();
+    }
+
     public function createSyncLog($reg, $sync)
     {
         if($reg->sync){
@@ -207,8 +232,10 @@ class SikiRegttController extends Controller
         
         if($obj = json_decode($response)){
             if($obj->response) {
-                if($this->createSyncLog($reg, $obj))
+                if($this->createSyncLog($reg, $obj)){
+                    $this->storeLocalRegTT($reg, $obj->ID_Registrasi_TK_Trampil);
                     return redirect()->back()->with('success', $obj->message);
+                }
             }
             return redirect()->back()->with('error', $obj->message);
         }

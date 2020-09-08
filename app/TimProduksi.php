@@ -14,4 +14,14 @@ class TimProduksi extends Model
   {
     return $this->belongsTo('App\TimProduksi', 'parent_id');
   }
+
+  public function pjk()
+  {
+    return $this->belongsTo('App\PjkLpjk', 'pjk_lpjk_id');
+  }
+    
+  public function provinsi()
+  {
+    return $this->belongsTo('App\Provinsi', 'provinsi_id');
+  }
 }

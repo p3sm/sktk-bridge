@@ -67,6 +67,14 @@
                       @endforeach
                     </select>
                   </div>
+                  <div class="form-group">
+                    <label>Tipe Kualifikasi</label>
+                    <select class="form-control" name="level">
+                      <option value="">-- pilih tipe kualifikasi --</option>
+                      <option value="UTAMA">UTAMA</option>
+                      <option value="NON_UTAMA">NON UTAMA</option>
+                    </select>
+                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
