@@ -4,12 +4,12 @@
 <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Tim Marketing
+        Badan Usaha
         {{--  <small>it all starts here</small>  --}}
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{url("")}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{url("users")}}">Tim Marketing</a></li>
+        <li><a href="{{url("users")}}">Badan Usaha</a></li>
         <li class="active"><a href="#">Create</a></li>
       </ol>
     </section>
@@ -23,7 +23,7 @@
 	        <!-- general form elements -->
 	        <div class="box box-primary">
 	          <div class="box-header with-border">
-	            <h3 class="box-title">Create Tim Marketing</h3>
+	            <h3 class="box-title">Create Badan Usaha</h3>
 	          </div>
 	          <!-- /.box-header -->
             @if(session()->get('error'))
@@ -32,7 +32,7 @@
             </div><br />
             @endif
 	          <!-- form start -->
-	          <form role="form" method="post" action="{{url("marketing")}}">
+	          <form role="form" method="post" action="{{url("master_badanusaha")}}">
               @csrf
 	            <div class="box-body row">
                 <div class="col-md-6">
@@ -41,11 +41,10 @@
                     <input type="text" class="form-control" name="nama" id="nama" placeholder="Masukan nama" required>
                   </div>
                   <div class="form-group">
-                    <label>Bentuk Usaha</label>
-                    <select class="form-control" name="bentuk_usaha">
-                      <option value="">-- pilih badan usaha --</option>
-                      @foreach ($bentuk_usaha as $bu)
-                      <option value="{{$bu->id}}">{{$bu->nama}}</option>
+                    <label>Asosiasi</label>
+                    <select class="form-control" name="asosiasi">
+                      @foreach ($asosiasi as $as)
+                      <option value="{{$as->id_asosiasi}}">{{$as->nama}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -58,23 +57,6 @@
                       @endforeach
                     </select>
                   </div>
-                  <div class="form-group">
-                    <label>Level</label>
-                    <select class="form-control" name="level">
-                      <option value="">-- pilih level --</option>
-                      @foreach ($tim_marketing_level as $lv)
-                      <option value="{{$lv->id}}">{{$lv->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Tipe Kualifikasi</label>
-                    <select class="form-control" name="kualifikasi_type">
-                      <option value="">-- pilih tipe kualifikasi --</option>
-                      <option value="UTAMA">UTAMA</option>
-                      <option value="NON_UTAMA">NON UTAMA</option>
-                    </select>
-                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
@@ -82,28 +64,20 @@
                     <input type="text" class="form-control" name="nama_singkat" id="nama_singkat" placeholder="Masukan Nama Singkat" required>
                   </div>
                   <div class="form-group">
-                    <label>Badan Usaha</label>
-                    <select class="form-control" name="badan_usaha">
-                      @foreach ($badan_usaha as $bu)
+                    <label>Status Kantor</label>
+                    <select class="form-control" name="status_kantor">
+                      <option value="">-- pilih status kantor --</option>
+                      @foreach ($status_kantor as $sk)
+                      <option value="{{$sk->id}}">{{$sk->nama}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Bentuk Usaha</label>
+                    <select class="form-control" name="bentuk_usaha">
+                      <option value="">-- pilih badan usaha --</option>
+                      @foreach ($bentuk_usaha as $bu)
                       <option value="{{$bu->id}}">{{$bu->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Tim Produksi</label>
-                    <select class="form-control" name="tim_produksi_id">
-                      <option value="">-- pilih tim produksi --</option>
-                      @foreach ($tim_produksi as $team)
-                      <option value="{{$team->id}}">{{$team->nama}}</option>
-                      @endforeach
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Tim Marketing Level Diatasnya</label>
-                    <select class="form-control" name="parent_id">
-                      <option value="">-- pilih tim marketing --</option>
-                      @foreach ($tim_marketing as $team)
-                      <option value="{{$team->id}}">{{$team->nama}}</option>
                       @endforeach
                     </select>
                   </div>
@@ -210,15 +184,6 @@
                   <div class="form-group">
                     <label for="keterangan">Keterangan</label>
                     <input type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan">
-                  </div>
-                  <div class="form-group">
-                    <label>Golongan Harga Marketing</label>
-                    <select class="form-control" name="gol_harga">
-                      <option value="">-- pilih gol harga tim marketing --</option>
-                      @foreach ($tim_marketing_gol_harga as $harga)
-                      <option value="{{$harga->id}}">{{$harga->gol_harga}}</option>
-                      @endforeach
-                    </select>
                   </div>
                 </div>
 	            </div>

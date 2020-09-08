@@ -78,5 +78,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::group(['middleware' => 'authorization:user'], function () {
 		Route::resources(['users' => 'UserController']);
 	});
+
+	Route::group(['middleware' => 'authorization:master'], function () {
+		Route::resources(['master_badanusaha' => 'BadanUsahaController']);
+	});
 	
 });

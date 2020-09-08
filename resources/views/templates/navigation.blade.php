@@ -76,6 +76,15 @@
             </a>
         </li>
 
+        @if(Helpers::checkPermission('master') )
+          <li class="treeview {{Request::is('master*') ? 'active' : ''}}">
+            <a href=""><i class="fa fa-tasks"></i><span>Master Data</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+              <li class="{{Request::is('master_badanusaha*') ? 'active' : ''}}"> <a href="{{ url('master_badanusaha') }}"><span>Badan Usaha</span> </a> </li>
+            </ul>
+          </li>
+        @endif
+
         @if(Helpers::checkPermission('upsiki') )
           <li class="treeview {{Request::is('siki*') ? 'active' : ''}}">
             <a href=""><i class="fa fa-tasks"></i><span>UPSIKI</span> <i class="fa fa-angle-left pull-right"></i></a>
