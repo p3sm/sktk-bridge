@@ -81,6 +81,7 @@
             <a href=""><i class="fa fa-tasks"></i><span>Master Data</span> <i class="fa fa-angle-left pull-right"></i></a>
             <ul class="treeview-menu">
               <li class="{{Request::is('master_badanusaha*') ? 'active' : ''}}"> <a href="{{ url('master_badanusaha') }}"><span>Badan Usaha</span> </a> </li>
+              <li class="{{Request::is('master_pjklpjk*') ? 'active' : ''}}"> <a href="{{ url('master_pjklpjk') }}"><span>PJS LPJK</span> </a> </li>
             </ul>
           </li>
         @endif
@@ -135,6 +136,7 @@
               <li class="{{Request::is('produksi*') ? 'active' : ''}}"> <a href="{{ url('produksi') }}"><span>Tim Produksi</span> </a> </li>
               <li class="{{Request::is('marketing*') ? 'active' : ''}}"> <a href="{{ url('marketing') }}"><span>Tim Marketing</span> </a> </li>
               <li class="{{Request::is('gol_harga_produksi*') ? 'active' : ''}}"> <a href="{{ url('gol_harga_produksi') }}"><span>Gol Harga Produksi</span> </a> </li>
+              <li class="{{Request::is('gol_harga_marketing*') ? 'active' : ''}}"> <a href="{{ url('gol_harga_marketing') }}"><span>Gol Harga Marketing</span> </a> </li>
               <li class="{{Request::is('team_kontribusi_ta*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_ta') }}"><span>Kontribusi Ahli</span> </a> </li>
               <li class="{{Request::is('team_kontribusi_tt*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_tt') }}"><span>Kontribusi Trampil</span> </a> </li>
             </ul>

@@ -5,21 +5,17 @@ namespace App\Http\Controllers;
 use App\TeamKontribusiTa;
 use App\Provinsi;
 use App\Asosiasi;
-use App\BadanUsaha;
-use App\BentukUsaha;
-use App\JenisUsaha;
-use App\TimProduksiLevel;
-use App\PjkLpjk;
-use App\Bank;
+use App\Bidang;
 use App\Team;
 use App\TimProduksi;
-use App\TimProduksiGolHarga;
-use App\StatusKantor;
+use App\TimMarketingGolHarga;
+use App\TimMarketingGolHargaDetail;
+use App\JenisUsaha;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class BadanUsahaController extends Controller
+class MarketingGolHargaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +30,7 @@ class BadanUsahaController extends Controller
       $tim = $request->tim;
       $asosiasi = $request->aso;
 
-      $model = new BadanUsaha();
+      $model = new TimMarketingGolHargaDetail();
 
       if($request->prv) $model = $model->where("id_propinsi_reg", $request->prv);
       if($request->aso) $model = $model->where("id_asosiasi_profesi", $request->aso);
@@ -48,7 +44,7 @@ class BadanUsahaController extends Controller
       $data['results'] = $model->get();
       $data['provinsi_data'] = Provinsi::all();
 
-    	return view('badanusaha/index')->with($data);
+    	return view('team/marketing/gol_harga/index')->with($data);
     }
 
     /**
@@ -58,14 +54,18 @@ class BadanUsahaController extends Controller
      */
     public function create()
     {
-      $data["asosiasi"] = Asosiasi::all()->sortBy("nama");
-      $data["provinsi"] = Provinsi::all();
-      $data["bentuk_usaha"] = BentukUsaha::all()->sortBy("nama");
+      $data["gol_harga"] = TimMarketingGolHarga::all();
       $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
-      $data["banks"] = Bank::all();
-      $data["status_kantor"] = StatusKantor::all();
+      $data["bidang"] = Bidang::all();
 
-      return view('badanusaha/create')->with($data);
+      return view('team/marketing/gol_harga/create')->with($data);
+    }
+
+    public function createHead()
+    {
+      $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
+
+      return view('team/marketing/gol_harga/create-head')->with($data);
     }
 
     /**
@@ -76,42 +76,43 @@ class BadanUsahaController extends Controller
      */
     public function store(Request $request)
     {
-      $bu = new BadanUsaha();
+      $timProduksi = new TimMarketingGolHargaDetail();
 
-      $bu->jenis_usaha_id = $request->jenis_usaha;
-      $bu->asosiasi_id = $request->asosiasi;
-      $bu->status_kantor_proyek = $request->status_kantor;
-      $bu->bentuk_usaha_id = $request->bentuk_usaha;
-      $bu->nama = $request->nama;
-      $bu->singkatan = $request->nama_singkat;
-      $bu->provinsi_id = $request->provinsi_id;
-      $bu->kota_id = $request->kota_id;
-      $bu->alamat = $request->alamat;
-      $bu->no_tlp = $request->no_telp;
-      $bu->email = $request->email;
-      $bu->web = $request->web;
-      $bu->instansi = $request->instansi;
-      $bu->pimpinan_nama = $request->pimpinan;
-      $bu->pimpinan_jabatan = $request->pimpinan_jabatan;
-      $bu->pimpinan_hp = $request->pimpinan_no;
-      $bu->pimpinan_email = $request->pimpinan_email;
-      $bu->kontak_p = $request->pic;
-      $bu->no_kontak_p = $request->pic_no;
-      $bu->jab_kontak_p = $request->pic_jabatan;
-      $bu->email_kontak_p = $request->pic_email;
-      $bu->npwp = $request->npwp;
-      $bu->npwp_pdf = $request->npwp_file;
-      $bu->rekening_no = $request->rek;
-      $bu->rekening_nama = $request->rek_name;
-      $bu->rekening_bank = $request->bank;
-      $bu->keterangan = $request->keterangan;
-      $bu->is_active = 1;
-      $bu->created_by = Auth::id();
-      $bu->updated_by = Auth::id();
+      $timProduksi->gol_harga_id = $request->gol_harga;
+      $timProduksi->jenis_usaha_id = $request->jenis_usaha;
+      $timProduksi->klasifikasi = $request->klasifikasi;
+      $timProduksi->sub_klasifikasi = $request->sub_klasifikasi;
+      $timProduksi->kualifikasi = $request->kualifikasi;
+      $timProduksi->sub_kualifikasi = $request->sub_kualifikasi;
+      $timProduksi->harga = $request->harga;
+      $timProduksi->keterangan = $request->keterangan;
+      $timProduksi->is_active = 1;
+      $timProduksi->created_by = Auth::id();
+      $timProduksi->updated_by = Auth::id();
 
-      $bu->save();
+      // dd($timProduksi);
 
-      return redirect('/master_badanusaha')->with('success', 'Badan Usaha berhasil dibuat');
+      $timProduksi->save();
+
+      return redirect('/gol_harga_marketing')->with('success', 'Golongan harga berhasil dibuat');
+
+    }
+    public function storeHead(Request $request)
+    {
+      $timProduksi = new TimMarketingGolHarga();
+
+      $timProduksi->gol_harga = $request->gol_harga;
+      $timProduksi->jenis_usaha_id = $request->jenis_usaha;
+      $timProduksi->keterangan = $request->keterangan;
+      $timProduksi->is_active = 1;
+      $timProduksi->created_by = Auth::id();
+      $timProduksi->updated_by = Auth::id();
+
+      // dd($timProduksi);
+
+      $timProduksi->save();
+
+      return redirect('/gol_harga_marketing/create')->with('success', 'Golongan harga berhasil dibuat');
 
     }
 

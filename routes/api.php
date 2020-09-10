@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'v1'], function(){
 	Route::get('provinsi', 'ApiMasterController@provinsi');
 	Route::get('kota', 'ApiMasterController@kota');
+	Route::get('sub_bidang', 'ApiMasterController@bidang_sub');
 	Route::group(['prefix' => 'users'], function(){
 		Route::get('', 'UserController@getData');
 	});

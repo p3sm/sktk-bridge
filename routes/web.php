@@ -67,8 +67,11 @@ Route::group(['middleware' => 'auth'], function(){
 		Route::resources(['marketing' => 'MarketingController']);
 
 		Route::resources(['gol_harga_marketing' => 'MarketingGolHargaController']);
-
+		
+		Route::get('gol_harga_marketing_head', 'MarketingGolHargaController@createHead');
+		Route::post('gol_harga_marketing_head', 'MarketingGolHargaController@storeHead');
 	});
+
 	Route::group(['middleware' => 'authorization:report'], function () {
 		Route::resources(['approval_report' => 'ApprovalController']);
 		Route::get('approval_detail', 'ApprovalController@detail');
@@ -81,6 +84,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::group(['middleware' => 'authorization:master'], function () {
 		Route::resources(['master_badanusaha' => 'BadanUsahaController']);
+		Route::resources(['master_pjklpjk' => 'PjkLpjkController']);
 	});
 	
 });
