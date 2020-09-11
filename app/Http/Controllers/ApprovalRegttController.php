@@ -24,7 +24,7 @@ class ApprovalRegttController extends Controller
     public function index(Request $request)
     {
         if(Auth::user()->myAsosiasi()){
-            return redirect('/approval_regtt/' . Auth::user()->myAsosiasi()->asosiasi_id);
+            return redirect('/approval_regtt/' . Auth::user()->myAsosiasi()->id_asosiasi);
         }
 
     	return view('approval/regtt/index');

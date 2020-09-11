@@ -239,7 +239,7 @@ class Approval99Controller extends Controller
         // exit;
         // dd($request);
         // $asosiasiId = 142;
-        $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->asosiasi_id);
+        $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->id_asosiasi);
         // $reg = SikiRegta::find($id);
 
         $postData = [
@@ -305,10 +305,8 @@ class Approval99Controller extends Controller
     {
         // exit;
         // $asosiasiId = 142;
-        $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->asosiasi_id);
+        $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->id_asosiasi);
         // $reg = SikiRegta::find($id);
-
-        dd(Auth::user()->myAsosiasi());
 
         $postData = [
           "id_personal"           => $pengajuan->ID_Personal,
