@@ -46,7 +46,7 @@ class UserController extends Controller
     {
         $find = User::where("username", $request->get('username'))->first();
 
-        if($find){
+        if($find != null){
             return redirect('/users/create')->with('error', 'User sudah ada');
         }
 
