@@ -308,7 +308,7 @@ class Approval99Controller extends Controller
         $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->asosiasi_id);
         // $reg = SikiRegta::find($id);
 
-        // dd($pengajuan);
+        dd($asosiasi);
 
         $postData = [
           "id_personal"           => $pengajuan->ID_Personal,
