@@ -490,6 +490,7 @@ class Approval99Controller extends Controller
 
         if($pengajuan->user->marketing_id){
             $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $pengajuan->user->marketing->gol_harga_id)->first();
+            dd($golharga);
             $harga = $golharga->harga;
         } else {
             $harga = 0;
