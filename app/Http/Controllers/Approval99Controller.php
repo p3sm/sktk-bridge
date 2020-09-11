@@ -236,6 +236,7 @@ class Approval99Controller extends Controller
     public function approve($id)
     {
         $pengajuan = Pengajuan99::find($id);
+        dd(Auth::user()->asosiasi);
         // exit;
         // dd($request);
         // $asosiasiId = 142;
