@@ -236,11 +236,10 @@ class Approval99Controller extends Controller
     public function approve($id)
     {
         $pengajuan = Pengajuan99::find($id);
-        dd(Auth::user()->asosiasi);
         // exit;
         // dd($request);
         // $asosiasiId = 142;
-        $asosiasi = SikiAsosiasi::find(Auth::user()->asosiasi->asosiasi_id);
+        $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->asosiasi_id);
         // $reg = SikiRegta::find($id);
 
         $postData = [
@@ -306,7 +305,7 @@ class Approval99Controller extends Controller
     {
         // exit;
         // $asosiasiId = 142;
-        $asosiasi = SikiAsosiasi::find(Auth::user()->asosiasi->asosiasi_id);
+        $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->asosiasi_id);
         // $reg = SikiRegta::find($id);
 
         // dd($pengajuan);

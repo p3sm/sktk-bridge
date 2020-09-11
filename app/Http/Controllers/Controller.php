@@ -16,7 +16,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function refreshToken(){
-        $key = AsosiasiKey::where('asosiasi_id', Auth::user()->asosiasi->asosiasi_id)->first();
+        $key = AsosiasiKey::where('asosiasi_id', Auth::user()->myAsosiasi()->asosiasi_id)->first();
 
         $postData = [
             "X-Api-Key" => $key->lpjk_key,

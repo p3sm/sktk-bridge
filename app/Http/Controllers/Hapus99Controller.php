@@ -146,7 +146,7 @@ class Hapus99Controller extends Controller
         // exit;
         // dd($request);
         // $asosiasiId = 142;
-        $asosiasi = SikiAsosiasi::find(Auth::user()->asosiasi->asosiasi_id);
+        $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->asosiasi_id);
         // $reg = SikiRegta::find($id);
 
         $postData = [
