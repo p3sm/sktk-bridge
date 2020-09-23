@@ -19,9 +19,24 @@ class TimProduksi extends Model
   {
     return $this->belongsTo('App\PjkLpjk', 'pjk_lpjk_id');
   }
+
+  public function jenis_usaha()
+  {
+    return $this->belongsTo('App\JenisUsaha', 'jenis_usaha_id');
+  }
     
   public function provinsi()
   {
     return $this->belongsTo('App\Provinsi', 'provinsi_id');
+  }
+    
+  public function level()
+  {
+    return $this->belongsTo('App\TimProduksiLevel', 'level_id');
+  }
+    
+  public function marketing()
+  {
+    return $this->hasMany('App\TimMarketing', 'tim_produksi_id');
   }
 }

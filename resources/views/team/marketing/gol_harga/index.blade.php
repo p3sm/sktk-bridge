@@ -82,6 +82,7 @@
                             <th>No.</th>
                             <th>Golongan</th>
                             <th>Harga</th>
+                            <th>Jenis Permohonan</th>
                             <th>Klasifikasi</th>
                             <th>Sub Klasifikasi</th>
                             <th>Kualifikasi</th>
@@ -95,8 +96,9 @@
                             <td>{{$k + 1}}</td>
                             <td>{{$result->head->gol_harga}}</td>
                             <td>{{$result->harga}}</td>
-                            <td>{{$result->klasifikasi}}</td>
-                            <td>{{$result->sub_klasifikasi}}</td>
+                            <td>{{$result->id_permohonan == "1" ? "baru" : ($result->id_permohonan == "2" ? "Perpanjangan" : "Perubahan")}}</td>
+                            <td>{{$result->klasifikasi == 0 ? "Semua": $result->klasifikasi}}</td>
+                            <td>{{$result->sub_klasifikasi == 0 ? "Semua" : $result->sub_klasifikasi}}</td>
                             <td>{{$result->kualifikasi}}</td>
                             <td>{{$result->sub_kualifikasi}}</td>
                           </tr>

@@ -241,7 +241,7 @@ class SikiRegtaController extends Controller
         if($obj = json_decode($response)){
             if($obj->response) {
                 if($this->createSyncLog($reg, $obj)){
-                    $this->storeLocalRegTA($request, $obj->ID_Registrasi_TK_Ahli);
+                    $this->storeLocalRegTA($reg, $obj->ID_Registrasi_TK_Ahli);
                     return redirect()->back()->with('success', $obj->message);
                 }
             }

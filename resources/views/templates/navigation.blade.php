@@ -78,9 +78,13 @@
 
         @if(Helpers::checkPermission('master') )
           <li class="treeview {{Request::is('master*') ? 'active' : ''}}">
-            <a href=""><i class="fa fa-tasks"></i><span>Master Data</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <a href=""><i class="fa fa-tasks"></i><span>PJS Profesi LPJK Mandiri</span> <i class="fa fa-angle-left pull-right"></i></a>
             <ul class="treeview-menu">
-              <li class="{{Request::is('master_badanusaha*') ? 'active' : ''}}"> <a href="{{ url('master_badanusaha') }}"><span>Badan Usaha</span> </a> </li>
+              <li class=""> <a href="{{ url('#') }}"><span>Kantor PJS LPJK Mandiri</span> </a> </li>
+              <li class="{{Request::is('master_badanusaha*') ? 'active' : ''}}"> <a href="{{ url('master_badanusaha') }}"><span>Badan Usaha  PJS LPJK Mandiri</span> </a> </li>
+              <li class=""> <a href="{{ url('#') }}"><span>Ijin PJS LPJK Mandiri</span> </a> </li>
+              <li class=""> <a href="{{ url('#') }}"><span>Personil PJS LPJK Mandiri</span> </a> </li>
+              <li class=""> <a href="{{ url('#') }}"><span>Dokumen Personil PJS LPJK Mandiri</span> </a> </li>
               <li class="{{Request::is('master_pjklpjk*') ? 'active' : ''}}"> <a href="{{ url('master_pjklpjk') }}"><span>PJS LPJK</span> </a> </li>
             </ul>
           </li>
@@ -106,11 +110,6 @@
             </ul>
           </li>
 
-          <li class="{{Request::is('approval_99*') ? 'active' : ''}}">
-              <a href="{{ url('approval_99') }}">
-                <i class="fa fa-tasks"></i> <span>Approval & Hapus 99</span>
-              </a>
-          </li>
         @endif
 
         {{-- <li class="{{Request::is('hapus_99*') ? 'active' : ''}}">
@@ -131,14 +130,27 @@
 
         @if(Helpers::checkPermission('team') )
           <li class="treeview {{Request::is('produksi*') || Request::is('marketing*') || Request::is('gol*') ? 'active' : ''}}">
-            <a href=""><i class="fa fa-tasks"></i><span>Tim</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <a href=""><i class="fa fa-tasks"></i><span>Tim Produksi Profesi</span> <i class="fa fa-angle-left pull-right"></i></a>
             <ul class="treeview-menu">
-              <li class="{{Request::is('produksi*') ? 'active' : ''}}"> <a href="{{ url('produksi') }}"><span>Tim Produksi</span> </a> </li>
-              <li class="{{Request::is('marketing*') ? 'active' : ''}}"> <a href="{{ url('marketing') }}"><span>Tim Marketing</span> </a> </li>
+              <li class="{{Request::is('produksi*') ? 'active' : ''}}"> <a href="{{ url('produksi') }}"><span>Tim Produksi PJS LPJK Mandiri</span> </a> </li>
+              <li class=""> <a href="{{ url('#') }}"><span>Asesor PJS LPJK Mandiri</span> </a> </li>
+              <li class="{{Request::is('approval_99*') ? 'active' : ''}}">
+                  <a href="{{ url('approval_99') }}">
+                    <span>Kgt Produksi Persetujuan Pusat</span>
+                  </a>
+              </li>
               <li class="{{Request::is('gol_harga_produksi*') ? 'active' : ''}}"> <a href="{{ url('gol_harga_produksi') }}"><span>Gol Harga Produksi</span> </a> </li>
-              <li class="{{Request::is('gol_harga_marketing*') ? 'active' : ''}}"> <a href="{{ url('gol_harga_marketing') }}"><span>Gol Harga Marketing</span> </a> </li>
               <li class="{{Request::is('team_kontribusi_ta*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_ta') }}"><span>Kontribusi Ahli</span> </a> </li>
               <li class="{{Request::is('team_kontribusi_tt*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_tt') }}"><span>Kontribusi Trampil</span> </a> </li>
+            </ul>
+          </li>
+          <li class="treeview {{Request::is('produksi*') || Request::is('marketing*') || Request::is('gol*') ? 'active' : ''}}">
+            <a href=""><i class="fa fa-tasks"></i><span>Tim Marketing & Keuangan</span> <i class="fa fa-angle-left pull-right"></i></a>
+            <ul class="treeview-menu">
+              <li class="{{Request::is('marketing*') ? 'active' : ''}}"> <a href="{{ url('marketing') }}"><span>Tim Marketing PJS LPJK Mandiri</span> </a> </li>
+              <li class=""> <a href="{{ url('#') }}"><span>Kgt Persetujuan Pusat PJS LPJK Mandiri</span> </a> </li>
+              <li class="{{Request::is('gol_harga_marketing*') ? 'active' : ''}}"> <a href="{{ url('gol_harga_marketing') }}"><span>Kontribusi PJS LPJK Mandiri</span> </a> </li>
+              <li class=""> <a href="{{ url('#') }}"><span>Tagihan Kontribusi PJS LPJK Mandiri</span> </a> </li>
             </ul>
           </li>
         @endif
@@ -147,12 +159,30 @@
             <i class="fa fa-user"></i> <span>Pemohon</span>
           </a>
         </li> --}}
+        <li class="treeview">
+          <a href=""><i class="fa fa-tasks"></i><span>Master 1</span> <i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+            <li class=""> <a href=""><span>Data Jenis Usaha</span> </a> </li>
+            <li class=""> <a href=""><span>Data Klasifikasi</span> </a> </li>
+            <li class=""> <a href=""><span>Data Sub Klasifikasi</span> </a> </li>
+            <li class=""> <a href=""><span>Data Kualifikasi</span> </a> </li>
+            <li class=""> <a href=""><span>Data Sub Kualifikasi</span> </a> </li>
+          </ul>
+        </li>
+        <li class="treeview">
+          <a href=""><i class="fa fa-tasks"></i><span>Master 2</span> <i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+            <li class=""> <a href=""><span>Data Provinsi</span> </a> </li>
+            <li class=""> <a href=""><span>Data Kota</span> </a> </li>
+          </ul>
+        </li>
 
         @if(Helpers::checkPermission('user') )
-        <li class="{{Request::is('users') ? 'active' : ''}}">
-            <a href="{{ url('users') }}">
-              <i class="fa fa-users"></i> <span>Kelola User</span>
-            </a>
+        <li class="treeview {{Request::is('users*') ? 'active' : ''}}">
+          <a href=""><i class="fa fa-users"></i><span>Referensi</span> <i class="fa fa-angle-left pull-right"></i></a>
+          <ul class="treeview-menu">
+            <li class=""> <a href="{{ url('users') }}"><span>Daftar User</span> </a> </li>
+          </ul>
         </li>
         @endif
 

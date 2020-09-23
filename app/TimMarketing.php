@@ -29,4 +29,9 @@ class TimMarketing extends Model
   {
     return $this->belongsTo('App\TimMarketingGolHarga', 'gol_harga_id');
   }
+    
+  public function users()
+  {
+    return $this->hasMany('App\User', 'marketing_id');
+  }
 }

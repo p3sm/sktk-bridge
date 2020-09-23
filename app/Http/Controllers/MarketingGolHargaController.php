@@ -80,6 +80,7 @@ class MarketingGolHargaController extends Controller
 
       $timProduksi->gol_harga_id = $request->gol_harga;
       $timProduksi->jenis_usaha_id = $request->jenis_usaha;
+      $timProduksi->id_permohonan = $request->id_permohonan;
       $timProduksi->klasifikasi = $request->klasifikasi;
       $timProduksi->sub_klasifikasi = $request->sub_klasifikasi;
       $timProduksi->kualifikasi = $request->kualifikasi;

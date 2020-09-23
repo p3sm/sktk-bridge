@@ -56,9 +56,18 @@
                     </select>
                   </div>
                   <div class="form-group">
+                    <label>Jenis Permohonan</label>
+                    <select class="form-control"  name="id_permohonan">
+                      <option value="">-- pilih kualifikasi --</option>
+                      <option value="1">Baru</option>
+                      <option value="2">Perpanjangan</option>
+                      <option value="3">Perubahan</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
                     <label>Klasifikasi</label>
                     <select class="form-control" id="bidang" name="klasifikasi">
-                      <option value="">-- pilih klasifikasi --</option>
+                      <option value="0">Semua klasifikasi</option>
                       @foreach ($bidang as $bid)
                       <option value="{{$bid->id_bidang}}">{{$bid->id_bidang}} - {{$bid->deskripsi}}</option>
                       @endforeach
@@ -67,7 +76,7 @@
                   <div class="form-group">
                     <label>Sub Klasifikasi</label>
                     <select class="form-control" id="subbidang" name="sub_klasifikasi">
-                      <option value="">-- pilih sub klasifikasi --</option>
+                      <option value="0">Semua Sub klasifikasi</option>
                     </select>
                   </div>
                   <div class="form-group">
@@ -82,7 +91,7 @@
                     <label>Sub Kualifikasi</label>
                     <select class="form-control" name="sub_kualifikasi">
                       <option value="">-- pilih sub kualifikasi --</option>
-                      <option value="1">Ahli / Kelas 1</option>
+                      <option value="1">Utama / Kelas 1</option>
                       <option value="2">Madya / Kelas 2</option>
                       <option value="3">Muda / Kelas 3</option>
                     </select>
@@ -119,7 +128,7 @@ $(function(){
   $("#bidang").on("change", function(){
     $.getJSON("/api/v1/sub_bidang?bidang=" + $(this).val(), function(result){
       $('#subbidang').find('option').remove()
-      $('#subbidang').append(new Option("-- pilih sub klasifikasi --", ""))
+      $('#subbidang').append(new Option("Semua Sub klasifikasi", "0"))
       result.forEach(function(val, i) {
         $("#subbidang").append(new Option(val.id_sub_bidang + " - " + val.deskripsi, val.id_sub_bidang));
       })

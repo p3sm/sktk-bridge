@@ -39,10 +39,23 @@ class Approval99Controller extends Controller
         $asosiasi = $request->aso;
         $sertifikat = $request->srtf;
 
+        if(Auth::user()->tipe_akun != 2){
+            return redirect('/');
+        }
+
+        $mktgs = [];
+
+        foreach(Auth::user()->produksi->marketing as $mar){
+            foreach($mar->users as $us){
+                $mktgs[] = $us->id;
+            }
+        }
+
+
         if($sertifikat == "SKA" || $sertifikat == null) {
         
             $model = PersonalRegTa::whereDate("Tgl_Registrasi", ">=", $from->format('Y-m-d'))
-            ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'));
+            ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'))->whereIn('created_by', $mktgs);
     
             if($asosiasi) $model = $model->where("ID_Asosiasi_Profesi", $asosiasi);
             if($provinsi) $model = $model->where("ID_Propinsi_reg", $provinsi);
@@ -61,7 +74,7 @@ class Approval99Controller extends Controller
         if($sertifikat == "SKT" || $sertifikat == null) {
         
             $model = PersonalRegTt::whereDate("Tgl_Registrasi", ">=", $from->format('Y-m-d'))
-            ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'));
+            ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'))->whereIn('created_by', $mktgs);
     
             if($asosiasi) $model = $model->where("ID_Asosiasi_Profesi", $asosiasi);
             if($provinsi) $model = $model->where("ID_propinsi_reg", $provinsi);
@@ -489,7 +502,11 @@ class Approval99Controller extends Controller
                                     ->where("id_asosiasi_profesi", $pengajuan->ID_Asosiasi_Profesi)->first();
 
         if($pengajuan->user->marketing_id){
-            $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $pengajuan->user->marketing->gol_harga_id)->first();
+            $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $pengajuan->user->marketing->gol_harga_id)
+            ->where('id_permohonan', $pengajuan->id_permohonan)
+            ->where('kualifikasi', $pengajuan->tipe_sertifikat)
+            ->where('sub_kualifikasi', $pengajuan->ID_Kualifikasi)
+            ->first();
             $harga = $golharga->harga;
         } else {
             $harga = 0;

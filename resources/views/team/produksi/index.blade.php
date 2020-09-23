@@ -81,10 +81,19 @@
                         <tr>
                             <th><input id="check_all" type="checkbox"></th>
                             <th>No.</th>
-                            <th>Kode</th>
-                            <th>Nama</th>
-                            <th>Tim Produksi Induk</th>
-                            <th>Gol Harga</th>
+                            <th>Jns Usaha</th>
+                            <th>PJS LPJK</th>
+                            <th>Tim Prod</th>
+                            <th>Nama Ktr</th>
+                            <th>Prov</th>
+                            <th>Instansi Reff</th>
+                            <th>Nama Pimp</th>
+                            <th>Kontak P</th>
+                            <th>NPWP</th>
+                            <th>Keterangan</th>
+                            <th>Pdf NPWP</th>
+                            <th>User Waktu Tambah</th>
+                            <th>User Waktu Ubah</th>
                             {{-- <th>Action</th> --}}
                         </tr>
                     </thead>
@@ -93,10 +102,39 @@
                           <tr>
                             <td><input class="check_item" type="checkbox" name="pilih_permohonan[]" value="<?php echo $result->id?>" /></td>
                             <td>{{$k + 1}}</td>
-                            <td>{{$result->kode}}</td>
-                            <td>{{$result->nama}}</td>
-                            <td><span class='label label-warning'>{{$result->parent ? $result->parent->nama : "-"}}</span></td>
-                            <td>{{$result->gol_harga}}</td>
+                            <td>{{$result->jenis_usaha->nama}}</td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Kode: {{$result->pjk->badanUsaha->kode}} <br> 
+                              Nama: {{$result->pjk->badanUsaha->nama}} <br> 
+                              Singkatan: {{$result->pjk->badanUsaha->singkatan}}">
+                              {{$result->pjk->badanUsaha->nama}}</span>
+                            </td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Kode: {{$result->kode}} <br> 
+                              Nama: {{$result->nama}} <br> 
+                              Singkatan: {{$result->singkatan}} <br> 
+                              Level: {{$result->level->nama}}">
+                              {{$result->singkatan}}</span>
+                            </td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Kode: {{$result->pjk->badanUsaha->kode}} <br> 
+                              Nama: {{$result->pjk->badanUsaha->nama}} <br> 
+                              Singkatan: {{$result->pjk->badanUsaha->singkatan}}">
+                              {{$result->pjk->badanUsaha->nama}}</span>
+                            </td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Kode: {{$result->pjk->badanUsaha->kode}} <br> 
+                              Nama: {{$result->pjk->badanUsaha->nama}} <br> 
+                              Singkatan: {{$result->pjk->badanUsaha->singkatan}}">
+                              {{$result->provinsi->nama}}</span></td>
+                            <td>{{$result->instansi}}</td>
+                            <td>{{$result->pimpinan_nama}}</td>
+                            <td>{{$result->pimpinan_kontak}}</td>
+                            <td>{{$result->npwp}}</td>
+                            <td>{{$result->npwp}}</td>
+                            <td>{{$result->keterangan}}</td>
+                            <td>{{$result->created_at}}</td>
+                            <td>{{$result->updated_at}}</td>
                             {{-- <td>
                               <a href="{{url("approval_99/" . $result->id . "/approve")}}" class="btn btn-primary btn-xs approve">Approve</a>
                             </td> --}}
