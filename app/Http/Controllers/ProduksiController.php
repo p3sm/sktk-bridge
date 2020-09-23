@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\TeamKontribusiTa;
 use App\Provinsi;
+use App\Kota;
 use App\Asosiasi;
 use App\BadanUsaha;
 use App\BentukUsaha;
@@ -27,6 +28,13 @@ class ProduksiController extends Controller
      */
     public function index(Request $request)
     {        
+      if($request->ubah){
+          if($request->pilih_data){
+            return redirect('produksi/' . $request->pilih_data[0] . '/edit');
+          } else {
+            return redirect('produksi')->with('error', 'Pilih data yang akan ubah');
+          }
+      }
       // $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
       // $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
 
@@ -108,7 +116,7 @@ class ProduksiController extends Controller
       $timProduksi->badan_usaha_id = $request->badan_usaha;
       $timProduksi->bentuk_usaha_id = $request->bentuk_usaha;
       $timProduksi->level_id = $request->level;
-      $timProduksi->gol_harga = $request->gol_harga;
+      $timProduksi->gol_harga_id = $request->gol_harga;
       $timProduksi->kode = $kode;
       $timProduksi->nama = $request->nama;
       $timProduksi->singkatan = $request->nama_singkat;
@@ -163,9 +171,22 @@ class ProduksiController extends Controller
      */
     public function edit($id)
     {
-      $data['kontribusi'] = TeamKontribusiTa::find($id);
+      $data['data'] = TimProduksi::find($id);
 
-      return view('team/kontribusi_ta/edit')->with($data);
+      $data["teams"] = Team::all()->sortBy("name");
+      $data['tim_produksi'] = TimProduksi::where("parent_id", null)->get()->sortBy("name");
+      $data["tim_produksi_gol_harga"] = TimProduksiGolHarga::all()->sortBy("gol_harga");
+      $data["tim_produksi_level"] = TimProduksiLevel::all();
+      $data["asosiasi"] = Asosiasi::all()->sortBy("nama");
+      $data["provinsi"] = Provinsi::all();
+      $data["kota"] = Kota::where('provinsi_id', $data['data']->provinsi_id)->get();
+      $data["badan_usaha"] = BadanUsaha::all();
+      $data["bentuk_usaha"] = BentukUsaha::all()->sortBy("nama");
+      $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
+      $data["pjk_lpjk"] = PjkLpjk::all();
+      $data["banks"] = Bank::all();
+
+      return view('team/produksi/edit')->with($data);
     }
 
     /**
@@ -177,10 +198,42 @@ class ProduksiController extends Controller
      */
     public function update(Request $request, $id)
     {
-      $data = TeamKontribusiTa::find($id);
-      $data->kontribusi = $request->kontribusi;
+      $timProduksi = TimProduksi::find($id);
+
+      $timProduksi->parent_id = $request->level_id == 1 ? null : $request->parent_id;
+      $timProduksi->pjk_lpjk_id = $request->pjk3;
+      $timProduksi->jenis_usaha_id = $request->jenis_usaha;
+      $timProduksi->badan_usaha_id = $request->badan_usaha;
+      $timProduksi->bentuk_usaha_id = $request->bentuk_usaha;
+      $timProduksi->level_id = $request->level;
+      $timProduksi->gol_harga_id = $request->gol_harga;
+      $timProduksi->nama = $request->nama;
+      $timProduksi->singkatan = $request->nama_singkat;
+      $timProduksi->provinsi_id = $request->provinsi_id;
+      $timProduksi->kota_id = $request->kota_id;
+      $timProduksi->alamat = $request->alamat;
+      $timProduksi->no_tlp = $request->no_telp;
+      $timProduksi->email = $request->email;
+      $timProduksi->web = $request->web;
+      $timProduksi->instansi = $request->instansi;
+      $timProduksi->pimpinan_nama = $request->pimpinan;
+      $timProduksi->pimpinan_jabatan = $request->pimpinan_jabatan;
+      $timProduksi->pimpinan_hp = $request->pimpinan_no;
+      $timProduksi->pimpinan_email = $request->pimpinan_email;
+      $timProduksi->kontak_p = $request->pic;
+      $timProduksi->no_kontak_p = $request->pic_no;
+      $timProduksi->jab_kontak_p = $request->pic_jabatan;
+      $timProduksi->email_kontak_p = $request->pic_email;
+      $timProduksi->npwp = $request->npwp;
+      $timProduksi->npwp_pdf = $request->npwp_file;
+      $timProduksi->rekening_no = $request->rek;
+      $timProduksi->rekening_nama = $request->rek_name;
+      $timProduksi->rekening_bank = $request->bank;
+      $timProduksi->keterangan = $request->keterangan;
+      $timProduksi->is_active = 1;
+      $timProduksi->updated_by = Auth::id();
       
-      if($data->save())
+      if($timProduksi->save())
         return redirect()->back()->with('success', "Edited successfully");
       else {
         return redirect()->back()->with('error', "An error occurred");

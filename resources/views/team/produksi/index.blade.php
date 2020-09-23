@@ -64,6 +64,7 @@
               {{-- <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
               <button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button> --}}
               <a href="/produksi/create" class="btn btn-success btn-sm my-1">Tambah</a>
+              <button type="submit" class="btn btn-warning btn-sm my-1" name="ubah" value="ubah">Ubah</button>
             </div>
             <div style="margin-bottom:10px">
               <select name="pjk" class="form-control input-sm" style="width: 200px">
@@ -132,7 +133,7 @@
                     <tbody>
                         @foreach($results as $k => $result)
                           <tr>
-                            <td><input class="check_item" type="checkbox" name="pilih_permohonan[]" value="<?php echo $result->id?>" /></td>
+                            <td><input class="check_item" type="checkbox" name="pilih_data[]" value="<?php echo $result->id?>" /></td>
                             <td>{{$k + 1}}</td>
                             <td>{{$result->jenis_usaha->nama}}</td>
                             <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
@@ -181,7 +182,7 @@
                               Bank: {{$result->rekening_bank}}">
                               {{$result->npwp}}</span></td>
                             <td>{{$result->keterangan}}</td>
-                            <td>{{$result->npwp}}</td>
+                            <td>-</td>
                             <td>{{$result->created_at}}</td>
                             <td>{{$result->updated_at}}</td>
                             {{-- <td>
