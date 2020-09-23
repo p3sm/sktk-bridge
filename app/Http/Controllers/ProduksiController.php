@@ -35,6 +35,20 @@ class ProduksiController extends Controller
             return redirect('produksi')->with('error', 'Pilih data yang akan ubah');
           }
       }
+
+      if($request->hapus){
+          if($request->pilih_data){
+              foreach($request->pilih_data as $res){
+                $del = TimProduksi::findOrFail($res);
+                if(!$del->delete()){
+                  return redirect('produksi')->with('error', 'Gagal menghapus data');
+                }
+              }
+              return redirect('produksi')->with('success', 'Data berhasil dihapus');
+          } else {                
+            return redirect('produksi')->with('error', 'Pilih data yang akan dihapus');
+          }
+      }
       // $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
       // $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
 
@@ -248,6 +262,9 @@ class ProduksiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = TimProduksi::findOrFail($id);
+        $item->delete();
+
+        return redirect('/produksi')->with('success', 'User berhasil dihapus');
     }
 }

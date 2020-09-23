@@ -3,13 +3,26 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class TimProduksi extends Model
 {
+  use SoftDeletes;
+
   protected $connection = 'mysql';
   protected $table = 'tim_produksi';
   protected $primaryKey = 'id';
+
+  public static function boot() {
+    parent::boot();
     
+    static::deleted(function($obj) {
+      $obj->deleted_by = Auth::id();
+      $obj->save();
+    });
+  }
+
   public function parent()
   {
     return $this->belongsTo('App\TimProduksi', 'parent_id');

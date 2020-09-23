@@ -61,10 +61,10 @@
               </select>
               <a href="/produksi" class="btn btn-default btn-sm my-1">Reset</a>
               <button type="submit" class="btn btn-primary btn-sm my-1">Filter</button>
-              {{-- <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
-              <button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button> --}}
+              {{--<button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button> --}}
               <a href="/produksi/create" class="btn btn-success btn-sm my-1">Tambah</a>
               <button type="submit" class="btn btn-warning btn-sm my-1" name="ubah" value="ubah">Ubah</button>
+              <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
             </div>
             <div style="margin-bottom:10px">
               <select name="pjk" class="form-control input-sm" style="width: 200px">
