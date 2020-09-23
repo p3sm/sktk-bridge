@@ -27,23 +27,31 @@ class ProduksiController extends Controller
      */
     public function index(Request $request)
     {        
-      $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
-      $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
-      $provinsi = $request->prv;
-      $tim = $request->tim;
-      $asosiasi = $request->aso;
+      // $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
+      // $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
 
       $model = new TimProduksi();
 
-      if($request->prv) $model = $model->where("id_propinsi_reg", $request->prv);
-      if($request->aso) $model = $model->where("id_asosiasi_profesi", $request->aso);
-      if($request->tim) $model = $model->where("team_id", $request->tim);
-      if($request->kua) $model = $model->where("id_kualifikasi", $request->kua);
+      // if($request->ktr) $model = $model->where("id_propinsi_reg", $request->ktr);
+      if($request->prd) $model = $model->where(function ($query) use ($request) {
+        $query->where("parent_id", $request->prd)
+              ->orWhere("id", $request->prd);
+      });
+      if($request->prv) $model = $model->where("provinsi_id", $request->prv);
+      // if($request->ins) $model = $model->where("instansi", $request->ins);
+      if($request->pjk) $model = $model->where("pjk_lpjk_id", $request->pjk);
+      if($request->lvl) $model = $model->where("level_id", $request->lvl);
+      if($request->kot) $model = $model->where("kota_id", $request->kot);
+      if($request->jnu) $model = $model->where("jenis_usaha_id", $request->jnu);
 
-      $data['from'] = $from;
-      $data['to'] = $to;
-      $data['asosiasi'] = $asosiasi;
-      $data['provinsi'] = $provinsi;
+      // $data['from'] = $from;
+      // $data['to'] = $to;
+      $data['tim_produksi'] = TimProduksi::where("parent_id", null)->get()->sortBy("name");
+      $data['provinsi'] = Provinsi::all();
+      $data['pjklpjk'] = PjkLpjk::all();
+      $data['level'] = TimProduksiLevel::all();
+      $data['jenis_usaha'] = JenisUsaha::all()->sortBy("nama");
+      $data['request'] = $request;
       $data['results'] = $model->get();
       $data['provinsi_data'] = Provinsi::all();
 

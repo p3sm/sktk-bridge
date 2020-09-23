@@ -35,27 +35,59 @@
         <div class="box-body">
           <form method="get" style="margin-bottom: 20px" action="" class="form-inline float-right">
             <label class="" for="inlineFormCustomSelectPref">filter: </label>
-            <div class="input-group input-daterange">
+            {{-- <div class="input-group input-daterange">
               <input type="text" name="from" class="form-control input-sm" value="{{$from->format("d/m/Y")}}">
               <div class="input-group-addon">to</div>
               <input type="text" name="to" class="form-control input-sm" value="{{$to->format("d/m/Y")}}">
+            </div> --}}
+            <div style="margin-bottom:5px">
+              <select name="ktr" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Pilih Kantor --</option>
+              </select>
+              <select name="prd" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Tim Produksi --</option>
+                @foreach ($tim_produksi as $data)
+                  <option value="{{$data->id}}" {{$request->prd == $data->id ? "selected" : ""}}>{{$data->nama}}</option>
+                @endforeach
+              </select>
+              <select name="prv" class="form-control input-sm" style="width: 200px" id="provinsi">
+                <option value="">-- Pilih Provinsi --</option>
+                @foreach ($provinsi_data as $data)
+                  <option value="{{str_pad((string)$data->id_provinsi, 2, '0', STR_PAD_LEFT)}}" {{$request->prv == $data->id_provinsi ? "selected" : ""}}>{{$data->nama}}</option>
+                @endforeach
+              </select>
+              <select name="ins" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Instansi Reff --</option>
+              </select>
+              <a href="/produksi" class="btn btn-default btn-sm my-1">Reset</a>
+              <button type="submit" class="btn btn-primary btn-sm my-1">Filter</button>
+              {{-- <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
+              <button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button> --}}
+              <a href="/produksi/create" class="btn btn-success btn-sm my-1">Tambah</a>
             </div>
-            <select name="prv" class="form-control input-sm">
-              <option value="">-- Pilih Provinsi --</option>
-              @foreach ($provinsi_data as $data)
-                <option value="{{str_pad((string)$data->id_provinsi, 2, '0', STR_PAD_LEFT)}}" {{$provinsi == $data->id_provinsi ? "selected" : ""}}>{{$data->nama}}</option>
-              @endforeach
-            </select>
-            <select name="aso" class="form-control input-sm">
-              <option value="">-- Pilih Asosiasi --</option>
-              <option value="142" {{$asosiasi == 142 ? "selected" : ""}}>ASTEKINDO</option>
-              <option value="148" {{$asosiasi == 148 ? "selected" : ""}}>GATAKI</option>
-            </select>
-            <a href="/approval_99" class="btn btn-default btn-sm my-1">Reset</a>
-            <button type="submit" class="btn btn-primary btn-sm my-1">Filter</button>
-            {{-- <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
-            <button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button> --}}
-            <a href="/produksi/create" class="btn btn-success btn-sm my-1">Tambah</a>
+            <div style="margin-bottom:10px">
+              <select name="pjk" class="form-control input-sm" style="width: 200px">
+                <option value="">-- PJS LPJK --</option>
+                @foreach ($pjklpjk as $data)
+                  <option value="{{$data->id}}" {{$request->pjk == $data->id ? "selected" : ""}}>{{$data->badanUsaha->nama}}</option>
+                @endforeach
+              </select>
+              <select name="lvl" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Level Tim Produksi--</option>
+                @foreach ($level as $data)
+                  <option value="{{$data->id}}" {{$request->lvl == $data->id ? "selected" : ""}}>{{$data->nama}}</option>
+                @endforeach
+              </select>
+              <select name="kot" class="form-control input-sm" style="width: 200px" id="kota">
+                <option value="">-- Kota --</option>
+              </select>
+              <select name="jnu" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Jenis Usaha --</option>
+                @foreach ($jenis_usaha as $data)
+                  <option value="{{$data->id}}" {{$request->jnu == $data->id ? "selected" : ""}}>{{$data->nama}}</option>
+                @endforeach
+              </select>
+            </div>
 
             @if(session()->get('success'))
             <div class="alert alert-success alert-block" style="margin-top: 10px;">
@@ -182,6 +214,16 @@ $(function(){
 		$(".check_item").each(function(i){
 			$(this).prop('checked', e.target.checked);;
 		})
+  })
+
+  $("#provinsi").on("change", function(){
+    $.getJSON("/api/v1/kota?provinsi=" + $(this).val(), function(result){
+      $('#kota').find('option').remove()
+      $('#kota').append(new Option("-- Kota --", ""))
+      result.forEach(function(val, i) {
+        $("#kota").append(new Option(val.nama, val.id));
+      })
+    });
   })
   
   $('.input-daterange').datepicker({format: 'dd/mm/yyyy'});
