@@ -130,11 +130,26 @@
                               Email: {{$result->email}}">
                               {{$result->provinsi->nama}}</span></td>
                             <td>{{$result->instansi}}</td>
-                            <td>{{$result->pimpinan_nama}}</td>
-                            <td>{{$result->pimpinan_kontak}}</td>
-                            <td>{{$result->npwp}}</td>
-                            <td>{{$result->npwp}}</td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Nama: {{$result->pimpinan_nama}} <br> 
+                              Jabatan: {{$result->pimpinan_jabatan}} <br> 
+                              No Hp: {{$result->pimpinan_hp}} <br> 
+                              Email: {{$result->pimpinan_email}}">
+                              {{$result->pimpinan_nama}}</span></td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Nama: {{$result->kontak_p}} <br> 
+                              Jabatan: {{$result->jab_kontak_p}} <br> 
+                              No Hp: {{$result->no_kontak_p}} <br> 
+                              Email: {{$result->email_kontak_p}}">
+                              {{$result->kontak_p}}</span></td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="NPWP: {{$result->npwp}} <br> 
+                              Norek: {{$result->rekening_no}} <br> 
+                              Nama: {{$result->rekening_nama}} <br> 
+                              Bank: {{$result->rekening_bank}}">
+                              {{$result->npwp}}</span></td>
                             <td>{{$result->keterangan}}</td>
+                            <td>{{$result->npwp}}</td>
                             <td>{{$result->created_at}}</td>
                             <td>{{$result->updated_at}}</td>
                             {{-- <td>
