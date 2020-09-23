@@ -30,6 +30,11 @@ class TimProduksi extends Model
     return $this->belongsTo('App\Provinsi', 'provinsi_id');
   }
     
+  public function kota()
+  {
+    return $this->belongsTo('App\Kota', 'kota_id');
+  }
+    
   public function level()
   {
     return $this->belongsTo('App\TimProduksiLevel', 'level_id');

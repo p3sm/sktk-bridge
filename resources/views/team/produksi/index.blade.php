@@ -123,9 +123,11 @@
                               {{$result->pjk->badanUsaha->nama}}</span>
                             </td>
                             <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
-                              title="Kode: {{$result->pjk->badanUsaha->kode}} <br> 
-                              Nama: {{$result->pjk->badanUsaha->nama}} <br> 
-                              Singkatan: {{$result->pjk->badanUsaha->singkatan}}">
+                              title="Singkatan: {{$result->kota->singkatan_kota}} <br> 
+                              Kota: {{$result->kota->nama}} <br> 
+                              Alamat: {{$result->alamat}} <br> 
+                              No HP: {{$result->no_telp}} <br> 
+                              Email: {{$result->email}}">
                               {{$result->provinsi->nama}}</span></td>
                             <td>{{$result->instansi}}</td>
                             <td>{{$result->pimpinan_nama}}</td>
