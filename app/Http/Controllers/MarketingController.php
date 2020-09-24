@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\TeamKontribusiTa;
 use App\Provinsi;
+use App\Kota;
 use App\Asosiasi;
 use App\BadanUsaha;
 use App\BentukUsaha;
@@ -28,24 +29,53 @@ class MarketingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {        
-      $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
-      $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
-      $provinsi = $request->prv;
-      $tim = $request->tim;
-      $asosiasi = $request->aso;
+    {      
+      if($request->ubah){
+          if($request->pilih_data){
+            return redirect('marketing/' . $request->pilih_data[0] . '/edit');
+          } else {
+            return redirect('marketing')->with('error', 'Pilih data yang akan ubah');
+          }
+      }
+
+      if($request->hapus){
+          if($request->pilih_data){
+              foreach($request->pilih_data as $res){
+                $del = TimMarketing::findOrFail($res);
+                if(!$del->delete()){
+                  return redirect('marketing')->with('error', 'Gagal menghapus data');
+                }
+              }
+              return redirect('marketing')->with('success', 'Data berhasil dihapus');
+          } else {                
+            return redirect('marketing')->with('error', 'Pilih data yang akan dihapus');
+          }
+      }
 
       $model = new TimMarketing();
 
-      if($request->prv) $model = $model->where("id_propinsi_reg", $request->prv);
-      if($request->aso) $model = $model->where("id_asosiasi_profesi", $request->aso);
-      if($request->tim) $model = $model->where("team_id", $request->tim);
-      if($request->kua) $model = $model->where("id_kualifikasi", $request->kua);
+      if($request->prd) $model = $model->where(function ($query) use ($request) {
+        $query->where("parent_id", $request->prd)
+              ->orWhere("id", $request->prd);
+      });
+      if($request->mkt) $model = $model->where(function ($query) use ($request) {
+        $query->where("parent_id", $request->mkt)
+              ->orWhere("id", $request->mkt);
+      });
+      if($request->prv) $model = $model->where("provinsi_id", $request->prv);
+      if($request->pjk) $model = $model->where("pjk_lpjk_id", $request->pjk);
+      if($request->lvl) $model = $model->where("level_id", $request->lvl);
+      if($request->kot) $model = $model->where("kota_id", $request->kot);
+      if($request->jnu) $model = $model->where("jenis_usaha_id", $request->jnu);
+      if($request->gol) $model = $model->where("gol_harga_id", $request->gol);
 
-      $data['from'] = $from;
-      $data['to'] = $to;
-      $data['asosiasi'] = $asosiasi;
-      $data['provinsi'] = $provinsi;
+      $data['tim_produksi'] = TimProduksi::where("parent_id", null)->get()->sortBy("name");
+      $data['tim_marketing'] = TimMarketing::where("parent_id", null)->get()->sortBy("name");
+      $data['provinsi'] = Provinsi::all();
+      $data['gol_harga'] = TimMarketingGolHarga::all();
+      $data['level'] = TimProduksiLevel::all();
+      $data['jenis_usaha'] = JenisUsaha::all()->sortBy("nama");
+      $data['request'] = $request;
       $data['results'] = $model->get();
       $data['provinsi_data'] = Provinsi::all();
 
@@ -120,7 +150,7 @@ class MarketingController extends Controller
       $timProduksi->instansi = $request->instansi;
       $timProduksi->pimpinan_nama = $request->pimpinan;
       $timProduksi->pimpinan_jabatan = $request->pimpinan_jabatan;
-      $timProduksi->pimpinan_hp = $request->pimpinan_no;
+      $timProduksi->pimpinan_hp = $request->pimpinan_hp;
       $timProduksi->pimpinan_email = $request->pimpinan_email;
       $timProduksi->kontak_p = $request->pic;
       $timProduksi->no_kontak_p = $request->pic_no;
@@ -162,9 +192,24 @@ class MarketingController extends Controller
      */
     public function edit($id)
     {
-      $data['kontribusi'] = TeamKontribusiTa::find($id);
+      $data['data'] = TimMarketing::find($id);
 
-      return view('team/kontribusi_ta/edit')->with($data);
+      $data["teams"] = Team::all()->sortBy("name");
+      $data['tim_produksi'] = TimProduksi::all()->sortBy("name");
+      $data["tim_produksi_level"] = TimProduksiLevel::all();
+      $data['tim_marketing'] = TimMarketing::where("parent_id", null)->get()->sortBy("name");
+      $data["tim_marketing_level"] = TimMarketingLevel::all();
+      $data["tim_marketing_gol_harga"] = TimMarketingGolHarga::all()->sortBy("gol_harga");
+      $data["asosiasi"] = Asosiasi::all()->sortBy("nama");
+      $data["provinsi"] = Provinsi::all();
+      $data["kota"] = Kota::where('provinsi_id', $data['data']->provinsi_id)->get();
+      $data["badan_usaha"] = BadanUsaha::all();
+      $data["bentuk_usaha"] = BentukUsaha::all()->sortBy("nama");
+      $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
+      $data["pjk_lpjk"] = PjkLpjk::all();
+      $data["banks"] = Bank::all();
+
+      return view('team/marketing/edit')->with($data);
     }
 
     /**
@@ -176,10 +221,46 @@ class MarketingController extends Controller
      */
     public function update(Request $request, $id)
     {
-      $data = TeamKontribusiTa::find($id);
-      $data->kontribusi = $request->kontribusi;
+      $timMktg = TimMarketing::find($id);
       
-      if($data->save())
+      $timMktg->tim_produksi_id = $request->tim_produksi_id;
+      $timMktg->parent_id = $request->level_id == 1 ? null : $request->parent_id;
+      $timMktg->jenis_usaha_id = $request->jenis_usaha;
+      $timMktg->badan_usaha_id = $request->badan_usaha;
+      $timMktg->bentuk_usaha_id = $request->bentuk_usaha;
+      $timMktg->level_id = $request->level;
+      $timMktg->kualifikasi_type = $request->kualifikasi_type;
+      $timMktg->gol_harga_id = $request->gol_harga;
+      $timMktg->nama = $request->nama;
+      $timMktg->singkatan = $request->nama_singkat;
+      $timMktg->provinsi_id = $request->provinsi_id;
+      $timMktg->kota_id = $request->kota_id;
+      $timMktg->alamat = $request->alamat;
+      $timMktg->no_tlp = $request->no_telp;
+      $timMktg->email = $request->email;
+      $timMktg->web = $request->web;
+      $timMktg->instansi = $request->instansi;
+      $timMktg->pimpinan_nama = $request->pimpinan;
+      $timMktg->pimpinan_jabatan = $request->pimpinan_jabatan;
+      $timMktg->pimpinan_hp = $request->pimpinan_hp;
+      $timMktg->pimpinan_email = $request->pimpinan_email;
+      $timMktg->kontak_p = $request->pic;
+      $timMktg->no_kontak_p = $request->pic_no;
+      $timMktg->jab_kontak_p = $request->pic_jabatan;
+      $timMktg->email_kontak_p = $request->pic_email;
+      $timMktg->npwp = $request->npwp;
+      $timMktg->npwp_pdf = $request->npwp_file;
+      $timMktg->rekening_no = $request->rek;
+      $timMktg->rekening_nama = $request->rek_name;
+      $timMktg->rekening_bank = $request->bank;
+      $timMktg->keterangan = $request->keterangan;
+      $timMktg->is_active = 1;
+      $timMktg->updated_by = Auth::id();
+
+      $timMktg->save();
+
+      
+      if($timMktg->save())
         return redirect()->back()->with('success', "Edited successfully");
       else {
         return redirect()->back()->with('error', "An error occurred");

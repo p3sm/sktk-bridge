@@ -129,7 +129,7 @@
         @endif
 
         @if(Helpers::checkPermission('team') )
-          <li class="treeview {{Request::is('produksi*') || Request::is('marketing*') || Request::is('gol*') ? 'active' : ''}}">
+          <li class="treeview {{Request::is('produksi*') || Request::is('gol*') ? 'active' : ''}}">
             <a href=""><i class="fa fa-tasks"></i><span>Tim Produksi Profesi</span> <i class="fa fa-angle-left pull-right"></i></a>
             <ul class="treeview-menu">
               <li class="{{Request::is('produksi*') ? 'active' : ''}}"> <a href="{{ url('produksi') }}"><span>Tim Produksi PJS LPJK Mandiri</span> </a> </li>
@@ -144,7 +144,7 @@
               <li class="{{Request::is('team_kontribusi_tt*') ? 'active' : ''}}"> <a href="{{ url('team_kontribusi_tt') }}"><span>Kontribusi Trampil</span> </a> </li>
             </ul>
           </li>
-          <li class="treeview {{Request::is('produksi*') || Request::is('marketing*') || Request::is('gol*') ? 'active' : ''}}">
+          <li class="treeview {{Request::is('marketing*') || Request::is('gol*') ? 'active' : ''}}">
             <a href=""><i class="fa fa-tasks"></i><span>Tim Marketing & Keuangan</span> <i class="fa fa-angle-left pull-right"></i></a>
             <ul class="treeview-menu">
               <li class="{{Request::is('marketing*') ? 'active' : ''}}"> <a href="{{ url('marketing') }}"><span>Tim Marketing PJS LPJK Mandiri</span> </a> </li>
