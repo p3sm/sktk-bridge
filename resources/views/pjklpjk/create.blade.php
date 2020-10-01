@@ -9,7 +9,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{url("")}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{url("users")}}">PJS LPJK</a></li>
+        <li><a href="{{url("master_pjklpjk")}}">PJS LPJK</a></li>
         <li class="active"><a href="#">Create</a></li>
       </ol>
     </section>
@@ -20,6 +20,9 @@
 
 	      <div class="col-md-12">
 
+        <!-- form start -->
+        <form role="form" method="post" action="{{url("master_pjklpjk")}}">
+          @csrf
 	        <!-- general form elements -->
 	        <div class="box box-primary">
 	          <div class="box-header with-border">
@@ -31,53 +34,59 @@
               {{ session()->get('error') }}  
             </div><br />
             @endif
-	          <!-- form start -->
-	          <form role="form" method="post" action="{{url("master_pjklpjk")}}">
-              @csrf
-	            <div class="box-body row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label>Badan Usaha</label>
-                    <select class="form-control" name="badan_usaha">
-                      <option value="">-- pilih badan usaha --</option>
-                      @foreach ($badan_usaha as $bu)
-                      <option value="{{$bu->id}}">{{$bu->nama}}</option>
-                      @endforeach
-                    </select>
+	            <div class="box-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label>Badan Usaha</label>
+                      <select class="form-control" name="badan_usaha">
+                        <option value="">-- pilih badan usaha --</option>
+                        @foreach ($badan_usaha as $bu)
+                        <option value="{{$bu->id}}">{{$bu->nama}}</option>
+                        @endforeach
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label for="tgl_sk">Tgl SK</label>
+                      <input type="text" class="form-control datepicker" name="tgl_sk" id="tgl_sk" placeholder="Tanggal SK" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="npwp_file">File SK</label>
+                      <input type="file" name="pdf_sk" id="pdf_sk">
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="is_active" checked="checked"> Active
+                      </label>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label for="tgl_sk">Tgl SK</label>
-                    <input type="text" class="form-control datepicker" name="tgl_sk" id="tgl_sk" placeholder="Tanggal SK" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="npwp_file">File SK</label>
-                    <input type="file" name="pdf_sk" id="pdf_sk">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="no_sk">No SK</label>
+                      <input type="text" class="form-control" name="no_sk" id="no_sk" placeholder="Masukan No SK" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="tgl_sk_akhir">Tgl SK AKhir</label>
+                      <input type="text" class="form-control datepicker" name="tgl_sk_akhir" id="tgl_sk_akhir" placeholder="Tanggal SK Akhir" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="keterangan">Keterangan</label>
+                      <textarea type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan" required></textarea>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="no_sk">No SK</label>
-                    <input type="text" class="form-control" name="no_sk" id="no_sk" placeholder="Masukan No SK" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="tgl_sk_akhir">Tgl SK AKhir</label>
-                    <input type="text" class="form-control datepicker" name="tgl_sk_akhir" id="tgl_sk_akhir" placeholder="Tanggal SK Akhir" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="keterangan">Keterangan</label>
-                    <textarea type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan" required></textarea>
-                  </div>
-                </div>
-	            </div>
+                <h4>Detail</h4>
+                <div id="add-pjs-detail"></div>
+              </div>
 	            <!-- /.box-body -->
 
 	            <div class="box-footer">
-	              <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+	              <button type="submit" name="submit" value="submit" class="btn btn-primary btn-block">Submit</button>
 	            </div>
-	          </form>
 	        </div>
 	        <!-- /.box -->
 
+        </form>
 	      </div>
 
 	    </div>
@@ -99,6 +108,18 @@ $(function(){
       })
     });
   })
+
+  // $(".bidang").on("change", function(){
+  //   var subbidang = $(this).parents('tr').find('.subbidang')
+
+  //   $.getJSON("/api/v1/sub_bidang?bidang=" + $(this).val(), function(result){
+  //     subbidang.find('option').remove()
+  //     subbidang.append(new Option("Semua Sub klasifikasi", "0"))
+  //     result.forEach(function(val, i) {
+  //       subbidang.append(new Option(val.id_sub_bidang + " - " + val.deskripsi, val.id_sub_bidang));
+  //     })
+  //   });
+  // })
 });
 </script>
 @endpush

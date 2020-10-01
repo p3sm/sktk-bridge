@@ -12,4 +12,9 @@ class PjkLpjk extends Model
   {
     return $this->belongsTo('App\BadanUsaha', 'badan_usaha_id');
   }
+    
+  public function detail()
+  {
+    return $this->hasMany('App\PjkLpjkDetail', 'pjk_lpjk_id');
+  }
 }

@@ -35,27 +35,29 @@
         <div class="box-body">
           <form method="get" style="margin-bottom: 20px" action="" class="form-inline float-right">
             <label class="" for="inlineFormCustomSelectPref">filter: </label>
-            <div class="input-group input-daterange">
-              <input type="text" name="from" class="form-control input-sm" value="{{$from->format("d/m/Y")}}">
-              <div class="input-group-addon">to</div>
-              <input type="text" name="to" class="form-control input-sm" value="{{$to->format("d/m/Y")}}">
+            <div style="margin-bottom:5px">
+              <select name="jnu" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Jenis Usaha --</option>
+              </select>
+              <select name="prv" class="form-control input-sm" style="width: 200px" id="provinsi">
+                <option value="">-- Provinsi Tim Marketing --</option>
+              </select>
+              <select name="mkt" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Tim Marketing --</option>
+              </select>
+              <select name="lvl" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Level Tim Marketing--</option>
+              </select>
+              <select name="gol" class="form-control input-sm" style="width: 200px">
+                <option value="">-- Golongan Harga --</option>
+              </select>
+              <a href="/master_pjklpjk" class="btn btn-default btn-sm my-1">Reset</a>
+              <button type="submit" class="btn btn-primary btn-sm my-1">Filter</button>
+              {{--<button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button> --}}
+              <a href="/master_pjklpjk/create" class="btn btn-success btn-sm my-1">Tambah</a>
+              <button type="submit" class="btn btn-warning btn-sm my-1" name="ubah" value="ubah">Ubah</button>
+              <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
             </div>
-            <select name="prv" class="form-control input-sm">
-              <option value="">-- Pilih Provinsi --</option>
-              @foreach ($provinsi_data as $data)
-                <option value="{{str_pad((string)$data->id_provinsi, 2, '0', STR_PAD_LEFT)}}" {{$provinsi == $data->id_provinsi ? "selected" : ""}}>{{$data->nama}}</option>
-              @endforeach
-            </select>
-            <select name="aso" class="form-control input-sm">
-              <option value="">-- Pilih Asosiasi --</option>
-              <option value="142" {{$asosiasi == 142 ? "selected" : ""}}>ASTEKINDO</option>
-              <option value="148" {{$asosiasi == 148 ? "selected" : ""}}>GATAKI</option>
-            </select>
-            <a href="/approval_99" class="btn btn-default btn-sm my-1">Reset</a>
-            <button type="submit" class="btn btn-primary btn-sm my-1">Filter</button>
-            {{-- <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
-            <button type="submit" class="btn btn-success btn-sm my-1" name="setuju" value="setuju">Setuju</button> --}}
-            <a href="/master_pjklpjk/create" class="btn btn-success btn-sm my-1">Tambah</a>
 
             @if(session()->get('success'))
             <div class="alert alert-success alert-block" style="margin-top: 10px;">
@@ -83,15 +85,19 @@
                             <th>No.</th>
                             <th>Badan Usaha</th>
                             <th>No SK</th>
+                            <th>Tanggal SK</th>
+                            <th>Keterangan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($results as $k => $result)
                           <tr>
-                            <td><input class="check_item" type="checkbox" name="pilih_permohonan[]" value="<?php echo $result->id?>" /></td>
+                            <td><input class="check_item" type="checkbox" name="pilih_data[]" value="<?php echo $result->id?>" /></td>
                             <td>{{$k + 1}}</td>
                             <td>{{$result->badanUsaha->nama}}</td>
                             <td>{{$result->no_sk}}</td>
+                            <td>{{\Carbon\Carbon::parse($result->tgl_sk)->format("d M Y")}} - {{\Carbon\Carbon::parse($result->tgl_sk_akhir)->format("d M Y")}}</td>
+                            <td>{{$result->keterangan}}</td>
                             {{-- <td>
                               <a href="{{url("approval_99/" . $result->id . "/approve")}}" class="btn btn-primary btn-xs approve">Approve</a>
                             </td> --}}
