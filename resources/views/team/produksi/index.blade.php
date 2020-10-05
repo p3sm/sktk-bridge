@@ -31,7 +31,7 @@
     <section class="content">
 
       <!-- Default box -->
-      <div class="box">
+      <div class="box box-content">
         <div class="box-body">
           <form method="get" style="margin-bottom: 20px" action="" class="form-inline float-right">
             <label class="" for="inlineFormCustomSelectPref">filter: </label>
@@ -109,7 +109,7 @@
 
             {{--  table data  --}}
             <div class="table-responsive" style="">
-                <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="datatable" class="table table-striped table-bordered dataTable customTable no-footer" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th><input id="check_all" type="checkbox"></th>
