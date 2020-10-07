@@ -85,6 +85,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::group(['middleware' => 'authorization:master'], function () {
 		Route::resources(['master_badanusaha' => 'BadanUsahaController']);
 		Route::resources(['master_pjklpjk' => 'PjkLpjkController']);
+		Route::resources(['master_kantor' => 'KantorController']);
 	});
 	
 });

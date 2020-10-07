@@ -216,12 +216,6 @@
 @push('script')
 <script>
 $(function(){
-	$("#check_all").on("click", function(e){
-		$(".check_item").each(function(i){
-			$(this).prop('checked', e.target.checked);;
-		})
-  })
-
   $("#provinsi").on("change", function(){
     $.getJSON("/api/v1/kota?provinsi=" + $(this).val(), function(result){
       $('#kota').find('option').remove()
@@ -231,28 +225,6 @@ $(function(){
       })
     });
   })
-  
-  $('.input-daterange').datepicker({format: 'dd/mm/yyyy'});
-	
-  var dt = $('#datatable').DataTable( {
-      "lengthMenu": [[100, 200, 500],[100, 200, 500]],
-      "scrollX": true,
-      "scrollY": $( window ).height() - 255,
-      "scrollCollapse": true,
-      "autoWidth": false,
-      "columnDefs": [ {
-          "searchable": false,
-          "orderable": false,
-          "targets": [0,1]
-      } ],
-      "order": [[ 2, 'asc' ]]
-  } );
-  
-  dt.on( 'order.dt search.dt', function () {
-    dt.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-        cell.innerHTML = i+1;
-    } );
-} ).draw();
 });
 </script>
 @endpush

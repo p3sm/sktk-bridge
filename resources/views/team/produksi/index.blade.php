@@ -41,22 +41,22 @@
               <input type="text" name="to" class="form-control input-sm" value="{{$to->format("d/m/Y")}}">
             </div> --}}
             <div style="margin-bottom:5px">
-              <select name="ktr" class="form-control input-sm" style="width: 200px">
+              <select name="ktr" class="form-control input-sm select2" style="width: 200px">
                 <option value="">-- Pilih Kantor --</option>
               </select>
-              <select name="prd" class="form-control input-sm" style="width: 200px">
+              <select name="prd" class="form-control input-sm select2" style="width: 200px">
                 <option value="">-- Tim Produksi --</option>
                 @foreach ($tim_produksi as $data)
                   <option value="{{$data->id}}" {{$request->prd == $data->id ? "selected" : ""}}>{{$data->nama}}</option>
                 @endforeach
               </select>
-              <select name="prv" class="form-control input-sm" style="width: 200px" id="provinsi">
+              <select name="prv" class="form-control input-sm select2" style="width: 200px" id="provinsi">
                 <option value="">-- Pilih Provinsi --</option>
                 @foreach ($provinsi_data as $data)
                   <option value="{{str_pad((string)$data->id_provinsi, 2, '0', STR_PAD_LEFT)}}" {{$request->prv == $data->id_provinsi ? "selected" : ""}}>{{$data->nama}}</option>
                 @endforeach
               </select>
-              <select name="ins" class="form-control input-sm" style="width: 200px">
+              <select name="ins" class="form-control input-sm select2" style="width: 200px">
                 <option value="">-- Instansi Reff --</option>
               </select>
               <a href="/produksi" class="btn btn-default btn-sm my-1">Reset</a>
@@ -67,22 +67,22 @@
               <button type="submit" class="btn btn-danger btn-sm my-1" name="hapus" value="hapus">Hapus</button>
             </div>
             <div style="margin-bottom:10px">
-              <select name="pjk" class="form-control input-sm" style="width: 200px">
+              <select name="pjk" class="form-control input-sm select2" style="width: 200px">
                 <option value="">-- PJS LPJK --</option>
                 @foreach ($pjklpjk as $data)
                   <option value="{{$data->id}}" {{$request->pjk == $data->id ? "selected" : ""}}>{{$data->badanUsaha->nama}}</option>
                 @endforeach
               </select>
-              <select name="lvl" class="form-control input-sm" style="width: 200px">
+              <select name="lvl" class="form-control input-smselect2" style="width: 200px">
                 <option value="">-- Level Tim Produksi--</option>
                 @foreach ($level as $data)
                   <option value="{{$data->id}}" {{$request->lvl == $data->id ? "selected" : ""}}>{{$data->nama}}</option>
                 @endforeach
               </select>
-              <select name="kot" class="form-control input-sm" style="width: 200px" id="kota">
+              <select name="kot" class="form-control input-sm select2" style="width: 200px" id="kota">
                 <option value="">-- Kota --</option>
               </select>
-              <select name="jnu" class="form-control input-sm" style="width: 200px">
+              <select name="jnu" class="form-control input-sm select2" style="width: 200px">
                 <option value="">-- Jenis Usaha --</option>
                 @foreach ($jenis_usaha as $data)
                   <option value="{{$data->id}}" {{$request->jnu == $data->id ? "selected" : ""}}>{{$data->nama}}</option>
@@ -211,11 +211,6 @@
 @push('script')
 <script>
 $(function(){
-	$("#check_all").on("click", function(e){
-		$(".check_item").each(function(i){
-			$(this).prop('checked', e.target.checked);;
-		})
-  })
 
   $("#provinsi").on("change", function(){
     $.getJSON("/api/v1/kota?provinsi=" + $(this).val(), function(result){
@@ -227,27 +222,7 @@ $(function(){
     });
   })
   
-  $('.input-daterange').datepicker({format: 'dd/mm/yyyy'});
 	
-  var dt = $('#datatable').DataTable( {
-      "lengthMenu": [[100, 200, 500],[100, 200, 500]],
-      "scrollX": true,
-      "scrollY": $( window ).height() - 255,
-      "scrollCollapse": true,
-      "autoWidth": false,
-      "columnDefs": [ {
-          "searchable": false,
-          "orderable": false,
-          "targets": [0,1]
-      } ],
-      "order": [[ 2, 'asc' ]]
-  } );
-  
-  dt.on( 'order.dt search.dt', function () {
-    dt.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-        cell.innerHTML = i+1;
-    } );
-} ).draw();
 });
 </script>
 @endpush

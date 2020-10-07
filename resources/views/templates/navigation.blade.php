@@ -80,7 +80,7 @@
           <li class="treeview {{Request::is('master*') ? 'active' : ''}}">
             <a href=""><i class="fa fa-tasks"></i><span style="width: 300px">PJS Profesi LPJK Mandiri</span> <i class="fa fa-angle-left pull-right"></i></a>
             <ul class="treeview-menu" style="width: 300px">
-              <li class=""> <a href="{{ url('#') }}"><span>Kantor PJS LPJK Mandiri</span> </a> </li>
+              <li class=""> <a href="{{ url('master_kantor') }}"><span>Kantor PJS LPJK Mandiri</span> </a> </li>
               <li class="{{Request::is('master_badanusaha*') ? 'active' : ''}}"> <a href="{{ url('master_badanusaha') }}"><span>Badan Usaha  PJS LPJK Mandiri</span> </a> </li>
               <li class=""> <a href="{{ url('#') }}"><span>Ijin PJS LPJK Mandiri</span> </a> </li>
               <li class=""> <a href="{{ url('#') }}"><span>Personil PJS LPJK Mandiri</span> </a> </li>

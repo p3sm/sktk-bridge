@@ -25,7 +25,10 @@
 
   <link rel="stylesheet" href="{{ asset('AdminLTE-2.3.11/plugins/fileinput-v4.5.2-0/css/fileinput-rtl.css') }}">
 
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet" />
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">
+
   <link rel="stylesheet" href="{{ asset('css/global.css') }}">
 
   <!-- FONT AWESOME -->

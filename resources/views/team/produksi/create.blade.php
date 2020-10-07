@@ -9,7 +9,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{url("")}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{url("users")}}">Tim Produksi</a></li>
+        <li><a href="{{url("produksi")}}">Tim Produksi</a></li>
         <li class="active"><a href="#">Create</a></li>
       </ol>
     </section>
@@ -21,7 +21,7 @@
 	      <div class="col-md-12">
 
 	        <!-- general form elements -->
-	        <div class="box box-primary">
+	        <div class="box box-primary box-content">
 	          <div class="box-header with-border">
 	            <h3 class="box-title">Create Tim Produksi</h3>
 	          </div>
