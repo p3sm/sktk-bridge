@@ -18,125 +18,127 @@
     <div class="box box-content">
         <div class="box-body">
 
-            @if(session()->get('message'))
-            <div class="alert alert-success alert-dismissible fade in"> {{ session()->get('message') }}
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            @if(session()->get('success'))
+            <div class="alert alert-success alert-block" style="margin-top: 10px;">
+              <button type="button" class="close" data-dismiss="alert">×</button>   
+                    <strong>{{ session()->get('success') }}</strong>
+            </div>
+            @endif
+
+            @if(session()->get('error'))
+            <div class="alert alert-danger alert-block" style="margin-top: 10px;">
+              <button type="button" class="close" data-dismiss="alert">×</button>   
+                    <strong>{{ session()->get('error') }}</strong>
             </div>
             @endif
 
             {{-- sub menu  --}}
-            <form action="{{ url('kantor/filter') }}" enctype="multipart/form-data" name="filterData"
-                id="filterData" method="post">
-                <!-- @method("PUT") -->
-                @csrf
-                <!-- <input type="hidden" name="key" id="key">
-                <input type="hidden" name="_method" id="_method"> -->
-                <div class="row">
-                    <div class="col-sm-3">
+            <form action="{{ url('master_kantor') }}" enctype="multipart/form-data" name="filterData" id="filterData" method="get">
+              <!-- <input type="hidden" name="key" id="key">
+              <input type="hidden" name="_method" id="_method"> -->
+              <div class="row">
+                  <div class="col-sm-3">
 
-                        <!-- Table Filter -->
-                        <table class="table table-condensed table-filter">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="input-group customSelect2md">
-                                            <select class="form-control select2" name="f_level" id="f_level">
-                                                <option selected value="">Level_Kantor</option>
-                                                @foreach($level as $key)
-                                                <option value="{{ $key->id }}"
-                                                    {{ request()->get('f_level') == $key->id ? 'selected' : '' }}>
-                                                    {{ $key->nama_level }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="input-group customSelect2md">
-                                            <select class="form-control select2" name="f_provinsi" id="f_provinsi">
-                                                <option value="">Provinsi</option>
-                                                @foreach($prov as $key)
-                                                <option value="{{ $key->id }}"
-                                                    {{ request()->get('f_provinsi') == $key->id ? 'selected' : '' }}>
-                                                    {{ $key->nama }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td style="padding-right: 0px">
-                                        <button type="submit" class="btn btn-sm btn-info"> <i class="fa fa-filter"></i>
-                                            Filter</button>
-                                    </td>
-                                    <td style="padding-left: 0px">
-                                        <a href="{{ url('kantor') }}" class="btn btn-sm btn-default"> <i
-                                                class="fa fa-refresh"></i>
-                                            Reset</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="input-group customSelect2md">
-                                            <select class="form-control select2" name="f_kantor" id="f_kantor">
-                                                <option selected value="">Kantor</option>
-                                                @foreach($kantor as $key)
-                                                <option value="{{ $key->nama_singkat }}"
-                                                    {{ request()->get('f_kantor') == $key->nama_singkat ? 'selected' : '' }}>
-                                                    {{ $key->nama_singkat }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </td>
+                      <!-- Table Filter -->
+                      <table class="table table-condensed table-filter">
+                          <tbody>
+                              <tr>
+                                  <td>
+                                      <div class="input-group customSelect2md">
+                                          <select class="form-control select2" name="f_level" id="f_level">
+                                              <option selected value="">Level_Kantor</option>
+                                              @foreach($level as $key)
+                                              <option value="{{ $key->id }}"
+                                                  {{ request()->get('f_level') == $key->id ? 'selected' : '' }}>
+                                                  {{ $key->nama_level }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  </td>
+                                  <td>
+                                      <div class="input-group customSelect2md">
+                                          <select class="form-control select2" name="f_provinsi" id="f_provinsi">
+                                              <option value="">Provinsi</option>
+                                              @foreach($prov as $key)
+                                              <option value="{{ $key->id }}"
+                                                  {{ request()->get('f_provinsi') == $key->id ? 'selected' : '' }}>
+                                                  {{ $key->nama }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  </td>
+                                  <td style="padding-right: 0px">
+                                      <button type="submit" class="btn btn-sm btn-info"> <i class="fa fa-filter"></i>
+                                          Filter</button>
+                                  </td>
+                                  <td style="padding-left: 0px">
+                                      <a href="{{ url('kantor') }}" class="btn btn-sm btn-default"> <i
+                                              class="fa fa-refresh"></i>
+                                          Reset</a>
+                                  </td>
+                              </tr>
+                              <tr>
+                                  <td>
+                                      <div class="input-group customSelect2md">
+                                          <select class="form-control select2" name="f_kantor" id="f_kantor">
+                                              <option selected value="">Kantor</option>
+                                              @foreach($kantor as $key)
+                                              <option value="{{ $key->nama_singkat }}"
+                                                  {{ request()->get('f_kantor') == $key->nama_singkat ? 'selected' : '' }}>
+                                                  {{ $key->nama_singkat }}</option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  </td>
 
-                                    <td>
-                                        <div class="input-group customSelect2md">
-                                            <select class="form-control select2" name="f_kota" id="f_kota">
-                                                <option selected value="">Kota</option>
-                                                @foreach($kota as $key)
-                                                <option value="{{ $key->id }}"
-                                                    {{ request()->get('f_kota') == $key->id ? 'selected' : '' }}>
-                                                    {{ $key->nama }}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </td>
+                                  <td>
+                                      <div class="input-group customSelect2md">
+                                          <select class="form-control select2" name="f_kota" id="f_kota">
+                                              <option selected value="">Kota</option>
+                                              @foreach($kota as $key)
+                                              <option value="{{ $key->id }}"
+                                                  {{ request()->get('f_kota') == $key->id ? 'selected' : '' }}>
+                                                  {{ $key->nama }}
+                                              </option>
+                                              @endforeach
+                                          </select>
+                                      </div>
+                                  </td>
 
-                                    <td>
+                                  <td>
 
-                                    </td>
-                                    <td>
+                                  </td>
+                                  <td>
 
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <!-- End -->
-                    </div>
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                      <!-- End -->
+                  </div>
 
-                    <div class="col-sm-7">
+                  <div class="col-sm-5">
 
-                    </div>
+                  </div>
 
-                    <div class="col-sm-2" style='text-align:right'>
-                        <div class="btn-group">
-                            <a href="{{ route('master_kantor.create') }}" class="btn btn-info"> <i class="fa fa-plus"></i>
-                                Tambah</a>
-                            <button class="btn btn-success" id="btnEdit" name="btnEdit"> <i class="fa fa-edit"></i>
-                                Ubah</button>
-                            <button class="btn btn-danger" id="btnHapus" name="btnHapus"> <i class="fa fa-trash"></i>
-                                Hapus</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-            <!-- /.box-footer -->
-            {{-- end of sub menu  --}}
-            <!-- <hr> -->
-            {{-- table data of car  --}}
-            {{-- <div class="table-responsive"> --}}
-            <table id="data-tables" class="table table-striped table-bordered dataTable customTable">
-                <thead>
-                    <tr>
-                        <th style="text-indent: 12px;"><i class="fa fa-check-square-o"></i></th>
+                  <div class="col-sm-4" style='text-align:right'>
+                      <div class="">
+                          <a href="{{ route('master_kantor.create') }}" class="btn btn-success btn-sm"> <i class="fa fa-plus"></i>
+                              Tambah</a>
+                          <button type="submit" class="btn btn-warning btn-sm my-1 ml-1" name="ubah" value="ubah"><i class="fa fa-edit"></i> Ubah</button>
+                          <button type="submit" class="btn btn-danger btn-sm my-1 ml-1" name="hapus" value="hapus"><i class="fa fa-trash"></i> Hapus</button>
+                      </div>
+                  </div>
+              </div>
+              <!-- /.box-footer -->
+              {{-- end of sub menu  --}}
+              <!-- <hr> -->
+              {{-- table data of car  --}}
+              {{-- <div class="table-responsive"> --}}
+              <table id="datatable" class="table table-striped table-bordered dataTable customTable">
+                  <thead>
+                      <tr>
+                        <th><input id="check_all" type="checkbox"></th>
                         <th style="text-indent: 22px;">No</th>
                         <th>Nama_Ktr</th>
                         <th>Level_Ktr</th>
@@ -146,33 +148,32 @@
                         <th>Keterangan</th>
                         <th>User_Tgl_Tambah</th>
                         <th>User_Tgl_Ubah</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($data as $key)
-                    <tr>
-                        <td style='text-align:center;width:1%'><input type="checkbox" data-id="{{ $key->id }}" class="selection"
-                                id="selection[]" name="selection[]"></td>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      @foreach($data as $key)
+                      <tr>
+                        <td><input class="check_item" type="checkbox" name="pilih_data[]" value="<?php echo $key->id?>" /></td>
                         <td style='text-align:center;width:1%'>{{ $loop->iteration }}</td>
                         <td data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="Nama : {{$key->nama_kantor}}<br>
-                                Singkatan Kantor : {{$key->nama_singkat}}
-                               ">{{$key->nama_singkat}}</td>
-                        {{-- <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true" --}}
-                            {{-- title="Level Atas : @if($key->level_atas) {{$key->level_atas_r->nama_singkat}} ({{$key->level_atas_r->nama_kantor}}) @else - @endif ">{{$key->levelkantor->nama_level}} --}}</td>
-                        {{-- <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="Nama : {{$key->nama}}<br>
+                                Singkatan Kantor : {{$key->singkatan}}
+                                ">{{$key->singkatan}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
+                            title="">{{$key->level->nama}}</td>
+                        <td style='text-align:center' data-toggle="tooltip" data-placement="bottom" data-html="true"
                             title="
                             Provinsi : {{$key->provinsi->nama}}<br>
-                            Kab/Kota : {{$key->kotakantor->nama}}<br>
+                            Kab/Kota : {{$key->kota->nama}}<br>
                             Alamat : {{$key->alamat}}<br>
                             No Telp : {{$key->no_telp}}<br>
                             Email : {{$key->email}}<br>
-                            ">{{$key->provinsi->nama_singkat}}</td> --}}
+                            ">{{$key->provinsi->nama_singkat}}</td>
                         <td data-toggle="tooltip" data-placement="bottom" data-html="true"
-                            title="Jabatan : {{$key->jab_pimp}}<br>
-                            No HP : {{$key->hp_pimp}}<br>
-                            Email : {{$key->email_pimp}}<br>
-                            ">{{$key->nama_pimp}}</td>
+                            title="Jabatan : {{$key->pimpinan_jabatan}}<br>
+                            No HP : {{$key->pimpinan_hp}}<br>
+                            Email : {{$key->pimpinan_email}}<br>
+                            ">{{$key->pimpinan_nama}}</td>
                         <td data-toggle="tooltip" data-placement="bottom" data-html="true"
                             title="Jabatan : {{$key->jab_kontak_p}}<br>
                             No HP : {{$key->no_kontak_p}}<br>
@@ -182,20 +183,22 @@
                         </td>
                         <td style='text-align:right'>
                         @if (isset($key->created_at))
-                            {{ \Carbon\Carbon::parse($key->created_at)->format("DD MMMM YYYY H:mm:s") }}
+                            {{ \Carbon\Carbon::parse($key->created_at)->format("D M Y H:i:s") }}
                             @endif
                         </td>
                         <td style='text-align:right'>
                         @if (isset($key->updated_at))
-                            {{ \Carbon\Carbon::parse($key->updated_at)->format("DD MMMM YYYY H:mm:s") }}
+                            {{ \Carbon\Carbon::parse($key->updated_at)->format("D M Y H:i:s") }}
                             @endif
                         </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            {{-- </div> --}}
-            {{-- end of car data  --}}
+                      </tr>
+                      @endforeach
+                  </tbody>
+              </table>
+              {{-- </div> --}}
+              {{-- end of car data  --}}
+
+            </form>
         </div>
         <!-- /.box-body -->
         <div class="box-footer"></div>

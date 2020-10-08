@@ -65,7 +65,7 @@
             </div>
             @endif
 
-            <form action="{{ route('daftarkantor.update', $data->id) }}" class="form-horizontal" id="formAdd"
+            <form action="{{ route('master_kantor.update', $data->id) }}" class="form-horizontal" id="formAdd"
                 name="formAdd" method="post" enctype="multipart/form-data">
                 @method("PATCH")
                 @csrf
@@ -78,7 +78,7 @@
                                 </div>
                                 <input name="id_nama_kantor" id="id_nama_kantor" class="form-control"
                                     placeholder="Nama Kantor"
-                                    value="{{old('id_nama_kantor') ? old('id_nama_kantor') : $data->nama_kantor}}">
+                                    value="{{old('id_nama_kantor') ? old('id_nama_kantor') : $data->nama}}">
                             </div>
 
                             <span id="id_nama_kantor"
@@ -93,7 +93,7 @@
                                 </div>
                                 <input name="id_singkat_kantor" id="id_singkat_kantor" class="form-control"
                                     placeholder="*Singkatan Nama Kantor"
-                                    value="{{old('id_singkat_kantor') ? old('id_singkat_kantor') : $data->nama_singkat}}">
+                                    value="{{old('id_singkat_kantor') ? old('id_singkat_kantor') : $data->singkatan}}">
                             </div>
 
                             <span id="id_singkat_kantor"
@@ -112,8 +112,8 @@
                                     style="width: 100%;">
                                     <option value="" disabled selected>Level Kantor</option>
                                     @foreach($level as $key)
-                                    <option value="{{ $key->id }}" {{ $key->id == $data->level ? 'selected' : '' }}>
-                                        {{ $key->nama_level }} </option>
+                                    <option value="{{ $key->id }}" {{ $key->id == $data->level_id ? 'selected' : '' }}>
+                                        {{ $key->nama }} </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -130,11 +130,6 @@
                                 <select class="form-control select2" name="id_level_atas" id="id_level_atas"
                                     style="width: 100%;">
                                     <option value="" disabled selected>Kantor Level Diatasnya</option>
-                                    @foreach($levelatas as $key)
-                                    <option value="{{ $key->id }}"
-                                        {{ $key->id == $data->level_atas ? 'selected' : '' }}>
-                                        {{ $key->nama_kantor }} </option>
-                                    @endforeach
                                 </select>
                             </div>
 
@@ -169,7 +164,7 @@
                                 <select class="form-control select2" name="id_prov" id="id_prov" style="width: 100%;">
                                     <option value="" disabled selected>*Provinsi</option>
                                     @foreach($prov as $key)
-                                    <option value="{{ $key->id }}" {{ $key->id == $data->prop ? 'selected' : '' }}>
+                                    <option value="{{ $key->id_provinsi }}" {{ $key->id_provinsi == $data->provinsi_id ? 'selected' : '' }}>
                                         {{ $key->nama }} </option>
                                     @endforeach
                                 </select>
@@ -187,7 +182,7 @@
                                 <select class="form-control select2" name="id_kota" id="id_kota" style="width: 100%;">
                                     <option value="" disabled selected>*Kota</option>
                                     @foreach($kotapil as $key)
-                                    <option value="{{ $key->id }}" {{ $key->id == $data->kota ? 'selected' : '' }}>
+                                    <option value="{{ $key->id }}" {{ $key->id == $data->kota_id ? 'selected' : '' }}>
                                         {{ $key->nama }} </option>
                                     @endforeach
                                 </select>
@@ -234,7 +229,7 @@
                                 </div>
                                 <input name="id_instansi" id="id_instansi" type="text" class="form-control"
                                     placeholder="Instansi Reff"
-                                    value="{{old('id_instansi') ? old('id_instansi') : $data->instansi_reff}}">
+                                    value="{{old('id_instansi') ? old('id_instansi') : $data->instansi}}">
                             </div>
 
                             <span id="id_instansi" class="help-block customspan">{{ $errors->first('id_instansi') }}
@@ -262,7 +257,7 @@
                                 </div>
                                 <input name="id_nama_p" id="id_nama_p" type="text" class="form-control"
                                     placeholder="Nama Pimpinan"
-                                    value="{{old('id_nama_p') ? old('id_nama_p') : $data->nama_pimp}}">
+                                    value="{{old('id_nama_p') ? old('id_nama_p') : $data->pimpinan_nama}}">
                             </div>
 
                             <span id="id_nama_p" class="help-block customspan">{{ $errors->first('id_nama_p') }} </span>
@@ -275,7 +270,7 @@
                                 </div>
                                 <input name="id_jab_p" id="id_jab_p" type="text" class="form-control"
                                     placeholder="Jabatan Pimpinan"
-                                    value="{{old('id_jab_p') ? old('id_jab_p') : $data->jab_pimp}}">
+                                    value="{{old('id_jab_p') ? old('id_jab_p') : $data->pimpinan_jabatan}}">
                             </div>
 
                             <span id="id_jab_p" class="help-block customspan">{{ $errors->first('id_jab_p') }} </span>
@@ -289,7 +284,7 @@
                                 </div>
                                 <input name="id_hp_p" id="id_hp_p" type="text" class="form-control"
                                     placeholder="No Hp Pimpinan"
-                                    value="{{old('id_hp_p') ? old('id_hp_p') : $data->hp_pimp}}">
+                                    value="{{old('id_hp_p') ? old('id_hp_p') : $data->pimpinan_hp}}">
                             </div>
 
                             <span id="id_hp_p" class="help-block customspan">{{ $errors->first('id_hp_p') }} </span>
@@ -302,7 +297,7 @@
                                 </div>
                                 <input name="id_email_p" id="id_email_p" type="email" class="form-control"
                                     placeholder="Email Pimpinan"
-                                    value="{{old('id_email_p') ? old('id_email_p') : $data->email_pimp}}">
+                                    value="{{old('id_email_p') ? old('id_email_p') : $data->pimpinan_email}}">
                             </div>
                             <span id="id_email_p" class="help-block customspan">{{ $errors->first('id_email_p') }}
                             </span>
@@ -424,13 +419,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
 <script type="text/javascript">
     // $('.select2').val(null).trigger('change');
-    var home = "{{ route('badanusaha.index') }}";
-
     $(function () {
 
         // untuk dropdown cari berdasarkan nama
-        sugestPersonil('id_nama_p', 'id_hp_p','id_email_p',"{{ route('searchPersonilByName') }}"); // Jika tidak autocomplete ke hp atau email parameter ny di kosongkan
-        sugestPersonil('id_nama_kp', 'id_hp_kp','id_email_kp',"{{ route('searchPersonilByName') }}");
 
         // Readonly Level Kantor
         $("#id_level_k").parent().find('.select2-container--default').css(
@@ -448,10 +439,16 @@
         $('[data-mask]').inputmask()
 
         // Filter Kota Berdasarkan Provinsi
-        $('#id_prov').on('select2:select', function () {
-            var url = `{{ url('register_perusahaan/chain') }}`;
-            chainedProvinsi(url, 'id_prov', 'id_kota', '*Kota');
-        });
+
+        $("#id_prov").on("change", function(){
+          $.getJSON("/api/v1/kota?provinsi=" + $(this).val(), function(result){
+            $('#id_kota').find('option').remove()
+            $('#id_kota').append(new Option("*Kota", ""))
+            result.forEach(function(val, i) {
+              $("#id_kota").append(new Option(val.nama, val.id));
+            })
+          });
+        })
 
         //Kunci Input No Hp Hanya Angka
         $('#id_no_telp,#id_hp_p,#id_hp_kp').on('input blur paste', function () {

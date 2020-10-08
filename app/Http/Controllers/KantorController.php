@@ -18,16 +18,38 @@ class KantorController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $idlevel = Kantor::select('level_id')->groupBy('level_id')->whereNotNull('level_id')->get()->toArray();
-        $level = KantorLevel::whereIn('id',$idlevel)->get();
-        $idprop = Kantor::select('provinsi_id')->groupBy('provinsi_id')->whereNotNull('provinsi_id')->get()->toArray();
-        $prov = Provinsi::whereIn('id',$idprop)->get();
-        $kota = Kota::all();
-        $data = Kantor::orderBy('id','asc')->get();
-        $kantor = Kantor::orderBy('id','asc')->groupBy('nama')->get();
-        return view('kantor.index')->with(compact('data','prov','kota','level','kantor'));
+      if($request->ubah){
+          if($request->pilih_data){
+            return redirect('master_kantor/' . $request->pilih_data[0] . '/edit');
+          } else {
+            return redirect('master_kantor')->with('error', 'Pilih data yang akan ubah');
+          }
+      }
+
+      if($request->hapus){
+          if($request->pilih_data){
+              foreach($request->pilih_data as $res){
+                $del = Kantor::findOrFail($res);
+                if(!$del->delete()){
+                  return redirect('master_kantor')->with('error', 'Gagal menghapus data');
+                }
+              }
+              return redirect('master_kantor')->with('success', 'Data berhasil dihapus');
+          } else {                
+            return redirect('master_kantor')->with('error', 'Pilih data yang akan dihapus');
+          }
+      }
+    
+      $idlevel = Kantor::select('level_id')->groupBy('level_id')->whereNotNull('level_id')->get()->toArray();
+      $level = KantorLevel::whereIn('id',$idlevel)->get();
+      $idprop = Kantor::select('provinsi_id')->groupBy('provinsi_id')->whereNotNull('provinsi_id')->get()->toArray();
+      $prov = Provinsi::whereIn('id_provinsi',$idprop)->get();
+      $kota = Kota::all();
+      $data = Kantor::orderBy('id','asc')->get();
+      $kantor = Kantor::orderBy('id','asc')->groupBy('nama')->get();
+      return view('kantor.index')->with(compact('data','prov','kota','level','kantor'));
     }
 
     /**
@@ -79,31 +101,32 @@ class KantorController extends Controller
         ]
         );
 
-        $data['nama'] = $request->id_nama_kantor;
-        $data['singkatan'] = $request->id_singkat_kantor;
-        $data['level_id'] = $request->id_level_k;
-        // $data['level_atas'] = $request->id_level_atas;
-        $data['provinsi_id'] = $request->id_prov;
-        $data['kota_id'] = $request->id_kota;
-        $data['alamat'] = $request->id_alamat;
-        $data['no_tlp'] = $request->id_no_telp;
-        $data['email'] = $request->id_email;
-        $data['web'] = $request->id_web;
-        $data['instansi'] = $request->id_instansi;
-        $data['pimpinan_nama'] = $request->id_nama_p;
-        $data['pimpinan_jabatan'] = $request->id_jab_p;
-        $data['pimpinan_hp'] = $request->id_hp_p;
-        $data['pimpinan_email'] = $request->id_email_p;
-        $data['kontak_p'] = $request->id_nama_kp;
-        $data['no_kontak_p'] = $request->id_hp_kp;
-        $data['jab_kontak_p'] = $request->id_jab_kp;
-        $data['email_kontak_p'] = $request->id_email_kp;
-        $data['keterangan'] = $request->id_keterangan;
-        $data['is_active'] = 1;
-        $data['created_by'] = Auth::id();
-        $data['created_at'] = Carbon::now()->toDateTimeString();
+        // dd($request);
+        $kantor = new Kantor();
+        $kantor->nama = $request->id_nama_kantor;
+        $kantor->singkatan = $request->id_singkat_kantor;
+        $kantor->level_id = $request->id_level_k;
+        $kantor->provinsi_id = $request->id_prov;
+        $kantor->kota_id = $request->id_kota;
+        $kantor->alamat = $request->id_alamat;
+        $kantor->no_tlp = $request->id_no_telp;
+        $kantor->email = $request->id_email;
+        $kantor->web = $request->id_web;
+        $kantor->instansi = $request->id_instansi;
+        $kantor->pimpinan_nama = $request->id_nama_p;
+        $kantor->pimpinan_jabatan = $request->id_jab_p;
+        $kantor->pimpinan_hp = $request->id_hp_p;
+        $kantor->pimpinan_email = $request->id_email_p;
+        $kantor->kontak_p = $request->id_nama_kp;
+        $kantor->no_kontak_p = $request->id_hp_kp;
+        $kantor->jab_kontak_p = $request->id_jab_kp;
+        $kantor->email_kontak_p = $request->id_email_kp;
+        $kantor->keterangan = $request->id_keterangan;
+        $kantor->is_active = 1;
+        $kantor->created_by = Auth::id();
+        $kantor->created_at = Carbon::now()->toDateTimeString();
 
-        $simpan = Kantor::create($data);
+        $kantor->save();
 
         return redirect('master_kantor')->with('message', 'Data berhasil ditambahkan');
       
@@ -131,10 +154,9 @@ class KantorController extends Controller
         $data = Kantor::find($id);
         $prov = Provinsi::all();
         $kota = Kota::all();
-        $kotapil = Kota::where('provinsi_id','=',$data->prop)->get();
-        $level = LevelKantor::all();
-        $levelatas = Kantor::where('level','=',$data->level-1)->get();
-        return view('suket.daftarkantor.edit')->with(compact('prov','kota','level','data','kotapil','levelatas'));
+        $kotapil = Kota::where('provinsi_id','=',$data->provinsi_id)->get();
+        $level = KantorLevel::all();
+        return view('kantor.edit')->with(compact('prov','kota','level','data','kotapil'));
     }
 
     /**
@@ -148,20 +170,20 @@ class KantorController extends Controller
     {
         $old = Kantor::find($id);
         $olddata['id_kantor'] = $old->id;
-        $olddata['nama_kantor'] = $old->nama_kantor;
-        $olddata['nama_singkat'] = $old->nama_singkat;
-        $olddata['level'] = $old->level;
-        $olddata['prop'] = $old->prop;
-        $olddata['kota'] = $old->kota;
+        $olddata['nama_kantor'] = $old->nama;
+        $olddata['nama_singkat'] = $old->singkatan;
+        $olddata['level'] = $old->level_id;
+        $olddata['prop'] = $old->provinsi_id;
+        $olddata['kota'] = $old->kota_id;
         $olddata['alamat'] = $old->alamat;
         $olddata['no_tlp'] = $old->no_tlp;
         $olddata['email'] = $old->email;
         $olddata['web'] = $old->web;
-        $olddata['instansi_reff'] = $old->instansi_reff;
-        $olddata['nama_pimp'] = $old->nama_pimp;
-        $olddata['jab_pimp'] = $old->jab_pimp;
-        $olddata['hp_pimp'] = $old->hp_pimp;
-        $olddata['email_pimp'] = $old->email_pimp;
+        $olddata['instansi_reff'] = $old->instansi;
+        $olddata['nama_pimp'] = $old->pimpinan_nama;
+        $olddata['jab_pimp'] = $old->pimpinan_jabatan;
+        $olddata['hp_pimp'] = $old->pimpinan_hp;
+        $olddata['email_pimp'] = $old->pimpinan_email;
         $olddata['kontak_p'] = $old->kontak_p;
         $olddata['no_kontak_p'] = $old->no_kontak_p;
         $olddata['jab_kontak_p'] = $old->jab_kontak_p;
@@ -198,35 +220,37 @@ class KantorController extends Controller
         ]
         );
 
-        $data['nama_kantor'] = $request->id_nama_kantor;
-        $data['nama_singkat'] = $request->id_singkat_kantor;
-        $data['level'] = $request->id_level_k;
-        $data['prop'] = $request->id_prov;
-        $data['kota'] = $request->id_kota;
-        $data['alamat'] = $request->id_alamat;
-        $data['no_tlp'] = $request->id_no_telp;
-        $data['email'] = $request->id_email;
-        $data['web'] = $request->id_web;
-        $data['instansi_reff'] = $request->id_instansi;
-        $data['nama_pimp'] = $request->id_nama_p;
-        $data['jab_pimp'] = $request->id_jab_p;
-        $data['hp_pimp'] = $request->id_hp_p;
-        $data['email_pimp'] = $request->id_email_p;
-        $data['kontak_p'] = $request->id_nama_kp;
-        $data['no_kontak_p'] = $request->id_hp_kp;
-        $data['jab_kontak_p'] = $request->id_jab_kp;
-        $data['email_kontak_p'] = $request->id_email_kp;
-        $data['keterangan'] = $request->id_keterangan;
-        $data['updated_by'] = Auth::id();
-        $data['updated_at'] = Carbon::now()->toDateTimeString();
+        $kantor = Kantor::find($id);
+
+        $kantor->nama = $request->id_nama_kantor;
+        $kantor->singkatan = $request->id_singkat_kantor;
+        $kantor->level_id = $request->id_level_k;
+        $kantor->provinsi_id = $request->id_prov;
+        $kantor->kota_id = $request->id_kota;
+        $kantor->alamat = $request->id_alamat;
+        $kantor->no_tlp = $request->id_no_telp;
+        $kantor->email = $request->id_email;
+        $kantor->web = $request->id_web;
+        $kantor->instansi = $request->id_instansi;
+        $kantor->pimpinan_nama = $request->id_nama_p;
+        $kantor->pimpinan_jabatan = $request->id_jab_p;
+        $kantor->pimpinan_hp = $request->id_hp_p;
+        $kantor->pimpinan_email = $request->id_email_p;
+        $kantor->kontak_p = $request->id_nama_kp;
+        $kantor->no_kontak_p = $request->id_hp_kp;
+        $kantor->jab_kontak_p = $request->id_jab_kp;
+        $kantor->email_kontak_p = $request->id_email_kp;
+        $kantor->keterangan = $request->id_keterangan;
+        $kantor->updated_by = Auth::id();
+        $kantor->updated_at = Carbon::now()->toDateTimeString();
 
         // Update Ke table Kantor
-        $update = Kantor::find($id)->update($data);
+        $kantor->save();
 
         // Insert ke table log kantor
-        LogKantor::create($olddata);
+        // LogKantor::create($olddata);
 
-        return redirect('daftarkantor')->with('message', 'Data berhasil dirubah');
+        return redirect('master_kantor')->with('message', 'Data berhasil dirubah');
     }
 
     /**
