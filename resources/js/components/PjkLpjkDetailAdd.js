@@ -149,6 +149,7 @@ export default class Main extends Component {
   render() {
     return (
       <>
+        <button className="btn btn-success btn-xs pull-right" onClick={(e) => this.tambahRow(e)}>Tambah Row</button>
         <table className="table table-bordered">
           <thead>
             <tr>
@@ -166,7 +167,6 @@ export default class Main extends Component {
             {this.state.row.map((d, i) => this.rowDetail(d, i))}
           </tbody>
         </table>
-        <button className="btn btn-success btn-xs pull-right" onClick={(e) => this.tambahRow(e)}>Tambah Row</button>
       </>
     );
   }

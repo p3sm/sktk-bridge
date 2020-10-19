@@ -84,9 +84,10 @@ class PjkLpjkController extends Controller
      */
     public function create()
     {
-      $data["badan_usaha"] = BadanUsaha::all();
+      $data["banks"] = Bank::all();
       $data["bidang"] = Bidang::all();
       $data["provinsi"] = Provinsi::all();
+      $data["badan_usaha"] = BadanUsaha::all();
 
       return view('pjklpjk/create')->with($data);
     }
@@ -102,6 +103,17 @@ class PjkLpjkController extends Controller
       $pj = new PjkLpjk();
 
       $pj->badan_usaha_id = $request->badan_usaha;
+      $pj->pimpinan_nama = $request->pimpinan_nama;
+      $pj->pimpinan_hp = $request->pimpinan_hp;
+      $pj->kontak_p = $request->kontak_p;
+      $pj->no_kontak_p = $request->no_kontak_p;
+      $pj->rekening_no = $request->rekening_no;
+      $pj->pimpinan_jabatan = $request->pimpinan_jabatan;
+      $pj->pimpinan_email = $request->pimpinan_email;
+      $pj->jab_kontak_p = $request->jab_kontak_p;
+      $pj->email_kontak_p = $request->email_kontak_p;
+      $pj->rekening_nama = $request->rekening_nama;
+      $pj->rekening_bank = $request->rekening_bank;
       $pj->no_sk = $request->no_sk;
       $pj->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk);
       $pj->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir);
@@ -152,6 +164,7 @@ class PjkLpjkController extends Controller
 
       $data["badan_usaha"] = BadanUsaha::all();
       $data["bidang"] = Bidang::all();
+      $data["banks"] = Bank::all();
 
       $subbidang = [];
       foreach($data['data']->detail as $detail){
@@ -176,6 +189,17 @@ class PjkLpjkController extends Controller
       $pj = PjkLpjk::find($id);
 
       $pj->badan_usaha_id = $request->badan_usaha;
+      $pj->pimpinan_nama = $request->pimpinan_nama;
+      $pj->pimpinan_hp = $request->pimpinan_hp;
+      $pj->kontak_p = $request->kontak_p;
+      $pj->no_kontak_p = $request->no_kontak_p;
+      $pj->rekening_no = $request->rekening_no;
+      $pj->pimpinan_jabatan = $request->pimpinan_jabatan;
+      $pj->pimpinan_email = $request->pimpinan_email;
+      $pj->jab_kontak_p = $request->jab_kontak_p;
+      $pj->email_kontak_p = $request->email_kontak_p;
+      $pj->rekening_nama = $request->rekening_nama;
+      $pj->rekening_bank = $request->rekening_bank;
       $pj->no_sk = $request->no_sk;
       $pj->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk);
       $pj->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir);

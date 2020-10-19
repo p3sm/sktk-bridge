@@ -22,6 +22,7 @@ Route::group(['prefix' => 'v1'], function(){
 	Route::get('kota', 'ApiMasterController@kota');
 	Route::get('bidang', 'ApiMasterController@bidang');
 	Route::get('sub_bidang', 'ApiMasterController@bidang_sub');
+	Route::get('badan_usaha', 'ApiMasterController@badan_usaha');
 	Route::group(['prefix' => 'users'], function(){
 		Route::get('', 'UserController@getData');
 	});

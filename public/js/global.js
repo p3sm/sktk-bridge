@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $("select").select2();
+    $(".select2").select2();
 
     $("#check_all").on("click", function(e) {
         $(".check_item").each(function(i) {
