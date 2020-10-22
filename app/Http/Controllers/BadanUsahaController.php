@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\TeamKontribusiTa;
 use App\Provinsi;
+use App\Kota;
 use App\Asosiasi;
 use App\BadanUsaha;
 use App\BentukUsaha;
@@ -27,26 +28,23 @@ class BadanUsahaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {        
-      $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
-      $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
-      $provinsi = $request->prv;
-      $tim = $request->tim;
-      $asosiasi = $request->aso;
+    {          
+      if($request->ubah){
+          if($request->pilih_data){
+            return redirect('master_badanusaha/' . $request->pilih_data[0] . '/edit');
+          } else {
+            return redirect('master_badanusaha')->with('error', 'Pilih data yang akan ubah');
+          }
+      }
 
       $model = new BadanUsaha();
 
-      if($request->prv) $model = $model->where("id_propinsi_reg", $request->prv);
-      if($request->aso) $model = $model->where("id_asosiasi_profesi", $request->aso);
-      if($request->tim) $model = $model->where("team_id", $request->tim);
-      if($request->kua) $model = $model->where("id_kualifikasi", $request->kua);
+      if($request->prv) $model = $model->where("provinsi_id", $request->prv);
+      if($request->kot) $model = $model->where("kota_id", $request->kot);
 
-      $data['from'] = $from;
-      $data['to'] = $to;
-      $data['asosiasi'] = $asosiasi;
-      $data['provinsi'] = $provinsi;
       $data['results'] = $model->get();
       $data['provinsi_data'] = Provinsi::all();
+      $data['request'] = $request;
 
     	return view('badanusaha/index')->with($data);
     }
@@ -60,6 +58,7 @@ class BadanUsahaController extends Controller
     {
       $data["asosiasi"] = Asosiasi::all()->sortBy("nama");
       $data["provinsi"] = Provinsi::all();
+      $data["badan_usaha"] = BadanUsaha::where('status_kantor_proyek', 2)->get();
       $data["bentuk_usaha"] = BentukUsaha::all()->sortBy("nama");
       $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
       $data["banks"] = Bank::all();
@@ -133,9 +132,18 @@ class BadanUsahaController extends Controller
      */
     public function edit($id)
     {
-      $data['kontribusi'] = TeamKontribusiTa::find($id);
+      $data['data'] = BadanUsaha::find($id);
 
-      return view('team/kontribusi_ta/edit')->with($data);
+      $data["asosiasi"] = Asosiasi::all()->sortBy("nama");
+      $data["provinsi"] = Provinsi::all();
+      $data["kota"] = Kota::where('provinsi_id', $data['data']->provinsi_id)->get();
+      $data["badan_usaha"] = BadanUsaha::where('status_kantor_proyek', 2)->get();
+      $data["bentuk_usaha"] = BentukUsaha::all()->sortBy("nama");
+      $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
+      $data["banks"] = Bank::all();
+      $data["status_kantor"] = StatusKantor::all();
+
+      return view('badanusaha/edit')->with($data);
     }
 
     /**
@@ -147,8 +155,38 @@ class BadanUsahaController extends Controller
      */
     public function update(Request $request, $id)
     {
-      $data = TeamKontribusiTa::find($id);
-      $data->kontribusi = $request->kontribusi;
+      $data = BadanUsaha::find($id);
+
+      $data->jenis_usaha_id = $request->jenis_usaha;
+      $data->asosiasi_id = $request->asosiasi;
+      $data->status_kantor_proyek = $request->status_kantor;
+      $data->bentuk_usaha_id = $request->bentuk_usaha;
+      $data->nama = $request->nama;
+      $data->singkatan = $request->nama_singkat;
+      $data->provinsi_id = $request->provinsi_id;
+      $data->kota_id = $request->kota_id;
+      $data->alamat = $request->alamat;
+      $data->no_tlp = $request->no_telp;
+      $data->email = $request->email;
+      $data->web = $request->web;
+      $data->instansi = $request->instansi;
+      $data->pimpinan_nama = $request->pimpinan;
+      $data->pimpinan_jabatan = $request->pimpinan_jabatan;
+      $data->pimpinan_hp = $request->pimpinan_no;
+      $data->pimpinan_email = $request->pimpinan_email;
+      $data->kontak_p = $request->pic;
+      $data->no_kontak_p = $request->pic_no;
+      $data->jab_kontak_p = $request->pic_jabatan;
+      $data->email_kontak_p = $request->pic_email;
+      $data->npwp = $request->npwp;
+      $data->npwp_pdf = $request->npwp_file;
+      $data->rekening_no = $request->rek;
+      $data->rekening_nama = $request->rek_name;
+      $data->rekening_bank = $request->bank;
+      $data->keterangan = $request->keterangan;
+      $data->is_active = 1;
+      $data->created_by = Auth::id();
+      $data->updated_by = Auth::id();
       
       if($data->save())
         return redirect()->back()->with('success', "Edited successfully");
