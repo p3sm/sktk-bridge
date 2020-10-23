@@ -47,13 +47,19 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Badan Usaha</label>
+                      <label>Nama PJS LPJK</label>
                       <select class="form-control" name="badan_usaha">
-                        <option value="">-- pilih badan usaha --</option>
+                        <option value="">-- nama pjs lpjk --</option>
                         @foreach ($badan_usaha as $bu)
                         <option value="{{$bu->id}}" {{$data->badan_usaha_id == $bu->id ? "selected" : ""}}>{{$bu->nama}}</option>
                         @endforeach
                       </select>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="alamat">Alamat</label>
+                      <textarea type="text" disabled class="form-control" rows="1" name="alamat" id="alamat" placeholder="Masukan alamat" required>{{$data->badanUsaha->alamat}}</textarea>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -61,72 +67,104 @@
                       <label for="provinsi">Provinsi</label>
                       <input type="text" disabled class="form-control" value="{{$data->badanUsaha->provinsi->nama}}" name="provinsi" id="provinsi" placeholder="Masukan Provinsi">
                     </div>
-                    <div class="form-group">
-                      <label for="alamat">Alamat</label>
-                      <textarea type="text" disabled class="form-control" rows="1" name="alamat" id="alamat" placeholder="Masukan alamat" required>{{$data->badanUsaha->alamat}}</textarea>
-                    </div>
-                    <div class="form-group">
-                      <label for="instansi">Instansi Reff</label>
-                      <input type="text" disabled class="form-control" value="{{$data->badanUsaha->instansi}}" name="instansi" id="instansi" placeholder="Masukan Instansi Ref">
-                    </div>
-                    <div class="form-group">
-                      <label for="pimpinan_nama">Nama Pimpinan</label>
-                      <input type="text" class="form-control" name="pimpinan_nama" id="pimpinan_nama" value="{{$data->pimpinan_nama}}" placeholder="Masukan Nama Pimpinan">
-                    </div>
-                    <div class="form-group">
-                      <label for="pimpinan_hp">No Hp Pimpinan</label>
-                      <input type="text" class="form-control" name="pimpinan_hp" id="pimpinan_hp" value="{{$data->pimpinan_hp}}" placeholder="Masukan No Pimpinan">
-                    </div>
-                    <div class="form-group">
-                      <label for="kontak_p">Nama Kontak Person</label>
-                      <input type="text" class="form-control" name="kontak_p" id="kontak_p" value="{{$data->kontak_p}}" placeholder="Masukan nama kontak person">
-                    </div>
-                    <div class="form-group">
-                      <label for="no_kontak_p">No Hp Kontak Person</label>
-                      <input type="text" class="form-control" name="no_kontak_p" id="no_kontak_p" value="{{$data->no_kontak_p}}" placeholder="Masukan no hp kontak person">
-                    </div>
-                    <div class="form-group">
-                      <label for="npwp">No NPWP</label>
-                      <input type="text" class="form-control" name="npwp" id="npwp" value="{{$data->badanUsaha->npwp}}" placeholder="Masukan no npwp">
-                    </div>
-                    <div class="form-group">
-                      <label for="rekening_no">No Rek Bank</label>
-                      <input type="text" class="form-control" name="rekening_no" id="rekening_no" value="{{$data->rekening_no}}" placeholder="Masukan no rekening">
-                    </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="kota">Kota</label>
                       <input type="text" disabled class="form-control" name="kota_id" id="kota" value="{{$data->badanUsaha->kota->nama}}" placeholder="Masukan Kota">
                     </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="no_telp">No Telp</label>
                       <input type="text" disabled class="form-control" name="no_telp" id="no_telp" value="{{$data->badanUsaha->no_tlp}}" placeholder="Masukan no telp" required>
                     </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="email">Email</label>
                       <input type="text" disabled class="form-control" name="email" id="email" placeholder="Masukan email" value="{{$data->badanUsaha->email}}" required>
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="instansi">Instansi Reff</label>
+                      <input type="text" disabled class="form-control" value="{{$data->badanUsaha->instansi}}" name="instansi" id="instansi" placeholder="Masukan Instansi Ref">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="web">Web</label>
                       <input type="text" disabled class="form-control" name="web" id="web" value="{{$data->badanUsaha->web}}" placeholder="Masukan Website">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="pimpinan_nama">Nama Pimpinan</label>
+                      <input type="text" class="form-control" name="pimpinan_nama" id="pimpinan_nama" value="{{$data->pimpinan_nama}}" placeholder="Masukan Nama Pimpinan">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="pimpinan_jabatan">Jabatan Pimpinan</label>
                       <input type="text" class="form-control" name="pimpinan_jabatan" id="pimpinan_jabatan" value="{{$data->pimpinan_jabatan}}" placeholder="Masukan Jabatan Pimpinan">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="pimpinan_hp">No Hp Pimpinan</label>
+                      <input type="text" class="form-control" name="pimpinan_hp" id="pimpinan_hp" value="{{$data->pimpinan_hp}}" placeholder="Masukan No Pimpinan">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="pimpinan_email">Email Pimpinan</label>
                       <input type="text" class="form-control" name="pimpinan_email" id="pimpinan_email" value="{{$data->pimpinan_email}}" placeholder="Masukan No Pimpinan">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="kontak_p">Nama Kontak Person</label>
+                      <input type="text" class="form-control" name="kontak_p" id="kontak_p" value="{{$data->kontak_p}}" placeholder="Masukan nama kontak person">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="jab_kontak_p">Jabatan Kontak Person</label>
                       <input type="text" class="form-control" name="jab_kontak_p" id="jab_kontak_p" value="{{$data->jab_kontak_p}}" placeholder="Masukan jabatan kontak person">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="no_kontak_p">No Hp Kontak Person</label>
+                      <input type="text" class="form-control" name="no_kontak_p" id="no_kontak_p" value="{{$data->no_kontak_p}}" placeholder="Masukan no hp kontak person">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="email_kontak_p">Email Kontak Person</label>
                       <input type="text" class="form-control" name="email_kontak_p" id="email_kontak_p" value="{{$data->email_kontak_p}}" placeholder="Masukan email kontak person">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="npwp">No NPWP</label>
+                      <input type="text" class="form-control" name="npwp" id="npwp" value="{{$data->badanUsaha->npwp}}" placeholder="Masukan no npwp">
+                    </div>
+                  </div>
+                  <div class="col-md-6" style="margin-bottom:20px">
+                    <div class="form-group">
+                      <label for="npwp_file">File NPWP</label>
+                      <input type="file" name="npwp_file" id="npwp_file">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="rekening_no">No Rek Bank</label>
+                      <input type="text" class="form-control" name="rekening_no" id="rekening_no" value="{{$data->rekening_no}}" placeholder="Masukan no rekening">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="rekening_nama">Nama Rekening Bank</label>
                       <input type="text" class="form-control" name="rekening_nama" id="rekening_nama" value="{{$data->rekening_nama}}" placeholder="Masukan nama rekening">
@@ -143,7 +181,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-md-12">
+                  {{-- <div class="col-md-12">
                     <div class="form-group">
                       <label for="no_sk">No SK</label>
                       <input type="text" class="form-control" name="no_sk" id="no_sk" placeholder="Masukan No SK" value="{{$data->no_sk}}" required>
@@ -171,8 +209,8 @@
                         <input type="checkbox" name="is_active" {{$data->is_active == 1 ? "checked" : ""}}> Active
                       </label>
                     </div>
-                  </div>
-                  <div class="col-md-6">
+                  </div> --}}
+                  <div class="col-md-12">
                     <div class="form-group">
                       <label for="keterangan">Keterangan</label>
                       <textarea type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan" required>{{$data->keterangan}}</textarea>
@@ -183,17 +221,29 @@
                 
                 <table class="table">
                   <tr>
+                    <th>Jenis Usaha</th>
                     <th>Provinsi</th>
                     <th>Klasifikasi</th>
                     <th>Sub Klasifikasi</th>
                     <th>Kualifikasi</th>
                     <th>Sub Kualifikasi</th>
-                    <th>Keterangan</th>
+                    <th>No SK</th>
+                    <th>Tgl Terbit SK</th>
+                    <th>Tgl Akhir SK</th>
+                    <th>Pdf SK</th>
                     <th>Active</th>
                     <th>Action</th>
                   </tr>
                   @foreach($data->detail as $i => $detail)
                   <tr id="detail">
+                    <td>
+                      <select class="form-control" name="jenis_usaha[{{$i}}]">
+                        <option value="">-- pilih jenis usaha --</option>
+                        @foreach ($jenis_usaha as $pr)
+                        <option value="{{$pr->id}}" {{$detail->jenis_usaha_id == $pr->id ? "selected" : ""}}>{{$pr->nama}}</option>
+                        @endforeach
+                      </select>
+                    </td>
                     <td>
                       <select class="form-control" name="provinsi[{{$i}}]">
                         <option value="">-- pilih provinsi --</option>
@@ -233,7 +283,11 @@
                         <option value="3" {{$detail->sub_kualifikasi == "3" ? "selected" : ""}}>Muda / Kelas 3</option>
                       </select>
                     </td>
-                    <td><textarea name="keterangan_detail[{{$i}}]" rows="1" class="form-control">{{$detail->keterangan}}</textarea></td>
+                    <td><input type="text" className="form-control" name="no_sk[{{$i}}]" value="{{$detail->no_sk}}" /></td>
+                    <td><input type="text" className="form-control" name="tgl_sk[{{$i}}]" value="{{\Carbon\Carbon::parse($detail->tgl_sk)->format("d/m/Y")}}" /></td>
+                    <td><input type="text" className="form-control" name="tgl_sk_akhir[{{$i}}]" value="{{\Carbon\Carbon::parse($detail->tgl_sk_akhir)->format("d/m/Y")}}" /></td>
+                    <td><input type="file" className="form-control" name="file_sk[{{$i}}]" /></td>
+                    {{-- <td><textarea name="keterangan_detail[{{$i}}]" rows="1" class="form-control">{{$detail->keterangan}}</textarea></td> --}}
                     <td>
                       <label>
                         <input type="checkbox" name="is_active_detail[{{$i}}]" {{$detail->is_active == 1 ? "checked" : ""}}> Active

@@ -17,7 +17,8 @@ export default class Main extends Component {
       row: [0],
       provinsi: [],
       bidang: [],
-      sub_bidang: [[]]
+      sub_bidang: [[]],
+      jenis_usaha: []
     }
   }
 
@@ -25,12 +26,22 @@ export default class Main extends Component {
 
     this.getProvinsi();
     this.getBidang();
+    this.getJenisUsaha();
   }
 
   getProvinsi() {
     axios.get(`/api/v1/provinsi`).then(response => {
       this.setState({
         provinsi: response.data,
+        loading: false
+      })
+    });
+  }
+
+  getJenisUsaha() {
+    axios.get(`/api/v1/jenis_usaha`).then(response => {
+      this.setState({
+        jenis_usaha: response.data,
         loading: false
       })
     });
@@ -93,6 +104,14 @@ export default class Main extends Component {
     return (
       <tr key={d} id="detail">
         <td>
+          <select className="form-control" name={"jenis_usaha[" + d + "]"} required>
+            <option value="">-- jenis usaha --</option>
+            {this.state.jenis_usaha.map((p) => (
+              <option value={p.id}>{p.nama}</option>
+            ))}
+          </select>
+        </td>
+        <td>
           <select className="form-control" name={"provinsi[" + d + "]"} required>
             <option value="">-- pilih provinsi --</option>
             {this.state.provinsi.map((p) => (
@@ -131,7 +150,11 @@ export default class Main extends Component {
             <option value="3">Muda / Kelas 3</option>
           </select>
         </td>
-        <td><textarea name={"keterangan_detail[" + d + "]"} rows="1" className="form-control"></textarea></td>
+        <td><input type="text" className="form-control" name={"no_sk[" + d + "]"} /></td>
+        <td><input type="text" className="form-control" name={"tgl_sk[" + d + "]"} /></td>
+        <td><input type="text" className="form-control" name={"tgl_sk_akhir[" + d + "]"} /></td>
+        {/* <td><textarea name={"keterangan_detail[" + d + "]"} rows="1" className="form-control"></textarea></td> */}
+        <td><input type="file" className="form-control" name={"file_sk[" + d + "]"} /></td>
         <td>
           <label>
             <input type="checkbox" name={"is_active_detail[" + d + "]"} checked="checked" /> Active
@@ -153,12 +176,16 @@ export default class Main extends Component {
         <table className="table table-bordered">
           <thead>
             <tr>
+              <th>Jenis Usaha</th>
               <th>Provinsi</th>
               <th>Klasifikasi</th>
               <th>Sub Klasifikasi</th>
               <th>Kualifikasi</th>
               <th>Sub Kualifikasi</th>
-              <th>Keterangan</th>
+              <th>No SK</th>
+              <th>Tgl Terbit SK</th>
+              <th>Tgl Akhir SK</th>
+              <th>Pdf SK</th>
               <th>Active</th>
               <th>Action</th>
             </tr>

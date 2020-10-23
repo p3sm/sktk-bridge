@@ -38,13 +38,19 @@
                 <div class="row">
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label>Badan Usaha</label>
+                      <label>Nama PJS LPJK</label>
                       <select class="form-control select2" id="badan_usaha" name="badan_usaha">
-                        <option value="">-- pilih badan usaha --</option>
+                        <option value="">-- nama pjs lpjk --</option>
                         @foreach ($badan_usaha as $bu)
                         <option value="{{$bu->id}}">{{$bu->nama}}</option>
                         @endforeach
                       </select>
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="alamat">Alamat</label>
+                      <textarea type="text" disabled class="form-control" rows="1" name="alamat" id="alamat" placeholder="Masukan alamat" required></textarea>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -52,72 +58,104 @@
                       <label for="provinsi">Provinsi</label>
                       <input type="text" disabled class="form-control" name="provinsi" id="provinsi" placeholder="Masukan Provinsi">
                     </div>
-                    <div class="form-group">
-                      <label for="alamat">Alamat</label>
-                      <textarea type="text" disabled class="form-control" rows="1" name="alamat" id="alamat" placeholder="Masukan alamat" required></textarea>
-                    </div>
-                    <div class="form-group">
-                      <label for="instansi">Instansi Reff</label>
-                      <input type="text" disabled class="form-control" name="instansi" id="instansi" placeholder="Masukan Instansi Ref">
-                    </div>
-                    <div class="form-group">
-                      <label for="pimpinan_nama">Nama Pimpinan</label>
-                      <input type="text" class="form-control" name="pimpinan_nama" id="pimpinan_nama" placeholder="Masukan Nama Pimpinan">
-                    </div>
-                    <div class="form-group">
-                      <label for="pimpinan_hp">No Hp Pimpinan</label>
-                      <input type="text" class="form-control" name="pimpinan_hp" id="pimpinan_hp" placeholder="Masukan No Pimpinan">
-                    </div>
-                    <div class="form-group">
-                      <label for="kontak_p">Nama Kontak Person</label>
-                      <input type="text" class="form-control" name="kontak_p" id="kontak_p" placeholder="Masukan nama kontak person">
-                    </div>
-                    <div class="form-group">
-                      <label for="no_kontak_p">No Hp Kontak Person</label>
-                      <input type="text" class="form-control" name="no_kontak_p" id="no_kontak_p" placeholder="Masukan no hp kontak person">
-                    </div>
-                    <div class="form-group">
-                      <label for="npwp">No NPWP</label>
-                      <input type="text" class="form-control" name="npwp" id="npwp" placeholder="Masukan no npwp">
-                    </div>
-                    <div class="form-group">
-                      <label for="rekening_no">No Rek Bank</label>
-                      <input type="text" class="form-control" name="rekening_no" id="rekening_no" placeholder="Masukan no rekening">
-                    </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="kota">Kota</label>
                       <input type="text" disabled class="form-control" name="kota_id" id="kota" placeholder="Masukan Kota">
                     </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="no_telp">No Telp</label>
                       <input type="text" disabled class="form-control" name="no_telp" id="no_telp" placeholder="Masukan no telp" required>
                     </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="email">Email</label>
                       <input type="text" disabled class="form-control" name="email" id="email" placeholder="Masukan email" required>
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="instansi">Instansi Reff</label>
+                      <input type="text" disabled class="form-control" name="instansi" id="instansi" placeholder="Masukan Instansi Ref">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="web">Web</label>
                       <input type="text" disabled class="form-control" name="web" id="web" placeholder="Masukan Website">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="pimpinan_nama">Nama Pimpinan</label>
+                      <input type="text" class="form-control" name="pimpinan_nama" id="pimpinan_nama" placeholder="Masukan Nama Pimpinan">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="pimpinan_jabatan">Jabatan Pimpinan</label>
                       <input type="text" class="form-control" name="pimpinan_jabatan" id="pimpinan_jabatan" placeholder="Masukan Jabatan Pimpinan">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="pimpinan_hp">No Hp Pimpinan</label>
+                      <input type="text" class="form-control" name="pimpinan_hp" id="pimpinan_hp" placeholder="Masukan No Pimpinan">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="pimpinan_email">Email Pimpinan</label>
                       <input type="text" class="form-control" name="pimpinan_email" id="pimpinan_email" placeholder="Masukan No Pimpinan">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="kontak_p">Nama Kontak Person</label>
+                      <input type="text" class="form-control" name="kontak_p" id="kontak_p" placeholder="Masukan nama kontak person">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="jab_kontak_p">Jabatan Kontak Person</label>
                       <input type="text" class="form-control" name="jab_kontak_p" id="jab_kontak_p" placeholder="Masukan jabatan kontak person">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="no_kontak_p">No Hp Kontak Person</label>
+                      <input type="text" class="form-control" name="no_kontak_p" id="no_kontak_p" placeholder="Masukan no hp kontak person">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="email_kontak_p">Email Kontak Person</label>
                       <input type="text" class="form-control" name="email_kontak_p" id="email_kontak_p" placeholder="Masukan email kontak person">
                     </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="npwp">No NPWP</label>
+                      <input type="text" class="form-control" name="npwp" id="npwp" placeholder="Masukan no npwp">
+                    </div>
+                  </div>
+                  <div class="col-md-6" style="margin-bottom:20px">
+                    <div class="form-group">
+                      <label for="npwp_file">File NPWP</label>
+                      <input type="file" name="npwp_file" id="npwp_file">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="rekening_no">No Rek Bank</label>
+                      <input type="text" class="form-control" name="rekening_no" id="rekening_no" placeholder="Masukan no rekening">
+                    </div>
+                  </div>
+                  <div class="col-md-6">
                     <div class="form-group">
                       <label for="rekening_nama">Nama Rekening Bank</label>
                       <input type="text" class="form-control" name="rekening_nama" id="rekening_nama" placeholder="Masukan nama rekening">
@@ -135,6 +173,12 @@
                     </div>
                   </div>
                   <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="keterangan">Keterangan</label>
+                      <textarea type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan" required></textarea>
+                    </div>
+                  </div>
+                  {{-- <div class="col-md-12">
                     <div class="form-group">
                       <label for="no_sk">No SK</label>
                       <input type="text" class="form-control" name="no_sk" id="no_sk" placeholder="Masukan No SK" required>
@@ -162,13 +206,7 @@
                         <input type="checkbox" name="is_active" checked="checked"> Active
                       </label>
                     </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="keterangan">Keterangan</label>
-                      <textarea type="text" class="form-control" name="keterangan" id="keterangan" placeholder="Keterangan" required></textarea>
-                    </div>
-                  </div>
+                  </div> --}}
                 </div>
                 <h4>Detail</h4>
                 <div id="add-pjs-detail"></div>

@@ -53601,7 +53601,8 @@ var Main = /*#__PURE__*/function (_Component) {
       row: [0],
       provinsi: [],
       bidang: [],
-      sub_bidang: [[]]
+      sub_bidang: [[]],
+      jenis_usaha: []
     };
     return _this;
   }
@@ -53611,6 +53612,7 @@ var Main = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       this.getProvinsi();
       this.getBidang();
+      this.getJenisUsaha();
     }
   }, {
     key: "getProvinsi",
@@ -53625,12 +53627,24 @@ var Main = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
-    key: "getBidang",
-    value: function getBidang() {
+    key: "getJenisUsaha",
+    value: function getJenisUsaha() {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/v1/bidang").then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/v1/jenis_usaha").then(function (response) {
         _this3.setState({
+          jenis_usaha: response.data,
+          loading: false
+        });
+      });
+    }
+  }, {
+    key: "getBidang",
+    value: function getBidang() {
+      var _this4 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/v1/bidang").then(function (response) {
+        _this4.setState({
           bidang: response.data,
           loading: false
         });
@@ -53639,18 +53653,18 @@ var Main = /*#__PURE__*/function (_Component) {
   }, {
     key: "getSubBidang",
     value: function getSubBidang(subbidang, i) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/v1/sub_bidang?bidang=" + subbidang).then(function (response) {
-        var sb = _this4.state.sub_bidang;
+        var sb = _this5.state.sub_bidang;
         console.log(i);
         sb[i] = response.data;
 
-        _this4.setState({
+        _this5.setState({
           sub_bidang: sb,
           loading: false
         }, function () {
-          console.log(_this4.state.sub_bidang);
+          console.log(_this5.state.sub_bidang);
         });
       });
     }
@@ -53697,12 +53711,22 @@ var Main = /*#__PURE__*/function (_Component) {
   }, {
     key: "rowDetail",
     value: function rowDetail(d, i) {
-      var _this5 = this;
+      var _this6 = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
         key: d,
         id: "detail"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        className: "form-control",
+        name: "jenis_usaha[" + d + "]",
+        required: true
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: ""
+      }, "-- jenis usaha --"), this.state.jenis_usaha.map(function (p) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: p.id
+        }, p.nama);
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         className: "form-control",
         name: "provinsi[" + d + "]",
         required: true
@@ -53717,7 +53741,7 @@ var Main = /*#__PURE__*/function (_Component) {
         name: "klasifikasi[" + d + "]",
         "data-key": d,
         onChange: function onChange(e) {
-          return _this5.onKlasifikasiChange(e);
+          return _this6.onKlasifikasiChange(e);
         },
         required: true
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
@@ -53758,10 +53782,22 @@ var Main = /*#__PURE__*/function (_Component) {
         value: "2"
       }, "Madya / Kelas 2"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "3"
-      }, "Muda / Kelas 3"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
-        name: "keterangan_detail[" + d + "]",
-        rows: "1",
-        className: "form-control"
+      }, "Muda / Kelas 3"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        name: "no_sk[" + d + "]"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        name: "tgl_sk[" + d + "]"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        name: "tgl_sk_akhir[" + d + "]"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "file",
+        className: "form-control",
+        name: "file_sk[" + d + "]"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "checkbox",
         name: "is_active_detail[" + d + "]",
@@ -53770,24 +53806,24 @@ var Main = /*#__PURE__*/function (_Component) {
         className: "btn btn-danger btn-xs",
         "data-key": d,
         onClick: function onClick(e) {
-          return _this5.deleteRow(e);
+          return _this6.deleteRow(e);
         }
       }, "delete")));
     }
   }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this7 = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-success btn-xs pull-right",
         onClick: function onClick(e) {
-          return _this6.tambahRow(e);
+          return _this7.tambahRow(e);
         }
       }, "Tambah Row"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
         className: "table table-bordered"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Provinsi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Klasifikasi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sub Klasifikasi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Kualifikasi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sub Kualifikasi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Keterangan"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Active"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, this.state.row.map(function (d, i) {
-        return _this6.rowDetail(d, i);
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Jenis Usaha"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Provinsi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Klasifikasi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sub Klasifikasi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Kualifikasi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Sub Kualifikasi"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "No SK"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Tgl Terbit SK"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Tgl Akhir SK"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Pdf SK"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Active"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Action"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, this.state.row.map(function (d, i) {
+        return _this7.rowDetail(d, i);
       }))));
     }
   }]);
@@ -53868,7 +53904,8 @@ var Main = /*#__PURE__*/function (_Component) {
       row: [],
       provinsi: [],
       bidang: [],
-      sub_bidang: [[]]
+      sub_bidang: [[]],
+      jenis_usaha: []
     };
     return _this;
   }
@@ -53878,6 +53915,7 @@ var Main = /*#__PURE__*/function (_Component) {
     value: function componentDidMount() {
       this.getProvinsi();
       this.getBidang();
+      this.getJenisUsaha();
     }
   }, {
     key: "getProvinsi",
@@ -53892,12 +53930,24 @@ var Main = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
-    key: "getBidang",
-    value: function getBidang() {
+    key: "getJenisUsaha",
+    value: function getJenisUsaha() {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/v1/bidang").then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/v1/jenis_usaha").then(function (response) {
         _this3.setState({
+          jenis_usaha: response.data,
+          loading: false
+        });
+      });
+    }
+  }, {
+    key: "getBidang",
+    value: function getBidang() {
+      var _this4 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/v1/bidang").then(function (response) {
+        _this4.setState({
           bidang: response.data,
           loading: false
         });
@@ -53906,18 +53956,18 @@ var Main = /*#__PURE__*/function (_Component) {
   }, {
     key: "getSubBidang",
     value: function getSubBidang(subbidang, i) {
-      var _this4 = this;
+      var _this5 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_3___default.a.get("/api/v1/sub_bidang?bidang=" + subbidang).then(function (response) {
-        var sb = _this4.state.sub_bidang;
+        var sb = _this5.state.sub_bidang;
         console.log(i);
         sb[i] = response.data;
 
-        _this4.setState({
+        _this5.setState({
           sub_bidang: sb,
           loading: false
         }, function () {
-          console.log(_this4.state.sub_bidang);
+          console.log(_this5.state.sub_bidang);
         });
       });
     }
@@ -53964,12 +54014,22 @@ var Main = /*#__PURE__*/function (_Component) {
   }, {
     key: "rowDetail",
     value: function rowDetail(d, i) {
-      var _this5 = this;
+      var _this6 = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
         key: d,
         id: "detail"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+        className: "form-control",
+        name: "jenis_usaha_new[" + d + "]",
+        required: true
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        value: ""
+      }, "-- jenis usaha --"), this.state.jenis_usaha.map(function (p) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+          value: p.id
+        }, p.nama);
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
         className: "form-control",
         name: "provinsi_new[" + d + "]",
         required: true
@@ -53984,7 +54044,7 @@ var Main = /*#__PURE__*/function (_Component) {
         name: "klasifikasi_new[" + d + "]",
         "data-key": d,
         onChange: function onChange(e) {
-          return _this5.onKlasifikasiChange(e);
+          return _this6.onKlasifikasiChange(e);
         },
         required: true
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
@@ -54025,10 +54085,22 @@ var Main = /*#__PURE__*/function (_Component) {
         value: "2"
       }, "Madya / Kelas 2"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
         value: "3"
-      }, "Muda / Kelas 3"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("textarea", {
-        name: "keterangan_detail_new[" + d + "]",
-        rows: "1",
-        className: "form-control"
+      }, "Muda / Kelas 3"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        name: "no_sk_new[" + d + "]"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        name: "tgl_sk_new[" + d + "]"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "text",
+        className: "form-control",
+        name: "tgl_sk_akhir_new[" + d + "]"
+      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "file",
+        className: "form-control",
+        name: "file_sk_new[" + d + "]"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
         type: "checkbox",
         name: "is_active_detail_new[" + d + "]",
@@ -54037,23 +54109,23 @@ var Main = /*#__PURE__*/function (_Component) {
         className: "btn btn-danger btn-xs",
         "data-key": d,
         onClick: function onClick(e) {
-          return _this5.deleteRow(e);
+          return _this6.deleteRow(e);
         }
       }, "delete")));
     }
   }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
+      var _this7 = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, this.state.row.map(function (d, i) {
-        return _this6.rowDetail(d, i);
+        return _this7.rowDetail(d, i);
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
         colSpan: 7
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         className: "btn btn-success btn-xs pull-right",
         onClick: function onClick(e) {
-          return _this6.tambahRow(e);
+          return _this7.tambahRow(e);
         }
       }, "Tambah Row"))));
     }

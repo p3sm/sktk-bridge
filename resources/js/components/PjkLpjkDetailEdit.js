@@ -17,7 +17,8 @@ export default class Main extends Component {
       row: [],
       provinsi: [],
       bidang: [],
-      sub_bidang: [[]]
+      sub_bidang: [[]],
+      jenis_usaha: []
     }
   }
 
@@ -25,12 +26,22 @@ export default class Main extends Component {
 
     this.getProvinsi();
     this.getBidang();
+    this.getJenisUsaha();
   }
 
   getProvinsi() {
     axios.get(`/api/v1/provinsi`).then(response => {
       this.setState({
         provinsi: response.data,
+        loading: false
+      })
+    });
+  }
+
+  getJenisUsaha() {
+    axios.get(`/api/v1/jenis_usaha`).then(response => {
+      this.setState({
+        jenis_usaha: response.data,
         loading: false
       })
     });
@@ -93,6 +104,14 @@ export default class Main extends Component {
     return (
       <tr key={d} id="detail">
         <td>
+          <select className="form-control" name={"jenis_usaha_new[" + d + "]"} required>
+            <option value="">-- jenis usaha --</option>
+            {this.state.jenis_usaha.map((p) => (
+              <option value={p.id}>{p.nama}</option>
+            ))}
+          </select>
+        </td>
+        <td>
           <select className="form-control" name={"provinsi_new[" + d + "]"} required>
             <option value="">-- pilih provinsi --</option>
             {this.state.provinsi.map((p) => (
@@ -131,7 +150,11 @@ export default class Main extends Component {
             <option value="3">Muda / Kelas 3</option>
           </select>
         </td>
-        <td><textarea name={"keterangan_detail_new[" + d + "]"} rows="1" className="form-control"></textarea></td>
+        <td><input type="text" className="form-control" name={"no_sk_new[" + d + "]"} /></td>
+        <td><input type="text" className="form-control" name={"tgl_sk_new[" + d + "]"} /></td>
+        <td><input type="text" className="form-control" name={"tgl_sk_akhir_new[" + d + "]"} /></td>
+        {/* <td><textarea name={"keterangan_detail_new[" + d + "]"} rows="1" className="form-control"></textarea></td> */}
+        <td><input type="file" className="form-control" name={"file_sk_new[" + d + "]"} /></td>
         <td>
           <label>
             <input type="checkbox" name={"is_active_detail_new[" + d + "]"} checked="checked" /> Active

@@ -114,9 +114,9 @@ class PjkLpjkController extends Controller
       $pj->email_kontak_p = $request->email_kontak_p;
       $pj->rekening_nama = $request->rekening_nama;
       $pj->rekening_bank = $request->rekening_bank;
-      $pj->no_sk = $request->no_sk;
-      $pj->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk);
-      $pj->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir);
+      // $pj->no_sk = $request->no_sk;
+      // $pj->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk);
+      // $pj->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir);
       $pj->keterangan = $request->keterangan;
       $pj->is_active = $request->is_active ? 1 : 0;
       $pj->created_by = Auth::id();
@@ -127,12 +127,16 @@ class PjkLpjkController extends Controller
           $pjd = new PjkLpjkDetail();
 
           $pjd->pjk_lpjk_id = $pj->id;
+          $pjd->jenis_usaha_id = $request->jenis_usaha[$i];
           $pjd->provinsi_id = $request->provinsi[$i];
           $pjd->klasifikasi = $request->klasifikasi[$i];
           $pjd->sub_klasifikasi = $request->sub_klasifikasi[$i];
           $pjd->kualifikasi = $request->kualifikasi[$i];
           $pjd->sub_kualifikasi = $request->sub_kualifikasi[$i];
           $pjd->keterangan = $request->keterangan_detail[$i];
+          $pjd->no_sk = $request->no_sk[$i];
+          $pjd->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk[$i]);
+          $pjd->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir[$i]);
           $pjd->is_active = array_key_exists($i, $request->is_active_detail) ? 1 : 0;
           $pjd->save();
         }
@@ -173,6 +177,7 @@ class PjkLpjkController extends Controller
 
       $data["sub_bidang"] = $subbidang;
       $data["provinsi"] = Provinsi::all();
+      $data["jenis_usaha"] = JenisUsaha::all();
 
       return view('pjklpjk/edit')->with($data);
     }
@@ -200,9 +205,9 @@ class PjkLpjkController extends Controller
       $pj->email_kontak_p = $request->email_kontak_p;
       $pj->rekening_nama = $request->rekening_nama;
       $pj->rekening_bank = $request->rekening_bank;
-      $pj->no_sk = $request->no_sk;
-      $pj->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk);
-      $pj->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir);
+      // $pj->no_sk = $request->no_sk;
+      // $pj->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk);
+      // $pj->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir);
       $pj->keterangan = $request->keterangan;
       $pj->is_active = $request->is_active ? 1 : 0;
       $pj->updated_by = Auth::id();
@@ -216,12 +221,16 @@ class PjkLpjkController extends Controller
             $pjd = new PjkLpjkDetail();
 
             $pjd->pjk_lpjk_id = $pj->id;
+            $pjd->jenis_usaha_id = $request->jenis_usaha[$i];
             $pjd->provinsi_id = $request->provinsi[$i];
             $pjd->klasifikasi = $request->klasifikasi[$i];
             $pjd->sub_klasifikasi = $request->sub_klasifikasi[$i];
             $pjd->kualifikasi = $request->kualifikasi[$i];
             $pjd->sub_kualifikasi = $request->sub_kualifikasi[$i];
             $pjd->keterangan = $request->keterangan_detail[$i];
+            $pjd->no_sk = $request->no_sk[$i];
+            $pjd->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk[$i]);
+            $pjd->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir[$i]);
             $pjd->is_active = array_key_exists($i, $request->is_active_detail) ? 1 : 0;
             $pjd->save();
           }
@@ -232,12 +241,16 @@ class PjkLpjkController extends Controller
             $pjd = new PjkLpjkDetail();
   
             $pjd->pjk_lpjk_id = $pj->id;
+            $pjd->jenis_usaha_id = $request->jenis_usaha_new[$i];
             $pjd->provinsi_id = $request->provinsi_new[$i];
             $pjd->klasifikasi = $request->klasifikasi_new[$i];
             $pjd->sub_klasifikasi = $request->sub_klasifikasi_new[$i];
             $pjd->kualifikasi = $request->kualifikasi_new[$i];
             $pjd->sub_kualifikasi = $request->sub_kualifikasi_new[$i];
             $pjd->keterangan = $request->keterangan_detail_new[$i];
+            $pjd->no_sk = $request->no_sk_new[$i];
+            $pjd->tgl_sk = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_new[$i]);
+            $pjd->tgl_sk_akhir = Carbon::createFromFormat("d/m/Y", $request->tgl_sk_akhir_new[$i]);
             $pjd->is_active = array_key_exists($i, $request->is_active_detail_new) ? 1 : 0;
             $pjd->save();
           }
