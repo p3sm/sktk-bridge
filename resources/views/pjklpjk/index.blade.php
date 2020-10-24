@@ -102,7 +102,7 @@
                     <tbody>
                         @foreach($results as $k => $result)
                           <tr>
-                            <td><input class="check_item" type="checkbox" name="pilih_data[]" value="<?php echo $result->id?>" /></td>
+                            <td><input class="check_item" type="checkbox" name="pilih_data[]" value="<?php echo $result->parent->id?>" /></td>
                             <td>{{$k + 1}}</td>
                             <td>{{$result->jenisUsaha->nama}}</td>
                             <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
