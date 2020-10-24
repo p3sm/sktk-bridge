@@ -87,6 +87,8 @@
                             <th>PJS LPJK</th>
                             <th>Kualfks</th>
                             <th>Sub_Kualfks</th>
+                            <th>Klasfks</th>
+                            <th>Sub_Klasfks</th>
                             <th>No Ijin</th>
                             <th>Tgl Terbit</th>
                             <th>Tgl Akhir</th>
@@ -102,10 +104,42 @@
                           <tr>
                             <td><input class="check_item" type="checkbox" name="pilih_data[]" value="<?php echo $result->id?>" /></td>
                             <td>{{$k + 1}}</td>
-                            <td>{{$result->badanUsaha->nama}}</td>
+                            <td>{{$result->jenisUsaha->nama}}</td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Nama: {{$result->parent->badanUsaha->nama}} <br> 
+                              Singkatan: {{$result->parent->badanUsaha->singkatan}}">
+                              {{$result->parent->badanUsaha->singkatan}}</span>
+                            </td>
+                            <td>{{$result->kualifikasi}}</td>
+                            <td>{{$result->sub_kualifikasi}}</td>
+                            <td>{{$result->klasifikasi}}</td>
+                            <td>{{$result->sub_klasifikasi}}</td>
                             <td>{{$result->no_sk}}</td>
-                            <td>{{\Carbon\Carbon::parse($result->tgl_sk)->format("d M Y")}} - {{\Carbon\Carbon::parse($result->tgl_sk_akhir)->format("d M Y")}}</td>
-                            <td>{{$result->keterangan}}</td>
+                            <td>{{$result->tgl_sk}}</td>
+                            <td>{{$result->tgl_sk_akhir}}</td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Nama: {{$result->provinsi->nama}} <br> 
+                              Singkatan: {{$result->provinsi->nama_singkat}} <br> 
+                              Alamat: {{$result->parent->badanUsaha->alamat}} <br> 
+                              No Tlp: {{$result->parent->badanUsaha->no_tlp}} <br> 
+                              Email: {{$result->parent->badanUsaha->email}} <br> 
+                              Web: {{$result->parent->badanUsaha->web}}">
+                              {{$result->provinsi->nama_singkat}}</span>
+                            </td>
+                            <td>{{$result->parent->badanUsaha->instansi}}</td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Nama: {{$result->parent->pimpinan_nama}} <br> 
+                              Jabatan: {{$result->parent->pimpinan_jabatan}} <br> 
+                              No Hp: {{$result->parent->pimpinan_hp}} <br> 
+                              Email: {{$result->parent->pimpinan_email}}">
+                              {{$result->parent->pimpinan_nama}}</span></td>
+                            <td><span data-toggle="tooltip" data-placement="bottom" data-html="true" 
+                              title="Nama: {{$result->parent->kontak_p}} <br> 
+                              Jabatan: {{$result->parent->jab_kontak_p}} <br> 
+                              No Hp: {{$result->parent->no_kontak_p}} <br> 
+                              Email: {{$result->parent->email_kontak_p}}">
+                              {{$result->parent->kontak_p}}</span></td>
+                            <td>{{$result->parent->npwp}}</td>
                             {{-- <td>
                               <a href="{{url("approval_99/" . $result->id . "/approve")}}" class="btn btn-primary btn-xs approve">Approve</a>
                             </td> --}}

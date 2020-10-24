@@ -60,7 +60,7 @@ class PjkLpjkController extends Controller
       $tim = $request->tim;
       $asosiasi = $request->aso;
 
-      $model = new PjkLpjk();
+      $model = new PjkLpjkDetail();
 
       if($request->prv) $model = $model->where("id_propinsi_reg", $request->prv);
       if($request->aso) $model = $model->where("id_asosiasi_profesi", $request->aso);
