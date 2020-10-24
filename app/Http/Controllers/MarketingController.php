@@ -82,6 +82,38 @@ class MarketingController extends Controller
     	return view('team/marketing/index')->with($data);
     }
 
+    public function viewList(Request $request)
+    {      
+      $model = new TimMarketing();
+
+      if($request->prd) $model = $model->where(function ($query) use ($request) {
+        $query->where("parent_id", $request->prd)
+              ->orWhere("id", $request->prd);
+      });
+      if($request->mkt) $model = $model->where(function ($query) use ($request) {
+        $query->where("parent_id", $request->mkt)
+              ->orWhere("id", $request->mkt);
+      });
+      if($request->prv) $model = $model->where("provinsi_id", $request->prv);
+      if($request->pjk) $model = $model->where("pjk_lpjk_id", $request->pjk);
+      if($request->lvl) $model = $model->where("level_id", $request->lvl);
+      if($request->kot) $model = $model->where("kota_id", $request->kot);
+      if($request->jnu) $model = $model->where("jenis_usaha_id", $request->jnu);
+      if($request->gol) $model = $model->where("gol_harga_id", $request->gol);
+
+      $data['tim_produksi'] = TimProduksi::where("parent_id", null)->get()->sortBy("name");
+      $data['tim_marketing'] = TimMarketing::where("parent_id", null)->get()->sortBy("name");
+      $data['provinsi'] = Provinsi::all();
+      $data['gol_harga'] = TimMarketingGolHarga::all();
+      $data['level'] = TimProduksiLevel::all();
+      $data['jenis_usaha'] = JenisUsaha::all()->sortBy("nama");
+      $data['request'] = $request;
+      $data['results'] = $model->get();
+      $data['provinsi_data'] = Provinsi::all();
+
+    	return view('team/marketing/index_view')->with($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

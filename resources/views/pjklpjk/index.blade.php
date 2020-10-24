@@ -83,10 +83,18 @@
                         <tr>
                             <th><input id="check_all" type="checkbox"></th>
                             <th>No.</th>
-                            <th>Badan Usaha</th>
-                            <th>No SK</th>
-                            <th>Tanggal SK</th>
-                            <th>Keterangan</th>
+                            <th>Jns Usaha</th>
+                            <th>PJS LPJK</th>
+                            <th>Kualfks</th>
+                            <th>Sub_Kualfks</th>
+                            <th>No Ijin</th>
+                            <th>Tgl Terbit</th>
+                            <th>Tgl Akhir</th>
+                            <th>Prov</th>
+                            <th>Instansi Reff</th>
+                            <th>Nama Pimp</th>
+                            <th>Kontak P</th>
+                            <th>NPWP</th>
                         </tr>
                     </thead>
                     <tbody>

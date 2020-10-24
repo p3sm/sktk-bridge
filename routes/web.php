@@ -62,9 +62,13 @@ Route::group(['middleware' => 'auth'], function(){
 
 		Route::resources(['produksi' => 'ProduksiController']);
 
+		Route::get('view_produksi', 'ProduksiController@viewList');
+
 		Route::resources(['gol_harga_produksi' => 'ProduksiGolHargaController']);
 
 		Route::resources(['marketing' => 'MarketingController']);
+
+		Route::get('view_marketing', 'MarketingController@viewList');
 
 		Route::resources(['gol_harga_marketing' => 'MarketingGolHargaController']);
 		

@@ -54160,8 +54160,8 @@ if (document.getElementById('edit-pjs-detail')) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/administrator/Documents/Ardy/Research/PHP/sktk-bridge/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/administrator/Documents/Ardy/Research/PHP/sktk-bridge/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\SKTK\sktk-bridge\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\SKTK\sktk-bridge\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

@@ -80,6 +80,36 @@ class ProduksiController extends Controller
     	return view('team/produksi/index')->with($data);
     }
 
+    public function viewList(Request $request)
+    {   
+      $model = new TimProduksi();
+
+      // if($request->ktr) $model = $model->where("id_propinsi_reg", $request->ktr);
+      if($request->prd) $model = $model->where(function ($query) use ($request) {
+        $query->where("parent_id", $request->prd)
+              ->orWhere("id", $request->prd);
+      });
+      if($request->prv) $model = $model->where("provinsi_id", $request->prv);
+      // if($request->ins) $model = $model->where("instansi", $request->ins);
+      if($request->pjk) $model = $model->where("pjk_lpjk_id", $request->pjk);
+      if($request->lvl) $model = $model->where("level_id", $request->lvl);
+      if($request->kot) $model = $model->where("kota_id", $request->kot);
+      if($request->jnu) $model = $model->where("jenis_usaha_id", $request->jnu);
+
+      // $data['from'] = $from;
+      // $data['to'] = $to;
+      $data['tim_produksi'] = TimProduksi::where("parent_id", null)->get()->sortBy("name");
+      $data['provinsi'] = Provinsi::all();
+      $data['pjklpjk'] = PjkLpjk::all();
+      $data['level'] = TimProduksiLevel::all();
+      $data['jenis_usaha'] = JenisUsaha::all()->sortBy("nama");
+      $data['request'] = $request;
+      $data['results'] = $model->get();
+      $data['provinsi_data'] = Provinsi::all();
+
+    	return view('team/produksi/index_view')->with($data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
