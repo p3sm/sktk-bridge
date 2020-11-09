@@ -131,7 +131,7 @@ class SikiPersonalController extends Controller
     
     private function createEmail($email){
         $whmusername = "root";
-        $whmpassword = "Astek7744Fb";
+        $whmpassword = "@c5IM4nD1Ri!";
 
         $param = [
             "cpanel_jsonapi_user"       => "csimandiri",
