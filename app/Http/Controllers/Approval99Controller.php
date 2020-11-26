@@ -39,7 +39,7 @@ class Approval99Controller extends Controller
         $asosiasi = $request->aso;
         $sertifikat = $request->srtf;
 
-        if(Auth::user()->tipe_akun != 2){
+        if(Auth::user()->tipe_akun != 2 && Auth::user()->tipe_akun != 1){
             return redirect('/');
         }
 
