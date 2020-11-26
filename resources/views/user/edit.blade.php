@@ -82,8 +82,10 @@
                   <select class="form-control" name="asosiasi_id">
 										<option value="">-- pilih asosiasi --</option>
                     @foreach ($asosiasi as $as)
-                    <option value="{{$as->id_asosiasi}}" {{$user->asosiasi && $user->asosiasi->asosiasi_id == $as->id_asosiasi ? "selected" : ""}}>{{$as->nama}}</option>
-                    @endforeach
+											@if($as->id_asosiasi == "142" || $as->id_asosiasi == "148")
+												<option value="{{$as->id_asosiasi}}" {{$user->asosiasi && $user->asosiasi->asosiasi_id == $as->id_asosiasi ? "selected" : ""}}>{{$as->nama}}</option>
+											@endif
+										@endforeach
                   </select>
                 </div>
 	              <div class="form-group">
@@ -91,7 +93,7 @@
                   <select class="form-control" name="provinsi_id">
 										<option value="">-- pilih provinsi --</option>
                     @foreach ($provinsi as $prov)
-                    <option value="{{$prov->id}}" {{$user->asosiasi && $user->asosiasi->provinsi_id == $prov->id_provinsi ? "selected" : ""}}>{{$prov->nama}}</option>
+                    <option value="{{$prov->id_provinsi}}" {{$user->asosiasi && $user->asosiasi->provinsi_id == $prov->id_provinsi ? "selected" : ""}}>{{$prov->nama}}</option>
                     @endforeach
                   </select>
                 </div>

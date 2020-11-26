@@ -86,8 +86,10 @@
                   <select class="form-control" name="asosiasi_id">
 										<option value="">-- pilih asosiasi --</option>
                     @foreach ($asosiasi as $as)
-                    <option value="{{$as->id_asosiasi}}">{{$as->nama}}</option>
-                    @endforeach
+											@if($as->id_asosiasi == "142" || $as->id_asosiasi == "148")
+												<option value="{{$as->id_asosiasi}}">{{$as->nama}}</option>
+											@endif
+										@endforeach
                   </select>
                 </div>
 	              <div class="form-group">
@@ -95,9 +97,7 @@
                   <select class="form-control" name="provinsi_id">
 										<option value="">-- pilih provinsi --</option>
 										@foreach ($provinsi as $prov)
-											@if($prov->id_provinsi == "04")
-												<option value="{{$prov->id_provinsi}}" {{$prov->id_provinsi == "04" ? "selected" : ""}}>{{$prov->nama}}</option>
-											@endif
+											<option value="{{$prov->id_provinsi}}" {{$prov->id_provinsi == "04" ? "selected" : ""}}>{{$prov->nama}}</option>
                     @endforeach
                   </select>
                 </div>
