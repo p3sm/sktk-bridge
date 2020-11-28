@@ -144,6 +144,8 @@ class SikiRegtaController extends Controller
         $data->Tgl_Registrasi = $request->Tgl_Registrasi;
         $data->ID_Propinsi_reg = $request->ID_Propinsi_reg;
         $data->status_terbaru = $request->status_terbaru;
+        $data->diajukan = 1;
+        $data->diajukan_by = Auth::user()->id;
         $data->updated_by = Auth::user()->id;
 
         $data->save();

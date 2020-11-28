@@ -51,17 +51,22 @@ class Approval99Controller extends Controller
             }
         }
 
+        $mktgs[] = 1;
+
+        // dd($mktgs);
+
 
         if($sertifikat == "SKA" || $sertifikat == null) {
         
             $model = PersonalRegTa::whereDate("Tgl_Registrasi", ">=", $from->format('Y-m-d'))
             ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'))->whereIn('created_by', $mktgs);
     
-            if($asosiasi) $model = $model->where("ID_Asosiasi_Profesi", $asosiasi);
-            if($provinsi) $model = $model->where("ID_Propinsi_reg", $provinsi);
+            // if($asosiasi) $model = $model->where("ID_Asosiasi_Profesi", $asosiasi);
+            // if($provinsi) $model = $model->where("ID_Propinsi_reg", $provinsi);
             // if($tim) $model = $model->where("team_id", $tim);
 
             $pengajuan = $model->orderByDesc("created_at")->get();
+            // dd($pengajuan);
   
             foreach($pengajuan as $value){
                 $value->tipe_sertifikat = 'SKA';
