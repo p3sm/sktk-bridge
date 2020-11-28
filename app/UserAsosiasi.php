@@ -20,4 +20,9 @@ class UserAsosiasi extends Model
   {
     return $this->hasOne('App\AsosiasiKey', 'asosiasi_id');
   }
+
+  public function detail()
+  {
+    return $this->belongsTo('App\Asosiasi', 'asosiasi_id');
+  }
 }

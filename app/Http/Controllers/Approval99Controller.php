@@ -364,7 +364,7 @@ class Approval99Controller extends Controller
       
             if($obj->message == "Token Anda Sudah Expired ! Silahkan Lakukan Aktivasi Token Untuk Mendapatkan Token Baru." || $obj->message == "Token Anda Tidak Terdaftar ! Silahkan Lakukan Aktivasi Token Untuk Mendapatkan Token Baru."){
                 if($this->refreshToken()){
-                    return $this->approve($id);
+                    return $this->approveV2($pengajuan);
                 } else {
                     $result = new \stdClass();
                     $result->message = "Error while refreshing token, please contact Administrator";
