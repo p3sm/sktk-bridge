@@ -332,7 +332,7 @@ class Approval99Controller extends Controller
           "id_kualifikasi"        => $pengajuan->ID_Kualifikasi,
           "id_unit_sertifikasi"   => $pengajuan->id_unit_sertifikasi,
         //   "tgl_permohonan"        => $pengajuan->Tgl_Registrasi,
-          "tgl_permohonan"        => Carbon::now()->format("Y-m-d"),
+          "tgl_permohonan"        => Carbon::parse($pengajuan->created_at)->format("Y-m-d"),
           "tahun"                 => Carbon::parse($pengajuan->Tgl_Registrasi)->format("Y"),
           "id_provinsi"           => $pengajuan->tipe_sertifikat == "SKA" ? $pengajuan->ID_Propinsi_reg : $pengajuan->ID_propinsi_reg,
           "id_permohonan"         => $pengajuan->id_permohonan,
