@@ -222,7 +222,7 @@ class SikiRegtaController extends Controller
           "url_pdf_penilaian_mandiri_f19"     => curl_file_create(realpath("uploads/source/dokumen-upload/TAHAP/" . $reg->tahap1 . "/SA_" . $reg->ID_Personal . "_" . $reg->ID_Sub_Bidang . ".pdf")),
         ];
 
-        dd($postData);
+        // dd($postData);
 
         $curl = curl_init();
         $header[] = "X-Api-Key:" . $reg->asosiasi->apikey->lpjk_key;
