@@ -25,4 +25,9 @@ class UserAsosiasi extends Model
   {
     return $this->belongsTo('App\Asosiasi', 'asosiasi_id');
   }
+
+  public function provinsi()
+  {
+    return $this->belongsTo('App\Provinsi', 'provinsi_id');
+  }
 }

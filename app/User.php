@@ -72,9 +72,9 @@ class User extends Authenticatable
         return $this->produksi->pjk->badanUsaha->asosiasi;
       } else if ($this->tipe_akun == 3) {
         return $this->marketing->produksi->pjk->badanUsaha->asosiasi;
-      } else {
-        return $this->asosiasi ? $this->asosiasi->detail : null;
       }
+
+      return $this->asosiasi ? $this->asosiasi->detail : null;
     }
 
     public function myProvinsi()
@@ -85,9 +85,8 @@ class User extends Authenticatable
       //   return $this->produksi->provinsi;
       // } else if ($this->tipe_akun == 3) {
       //   return $this->marketing->provinsi;
-      // } else {
-      //   return $this->asosiasi ? $this->asosiasi->provinsi : null;
       // }
+
       return $this->asosiasi ? $this->asosiasi->provinsi : null;
     }
 

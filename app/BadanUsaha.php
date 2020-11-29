@@ -8,6 +8,11 @@ class BadanUsaha extends Model
 {
   protected $table = 'badan_usaha';
     
+  public function pjk()
+  {
+    return $this->hasMany('App\PjkLpjk', 'badan_usaha_id');
+  }
+    
   public function asosiasi()
   {
     return $this->belongsTo('App\Asosiasi', 'asosiasi_id');

@@ -57,4 +57,9 @@ class TimProduksi extends Model
   {
     return $this->hasMany('App\TimMarketing', 'tim_produksi_id');
   }
+    
+  public function users()
+  {
+    return $this->hasMany('App\User', 'team_id');
+  }
 }

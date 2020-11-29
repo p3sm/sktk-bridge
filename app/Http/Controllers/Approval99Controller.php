@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\ApprovalTransaction;
 use App\SikiAsosiasi;
+use App\BadanUsaha;
 use App\Provinsi;
 use App\TeamProvinsi;
 use App\Team;
 use App\TeamKontribusiTa;
 use App\TeamKontribusiTt;
+use App\TimProduksi;
+use App\TimMarketing;
 use App\TimMarketingGolHarga;
 use App\TimMarketingGolHargaDetail;
 use App\PersonalRegTa;
@@ -39,30 +42,52 @@ class Approval99Controller extends Controller
         $asosiasi = $request->aso;
         $sertifikat = $request->srtf;
 
-        if(Auth::user()->tipe_akun != 2 && Auth::user()->tipe_akun != 1){
+        $ids = [];
+
+        if(Auth::user()->tipe_akun == 1){
+            $ids[] = Auth::user()->id;
+
+            if(Auth::user()->role_id == 1){
+                $p = Auth::user()->asosiasi->provinsi_id;
+                $a = Auth::user()->asosiasi->asosiasi_id;
+                $bu = BadanUsaha::where("asosiasi_id", $a)->first();
+                $tim = [];
+
+                foreach($bu->pjk as $pjk){
+                    foreach($pjk->timprod as $timprod){
+                        foreach($timprod->users as $us){
+                            $ids[] = $us->id;
+                        }
+                        foreach($timprod->marketing as $timmktg){
+                            foreach($timmktg->users as $us){
+                                $ids[] = $us->id;
+                            }
+                        }
+                    }
+                }
+            }
+
+        } else if(Auth::user()->tipe_akun == 2){
+            $ids[] = Auth::user()->id;
+
+            foreach(Auth::user()->produksi->marketing as $mar){
+                foreach($mar->users as $us){
+                    $ids[] = $us->id;
+                }
+            }
+        } else if(Auth::user()->tipe_akun == 3){
+            $ids[] = Auth::user()->id;
+        } else {
             return redirect('/');
         }
-
-        $mktgs = [];
-
-        foreach(Auth::user()->produksi->marketing as $mar){
-            foreach($mar->users as $us){
-                $mktgs[] = $us->id;
-            }
-        }
-
-        $mktgs[] = 1;
-
-        // dd($mktgs);
-
 
         if($sertifikat == "SKA" || $sertifikat == null) {
         
             $model = PersonalRegTa::whereDate("Tgl_Registrasi", ">=", $from->format('Y-m-d'))
-            ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'))->whereIn('created_by', $mktgs);
+            ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'))->whereIn('created_by', $ids);
     
-            // if($asosiasi) $model = $model->where("ID_Asosiasi_Profesi", $asosiasi);
-            // if($provinsi) $model = $model->where("ID_Propinsi_reg", $provinsi);
+            if($asosiasi) $model = $model->where("ID_Asosiasi_Profesi", $asosiasi);
+            if($provinsi) $model = $model->where("ID_Propinsi_reg", $provinsi);
             // if($tim) $model = $model->where("team_id", $tim);
 
             $pengajuan = $model->orderByDesc("created_at")->get();
@@ -79,7 +104,7 @@ class Approval99Controller extends Controller
         if($sertifikat == "SKT" || $sertifikat == null) {
         
             $model = PersonalRegTt::whereDate("Tgl_Registrasi", ">=", $from->format('Y-m-d'))
-            ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'))->whereIn('created_by', $mktgs);
+            ->whereDate("Tgl_Registrasi", "<=", $to->format('Y-m-d'))->whereIn('created_by', $ids);
     
             if($asosiasi) $model = $model->where("ID_Asosiasi_Profesi", $asosiasi);
             if($provinsi) $model = $model->where("ID_propinsi_reg", $provinsi);

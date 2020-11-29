@@ -148,6 +148,8 @@ class SikiRegtaController extends Controller
         $data->diajukan_by = Auth::user()->id;
         $data->updated_by = Auth::user()->id;
 
+        // dd($data);
+
         $data->save();
     }
 

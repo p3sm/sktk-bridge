@@ -17,4 +17,9 @@ class PjkLpjk extends Model
   {
     return $this->hasMany('App\PjkLpjkDetail', 'pjk_lpjk_id');
   }
+    
+  public function timprod()
+  {
+    return $this->hasMany('App\TimProduksi', 'pjk_lpjk_id');
+  }
 }
