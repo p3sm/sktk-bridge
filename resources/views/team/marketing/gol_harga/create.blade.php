@@ -9,7 +9,7 @@
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{url("")}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="{{url("users")}}">Golongan Harga Marketing</a></li>
+        <li><a href="{{url("gol_harga_marketing")}}">Golongan Harga Marketing</a></li>
         <li class="active"><a href="#">Create</a></li>
       </ol>
     </section>
@@ -45,6 +45,17 @@
                       @endforeach
                     </select>
                     <a href="{{url("gol_harga_marketing_head")}}">Tambah Golongan Harga</a>
+                  </div>
+                  <div class="form-group">
+                    <label>Asosiasi</label>
+                    <select class="form-control" name="asosiasi_id">
+                      <option value="">-- pilih asosiasi --</option>
+                      @foreach ($asosiasi as $as)
+                        @if($as->id_asosiasi == "142" || $as->id_asosiasi == "148")
+                          <option value="{{$as->id_asosiasi}}">{{$as->nama}}</option>
+                        @endif
+                      @endforeach
+                    </select>
                   </div>
                   <div class="form-group">
                     <label>Jenis Usaha</label>

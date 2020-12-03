@@ -24,23 +24,19 @@ class MarketingGolHargaController extends Controller
      */
     public function index(Request $request)
     {        
-      $from = $request->from ? Carbon::createFromFormat("d/m/Y", $request->from) : Carbon::now();
-      $to = $request->to ? Carbon::createFromFormat("d/m/Y", $request->to) : Carbon::now();
-      $provinsi = $request->prv;
-      $tim = $request->tim;
+      $gol = $request->gol;
       $asosiasi = $request->aso;
+      $master_gol = TimMarketingGolHarga::all();
 
       $model = new TimMarketingGolHargaDetail();
 
-      if($request->prv) $model = $model->where("id_propinsi_reg", $request->prv);
-      if($request->aso) $model = $model->where("id_asosiasi_profesi", $request->aso);
-      if($request->tim) $model = $model->where("team_id", $request->tim);
-      if($request->kua) $model = $model->where("id_kualifikasi", $request->kua);
+      if($request->gol) $model = $model->where("gol_harga_id", $request->gol);
+      if($request->aso) $model = $model->where("asosiasi_id", $request->aso);
 
-      $data['from'] = $from;
-      $data['to'] = $to;
+      // $data['from'] = $from;
+      $data['master_gol'] = $master_gol;
       $data['asosiasi'] = $asosiasi;
-      $data['provinsi'] = $provinsi;
+      $data['gol'] = $gol;
       $data['results'] = $model->get();
       $data['provinsi_data'] = Provinsi::all();
 
@@ -57,6 +53,7 @@ class MarketingGolHargaController extends Controller
       $data["gol_harga"] = TimMarketingGolHarga::all();
       $data["jenis_usaha"] = JenisUsaha::all()->sortBy("nama");
       $data["bidang"] = Bidang::all();
+      $data['asosiasi'] = Asosiasi::all();
 
       return view('team/marketing/gol_harga/create')->with($data);
     }
@@ -79,6 +76,7 @@ class MarketingGolHargaController extends Controller
       $timProduksi = new TimMarketingGolHargaDetail();
 
       $timProduksi->gol_harga_id = $request->gol_harga;
+      $timProduksi->asosiasi_id = $request->asosiasi_id;
       $timProduksi->jenis_usaha_id = $request->jenis_usaha;
       $timProduksi->id_permohonan = $request->id_permohonan;
       $timProduksi->klasifikasi = $request->klasifikasi;

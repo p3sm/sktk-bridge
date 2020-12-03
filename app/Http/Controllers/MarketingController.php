@@ -293,7 +293,7 @@ class MarketingController extends Controller
 
       
       if($timMktg->save())
-        return redirect()->back()->with('success', "Edited successfully");
+        return redirect('/marketing')->with('success', 'Berhasil merubah data');
       else {
         return redirect()->back()->with('error', "An error occurred");
       }

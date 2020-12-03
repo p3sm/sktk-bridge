@@ -15,7 +15,7 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
+    <section class="content" style="padding-bottom:50px">
     	<div class="row">
 
 	      <div class="col-md-12">
@@ -61,7 +61,7 @@
                   </div>
                   <div class="form-group">
                     <label>Jenis Usaha</label>
-                    <select class="form-control" name="jenis_usaha">
+                    <select class="form-control" name="jenis_usaha" required>
                       <option value="">-- pilih jenis usaha --</option>
                       @foreach ($jenis_usaha as $ju)
                       <option value="{{$ju->id}}" {{$data->jenis_usaha_id == $ju->id ? "selected" : ""}}>{{$ju->nama}}</option>
@@ -70,7 +70,7 @@
                   </div>
                   <div class="form-group">
                     <label>Level</label>
-                    <select class="form-control" name="level">
+                    <select class="form-control" name="level" required>
                       <option value="">-- pilih level --</option>
                       @foreach ($tim_produksi_level as $lv)
                       <option value="{{$lv->id}}" {{$data->level_id == $lv->id ? "selected" : ""}}>{{$lv->nama}}</option>
@@ -79,7 +79,7 @@
                   </div>
                   <div class="form-group">
                     <label>Tipe Kualifikasi</label>
-                    <select class="form-control" name="kualifikasi_type">
+                    <select class="form-control" name="kualifikasi_type" required>
                       <option value="">-- pilih tipe kualifikasi --</option>
                       <option value="UTAMA" {{$data->kualifikasi_type == 'UTAMA' ? "selected" : ""}}>UTAMA</option>
                       <option value="NON_UTAMA" {{$data->kualifikasi_type == 'NON_UTAMA' ? "selected" : ""}}>NON UTAMA</option>
@@ -102,7 +102,7 @@
                   </div>
                   <div class="form-group">
                     <label>Tim Produksi</label>
-                    <select class="form-control" name="tim_produksi_id">
+                    <select class="form-control" name="tim_produksi_id" required>
                       <option value="">-- pilih tim produksi --</option>
                       @foreach ($tim_produksi as $team)
                       <option value="{{$team->id}}" {{$data->tim_produksi_id == $team->id ? "selected" : ""}}>{{$team->nama}}</option>
@@ -122,13 +122,13 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label for="alamat">Alamat</label>
-                    <textarea type="text" class="form-control" name="alamat" id="alamat" placeholder="Masukan alamat" required>{{$data->alamat}}</textarea>
+                    <textarea type="text" class="form-control" name="alamat" id="alamat" placeholder="Masukan alamat">{{$data->alamat}}</textarea>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Provinsi</label>
-                    <select class="form-control" name="provinsi_id" id="provinsi">
+                    <select class="form-control" name="provinsi_id" id="provinsi" required>
                       <option value="">-- pilih provinsi --</option>
                       @foreach ($provinsi as $prov)
                       <option value="{{$prov->id_provinsi}}" {{$data->provinsi_id == $prov->id_provinsi ? "selected" : ""}}>{{$prov->id_provinsi}} - {{$prov->nama}}</option>
@@ -137,7 +137,7 @@
                   </div>
                   <div class="form-group">
                     <label for="no_telp">No Telp</label>
-                    <input type="text" class="form-control" name="no_telp" id="no_telp" placeholder="Masukan no telp" value="{{$data->no_tlp}}" required>
+                    <input type="text" class="form-control" name="no_telp" id="no_telp" placeholder="Masukan no telp" value="{{$data->no_tlp}}">
                   </div>
                   <div class="form-group">
                     <label for="instansi">Instansi Reff</label>
@@ -171,7 +171,7 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label>Kota</label>
-                    <select class="form-control" name="kota_id" id="kota">
+                    <select class="form-control" name="kota_id" id="kota" required>
                       <option value="">-- pilih kota --</option>
                       @foreach ($kota as $kot)
                       <option value="{{$kot->id}}" {{$data->kota_id == $kot->id ? "selected" : ""}}>{{$kot->nama}}</option>
@@ -180,7 +180,7 @@
                   </div>
                   <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" class="form-control" name="email" id="email" placeholder="Masukan email" value="{{$data->email}}" required>
+                    <input type="text" class="form-control" name="email" id="email" placeholder="Masukan email" value="{{$data->email}}">
                   </div>
                   <div class="form-group">
                     <label for="web">Web</label>
@@ -227,7 +227,7 @@
                   </div>
                   <div class="form-group">
                     <label>Golongan Harga Marketing</label>
-                    <select class="form-control" name="gol_harga">
+                    <select class="form-control" name="gol_harga" required>
                       <option value="">-- pilih gol harga tim marketing --</option>
                       @foreach ($tim_marketing_gol_harga as $harga)
                       <option value="{{$harga->id}}" {{$data->gol_harga_id == $harga->id ? "selected" : ""}}>{{$harga->gol_harga}}</option>
@@ -239,6 +239,7 @@
 	            <!-- /.box-body -->
 
 	            <div class="box-footer">
+	              <a href="/marketing" class="btn btn-warning">Cancel</a>
 	              <button type="submit" name="submit" class="btn btn-primary">Submit</button>
 	            </div>
 	          </form>
