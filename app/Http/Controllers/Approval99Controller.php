@@ -47,7 +47,7 @@ class Approval99Controller extends Controller
         if(Auth::user()->tipe_akun == 1){
             $ids[] = Auth::user()->id;
 
-            if(Auth::user()->role_id == 1){
+            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4){
                 $p = Auth::user()->asosiasi->provinsi_id;
                 $a = Auth::user()->asosiasi->asosiasi_id;
                 $bu = BadanUsaha::where("asosiasi_id", $a)->first();
