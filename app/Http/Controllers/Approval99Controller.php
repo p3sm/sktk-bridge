@@ -365,7 +365,7 @@ class Approval99Controller extends Controller
           "catatan"               => ""
         ];
 
-        dd($postData);
+        dd($asosiasi);
 
         $curl = curl_init();
         $header[] = "X-Api-Key:" . $asosiasi->apikey->lpjk_key;
