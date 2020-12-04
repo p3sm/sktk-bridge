@@ -63,6 +63,11 @@ class User extends Authenticatable
     {
       return $this->belongsTo('App\TimMarketing', 'marketing_id');
     }
+    
+    public function multiMarketing()
+    {
+      return $this->hasMany('App\UserMultiMktg', 'user_id');
+    }
 
     public function myAsosiasi()
     {

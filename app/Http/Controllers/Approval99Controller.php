@@ -346,9 +346,8 @@ class Approval99Controller extends Controller
 
     public function approveV2($pengajuan)
     {
-        // exit;
-        // $asosiasiId = 142;
-        $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->id_asosiasi);
+        // $asosiasi = SikiAsosiasi::find(Auth::user()->myAsosiasi()->id_asosiasi);
+        $asosiasi = SikiAsosiasi::find($pengajuan->ID_Asosiasi_Profesi);
         // $reg = SikiRegta::find($id);
 
         $postData = [
