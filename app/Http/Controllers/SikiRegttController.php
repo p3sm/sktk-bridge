@@ -233,6 +233,8 @@ class SikiRegttController extends Controller
         CURLOPT_HTTPHEADER => $header,
         ));
         $response = curl_exec($curl);
+
+        dd($obj);
         
         if($obj = json_decode($response)){
             if($obj->response) {
