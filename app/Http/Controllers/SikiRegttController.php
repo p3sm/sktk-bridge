@@ -234,7 +234,7 @@ class SikiRegttController extends Controller
         ));
         $response = curl_exec($curl);
 
-        dd($obj);
+        dd($response);
         
         if($obj = json_decode($response)){
             if($obj->response) {
