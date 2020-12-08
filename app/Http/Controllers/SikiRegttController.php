@@ -126,6 +126,7 @@ class SikiRegttController extends Controller
 
     public function storeLocalRegTT($request, $id)
     {
+        dd($id);
         $user = User::find(Auth::user()->id);
         $data = PersonalRegTt::find($id);
         
@@ -233,8 +234,6 @@ class SikiRegttController extends Controller
         CURLOPT_HTTPHEADER => $header,
         ));
         $response = curl_exec($curl);
-
-        dd($response);
         
         if($obj = json_decode($response)){
             if($obj->response) {
