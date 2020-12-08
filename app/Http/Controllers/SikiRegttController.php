@@ -126,7 +126,6 @@ class SikiRegttController extends Controller
 
     public function storeLocalRegTT($request, $id)
     {
-        dd($id);
         $user = User::find(Auth::user()->id);
         $data = PersonalRegTt::find($id);
         
@@ -148,6 +147,7 @@ class SikiRegttController extends Controller
         $data->diajukan = 1;
         $data->diajukan_by = Auth::user()->id;
         $data->updated_by = Auth::user()->id;
+        dd($data);
 
         $data->save();
     }
