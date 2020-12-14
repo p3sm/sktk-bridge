@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
+use App\User;
 use App\ApprovalTransaction;
 use App\SikiAsosiasi;
 use App\BadanUsaha;
@@ -51,20 +52,23 @@ class Approval99Controller extends Controller
                 $p = Auth::user()->asosiasi->provinsi_id;
                 $a = Auth::user()->asosiasi->asosiasi_id;
                 $bu = BadanUsaha::where("asosiasi_id", $a)->first();
-                // $asosiasi = $a;
+                $asosiasi = $a;
                 $team = [];
 
-                foreach($bu->pjk as $pjk){
-                    foreach($pjk->timprod as $timprod){
-                        foreach($timprod->users as $us){
-                            $ids[] = $us->id;
-                        }
-                        foreach($timprod->marketing as $timmktg){
-                            foreach($timmktg->users as $us){
-                                $ids[] = $us->id;
-                            }
-                        }
-                    }
+                // foreach($bu->pjk as $pjk){
+                //     foreach($pjk->timprod as $timprod){
+                //         foreach($timprod->users as $us){
+                //             $ids[] = $us->id;
+                //         }
+                //         foreach($timprod->marketing as $timmktg){
+                //             foreach($timmktg->users as $us){
+                //                 $ids[] = $us->id;
+                //             }
+                //         }
+                //     }
+                // }
+                foreach(User::all() as $us){
+                    $ids[] = $us->id;
                 }
             }
 
