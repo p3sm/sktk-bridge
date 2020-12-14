@@ -86,12 +86,18 @@
                             <td>
                               <select class="team">
                                 <option>-- Select Team --</option>
-                                @foreach (App\TeamKontribusiTa::where("id_asosiasi_profesi", $result->ID_Asosiasi_Profesi)
+                                {{-- @foreach (App\TeamKontribusiTa::where("id_asosiasi_profesi", $result->ID_Asosiasi_Profesi)
                                 ->where("id_propinsi_reg", $result->ID_Propinsi_reg)
                                 ->where("id_kualifikasi", $result->ID_Kualifikasi)
                                 ->get() as $item)
 
                                 <option value="{{$item->team_id}}" {{($role == 1 || $role == 2) && $item->team_id == 1 ? "selected" : ""}}>{{$item->team->name}}</option>
+
+                                @endforeach --}}
+                                @foreach (App\TimMarketing::where("provinsi_id", $result->ID_Propinsi_reg)
+                                ->get() as $item)
+
+                                <option value="{{$item->id}}">{{$item->nama}}</option>
 
                                 @endforeach
                               </select>

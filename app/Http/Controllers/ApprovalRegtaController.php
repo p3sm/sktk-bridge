@@ -8,6 +8,7 @@ use App\TeamKontribusiTa;
 use App\PersonalRegTa;
 use App\PersonalRegTaSync;
 use App\PersonalRegTaApprove;
+use App\TimMarketing;
 use App\TimMarketingGolHarga;
 use App\TimMarketingGolHargaDetail;
 use Carbon\Carbon;
@@ -126,9 +127,6 @@ class ApprovalRegtaController extends Controller
 
     public function approve(Request $request, $id)
     {
-        $this->ApproveTransaction($request);
-        exit;
-        // exit;
         // dd($request);
         // $asosiasiId = 142;
         $asosiasi = SikiAsosiasi::find($id);
@@ -168,6 +166,19 @@ class ApprovalRegtaController extends Controller
         // exit;
         
         if($obj = json_decode($response)){
+      
+            if($obj->message == "Token Anda Sudah Expired ! Silahkan Lakukan Aktivasi Token Untuk Mendapatkan Token Baru." || $obj->message == "Token Anda Tidak Terdaftar ! Silahkan Lakukan Aktivasi Token Untuk Mendapatkan Token Baru."){
+                if($this->refreshToken()){
+                    return $this->approve($request, $id);
+                } else {
+                    $result = new \stdClass();
+                    $result->message = "Error while refreshing token, please contact Administrator";
+                    $result->status = 401;
+      
+                    return response()->json($result, 401);
+                }
+            }
+
             if($obj->response) {
                 $this->ApproveTransaction($request);
                 // if($this->createApproveLog($reg))
@@ -188,8 +199,21 @@ class ApprovalRegtaController extends Controller
         ->where("id_kualifikasi", $request->query('ID_Kualifikasi'))
         ->first();
 
-        if($regta->user->tipe_akun == 2){
-            $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $regta->user->marketing->gol_harga_id)->first();
+        // if($regta->user->tipe_akun == 2){
+        //     $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $regta->user->marketing->gol_harga_id)->first();
+        //     $harga = $golharga->harga;
+        // } else {
+        //     $harga = 0;
+        // }
+
+        if($request->query('team')){
+            $mktg = TimMarketing::find($request->query('team'));
+            $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $mktg->gol_harga_id)
+            ->where('id_permohonan', $request->query('id_permohonan'))
+            ->where('kualifikasi', "SKA")
+            ->where('sub_kualifikasi', $request->query('ID_Kualifikasi'))
+            ->where('asosiasi_id', $request->query('ID_Asosiasi_Profesi'))
+            ->first();
             $harga = $golharga->harga;
         } else {
             $harga = 0;
@@ -198,7 +222,7 @@ class ApprovalRegtaController extends Controller
         $approvalTrx                      = new ApprovalTransaction();
         $approvalTrx->id_asosiasi_profesi = $request->query('ID_Asosiasi_Profesi');
         $approvalTrx->id_propinsi_reg     = $request->query('ID_Propinsi_reg');
-        $approvalTrx->team_id             = Auth::user()->myTeam()->id;
+        $approvalTrx->team_id             = $request->query('team');
         $approvalTrx->tipe_sertifikat     = "SKA";
         $approvalTrx->id_personal         = $request->query('ID_Personal');
         $approvalTrx->nama                = $request->query('Nama');
@@ -210,7 +234,7 @@ class ApprovalRegtaController extends Controller
         $approvalTrx->dpp_adm_anggota     = 0;
         $approvalTrx->dpp_kontribusi      = $harga;
         $approvalTrx->dpp_total           = $harga;
-        $approvalTrx->owner               = $regta->created_by;
+        $approvalTrx->owner               = Auth::id();
         $approvalTrx->created_by          = Auth::id();
         $approvalTrx->save();
     }

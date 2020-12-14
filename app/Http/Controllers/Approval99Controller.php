@@ -541,6 +541,7 @@ class Approval99Controller extends Controller
             ->where('id_permohonan', $pengajuan->id_permohonan)
             ->where('kualifikasi', $pengajuan->tipe_sertifikat)
             ->where('sub_kualifikasi', $pengajuan->ID_Kualifikasi)
+            ->where('asosiasi_id', $pengajuan->ID_Asosiasi_Profesi)
             ->first();
             $harga = $golharga->harga;
         } else {
@@ -551,7 +552,14 @@ class Approval99Controller extends Controller
             $approvalTrx                      = new ApprovalTransaction();
             $approvalTrx->id_asosiasi_profesi = $pengajuan->ID_Asosiasi_Profesi;
             $approvalTrx->id_propinsi_reg     = $pengajuan->tipe_sertifikat == "SKA" ? $pengajuan->ID_Propinsi_reg : $pengajuan->ID_propinsi_reg;
-            $approvalTrx->team_id             = $pengajuan->user->marketing_id ? $pengajuan->user->marketing->produksi->id : $pengajuan->user->team_id ;
+
+            if($pengajuan->user->role_id == 2){
+                $approvalTrx->team_id = $pengajuan->user->multiMarketing->where('asosiasi_id', $pengajuan->ID_Asosiasi_Profesi)->first()->mktg->id;
+            } else {
+                $approvalTrx->team_id = $pengajuan->user->marketing_id;
+            }
+
+            // $approvalTrx->team_id             = $pengajuan->user->marketing_id ? $pengajuan->user->marketing->produksi->id : $pengajuan->user->team_id ;
             $approvalTrx->tipe_sertifikat     = $pengajuan->tipe_sertifikat;
             $approvalTrx->id_personal         = $pengajuan->ID_Personal;
             $approvalTrx->nama                = $pengajuan->personal->Nama;
