@@ -122,7 +122,6 @@
 <script>
 $(function(){
   $('.input-daterange').datepicker({format: 'dd/mm/yyyy'});
-  $('#datatable').DataTable({"paging": false});
 
   $('.team').on('change', function(){
     $(this).parents("tr").find(".approve").data("team", $(this).val())

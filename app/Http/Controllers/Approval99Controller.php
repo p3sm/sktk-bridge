@@ -51,7 +51,8 @@ class Approval99Controller extends Controller
                 $p = Auth::user()->asosiasi->provinsi_id;
                 $a = Auth::user()->asosiasi->asosiasi_id;
                 $bu = BadanUsaha::where("asosiasi_id", $a)->first();
-                $tim = [];
+                $asosiasi = $a;
+                $team = [];
 
                 foreach($bu->pjk as $pjk){
                     foreach($pjk->timprod as $timprod){
