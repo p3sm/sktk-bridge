@@ -584,24 +584,79 @@ class Approval99Controller extends Controller
             $data = PersonalRegTa::find($pengajuan->id);
             
             if($data){
-                $data->deleted = 1;
-                $data->deleted_by = Auth::id();
-                $data->deleted_at = Carbon::now();
-                if($data->save()){
-                    $this->message = "data berhasil dihapus";
-                    return true;
+                $deleted = new PersonalRegTaDeleted();
+                $deleted->ID_Registrasi_TK_Ahli = $pengajuan->id;
+                $deleted->ID_Personal = $data->ID_Personal;
+                $deleted->created_by = $data->created_by;
+                $deleted->created_at = $data->created_at;
+                $deleted->ID_Sub_Bidang = $data->ID_Sub_Bidang;
+                $deleted->ID_Kualifikasi = $data->ID_Kualifikasi;
+                $deleted->ID_Asosiasi_Profesi = $data->ID_Asosiasi_Profesi;
+                $deleted->No_Reg_Asosiasi = $data->No_Reg_Asosiasi;
+                $deleted->id_unit_sertifikasi = $data->id_unit_sertifikasi;
+                $deleted->id_permohonan = $data->id_permohonan;
+                $deleted->Tgl_Registrasi = $data->Tgl_Registrasi;
+                $deleted->ID_Propinsi_reg = $data->ID_Propinsi_reg;
+                $deleted->status_terbaru = $data->status_terbaru;
+                $deleted->updated_by = $data->updated_by;
+                $deleted->updated_at = $data->updated_at;
+                $deleted->diajukan = $data->diajukan;
+                $deleted->diajukan_by = $data->diajukan_by;
+                $deleted->diajukan_at = $data->diajukan_at;
+                $deleted->approved = $data->approved;
+                $deleted->approved_by = $data->approved_by;
+                $deleted->approved_at = $data->approved_at;
+                $deleted->diajukan_hapus = $data->diajukan_hapus;
+                $deleted->diajukan_hapus_by = $data->diajukan_hapus_by;
+                $deleted->diajukan_hapus_at = $data->diajukan_hapus_at;
+                $deleted->deleted = 1;
+                $deleted->deleted_by = Auth::user()->id;
+                $deleted->deleted_at = Carbon::now();
+                
+                if($deleted->save()){
+                    if($data->delete()){
+                        $this->message = "data berhasil dihapus";
+                        return true;
+                    }
                 }
             }
         } else {
             $data = PersonalRegTt::find($pengajuan->id);
-            
+
             if($data){
-                $data->deleted = 1;
-                $data->deleted_by = Auth::id();
-                $data->deleted_at = Carbon::now();
-                if($data->save()){
-                    $this->message = "data berhasil dihapus";
-                    return true;
+                $deleted = new PersonalRegTtDeleted();
+                $deleted->ID_Registrasi_TK_Trampil = $pengajuan->id;
+                $deleted->ID_Personal = $data->ID_Personal;
+                $deleted->created_by = $data->created_by;
+                $deleted->created_at = $data->created_at;
+                $deleted->ID_Sub_Bidang = $data->ID_Sub_Bidang;
+                $deleted->ID_Kualifikasi = $data->ID_Kualifikasi;
+                $deleted->ID_Asosiasi_Profesi = $data->ID_Asosiasi_Profesi;
+                $deleted->id_unit_sertifikasi = $data->id_unit_sertifikasi;
+                $deleted->id_permohonan = $data->id_permohonan;
+                $deleted->Tgl_Registrasi = $data->Tgl_Registrasi;
+                $deleted->ID_propinsi_reg = $data->ID_propinsi_reg;
+                $deleted->status_terbaru = $data->status_terbaru;
+                $deleted->updated_by = $data->updated_by;
+                $deleted->updated_at = $data->updated_at;
+                $deleted->diajukan = $data->diajukan;
+                $deleted->diajukan_by = $data->diajukan_by;
+                $deleted->diajukan_at = $data->diajukan_at;
+                $deleted->approved = $data->approved;
+                $deleted->approved_by = $data->approved_by;
+                $deleted->approved_at = $data->approved_at;
+                $deleted->diajukan_hapus = $data->diajukan_hapus;
+                $deleted->diajukan_hapus_by = $data->diajukan_hapus_by;
+                $deleted->diajukan_hapus_at = $data->diajukan_hapus_at;
+                $deleted->deleted = 1;
+                $deleted->deleted_by = Auth::user()->id;
+                $deleted->deleted_at = Carbon::now();
+                
+                if($deleted->save()){
+                    if($data->delete()){
+                        $this->message = "data berhasil dihapus";
+                        return true;
+                    }
                 }
             }
         }

@@ -134,8 +134,17 @@
                             <td>{{$result->id_permohonan == 1 ? "Baru" : ($result->id_permohonan == 2 ? "Perpanjangan" : "Perubahan")}}</td>
                             
                             @if($result->user->role_id == 2 && $result->user->multiMarketing)
-                              <td>{{$result->user->multiMarketing->where('asosiasi_id', $result->ID_Asosiasi_Profesi)->first()->mktg->produksi->nama}}</td>
-                              <td>{{$result->user->multiMarketing->where('asosiasi_id', $result->ID_Asosiasi_Profesi)->first()->mktg->nama}}</td>
+                              @php
+                                $mktgs = $result->user->multiMarketing->where('asosiasi_id', $result->ID_Asosiasi_Profesi);
+                              @endphp
+                              
+                              @if(count($mktgs) > 0)
+                                <td>{{$mktgs->first()->mktg->produksi->nama}}</td>
+                                <td>{{$mktgs->first()->mktg->nama}}</td>
+                              @else
+                                <td>-</td>
+                                <td>-</td>
+                              @endif
                             @else
                               <td>{{$result->user->marketing_id ? $result->user->marketing->produksi->nama : ($result->user->team_id ? $result->user->team->nama : "-")}}</td>
                               <td>{{$result->user->marketing_id ? $result->user->marketing->nama : "-"}}</td>
