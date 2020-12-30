@@ -118,8 +118,8 @@ class SikiProyekController extends Controller
         $date = Carbon::now();
         $proyek = SikiPersonalProyek::find($id);
 
-        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $proyek->id_personal . "/IJZ.pdf")){
-            return redirect()->back()->with('error', 'File Ijazah tidak tersedia');
+        if(!file_exists("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $proyek->id_personal . "/CV.pdf")){
+            return redirect()->back()->with('error', 'File CV tidak tersedia');
         }
 
         $postData = [
@@ -131,7 +131,7 @@ class SikiProyekController extends Controller
             "tgl_selesai"                           => $proyek->Tgl_Selesai,
             "jabatan"                               => $proyek->Jabatan,
             "nilai_proyek"                          => $proyek->Nilai,
-            "url_pdf_persyaratan_pengalaman_proyek" => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $proyek->id_personal . "/IJZ.pdf")),
+            "url_pdf_persyaratan_pengalaman_proyek" => curl_file_create(realpath("uploads/source/dokumen-upload/BIODATA/" . $date->format("Y/m/d/") . $proyek->id_personal . "/CV.pdf")),
         ];
 
         $curl = curl_init();

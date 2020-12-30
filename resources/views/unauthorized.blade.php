@@ -68,7 +68,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-				You cannot access this page! This is for only "{{$role}}"
+                    Sorry, You cannot access this page <br> You need "{{$role}}" access
                 </div>
                 <div class="links">
                     <a href="{{ url('') }}">Go Home Page</a>

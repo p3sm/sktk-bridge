@@ -7,6 +7,7 @@ use App\SikiRegtt;
 use App\SikiPersonal;
 use App\SikiPersonalProyek;
 use App\AsosiasiKey;
+use App\Personal;
 use App\Http\Controllers\Controller;
 use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -240,7 +241,7 @@ class SikiPersonalController extends Controller
             return redirect()->back()->with('error', $error);
         }
 
-        // dd($postData);
+        // dd($reg->asosiasi);
 
         $curl = curl_init();
         $header[] = "X-Api-Key:" . $reg->asosiasi->apikey->lpjk_key;
@@ -275,11 +276,43 @@ class SikiPersonalController extends Controller
         
 		if($obj = json_decode($response)){
 			if($obj->response) {
+                $this->storeLocalBiodata($personal);
 				return redirect()->back()->with('success', $obj->message);
             }
             return redirect()->back()->with('error', $obj->message);
 		}
 
         return redirect()->back()->with('error', "An error has occurred");
+    }
+
+    public function storeLocalBiodata($request)
+    {
+        $data = Personal::find($request->id_personal);
+        
+        if(!$data){
+            $data = new Personal();
+            $data->ID_Personal = $request->id_personal;
+            $data->No_KTP = $request->id_personal;
+            $data->created_by = Auth::user()->id;
+        }
+        
+        $data->Nama = $request->Nama;
+        $data->nama_tanpa_gelar = $request->nama_tanpa_gelar;
+        $data->Alamat1 = $request->Alamat1;
+        $data->Kodepos = $request->Kodepos;
+        $data->ID_Kabupaten_Alamat = $request->ID_Kabupaten_Alamat;
+        $data->Tgl_Lahir = $request->Tgl_Lahir;
+        $data->jenis_kelamin = $request->jenis_kelamin;
+        $data->Tempat_Lahir = $request->Tempat_Lahir;
+        $data->ID_Kabupaten_Lahir = $request->ID_Kabupaten_Lahir;
+        $data->ID_Propinsi = $request->ID_Propinsi;
+        $data->npwp = $request->npwp;
+        $data->email = $request->email;
+        $data->no_hp = $request->no_hp;
+        $data->ID_Negara = $request->ID_Negara;
+        $data->Tenaga_Kerja = $request->jenis_tenaga_kerja == "tenaga_ahli" ? "AHLI" : "TRAMPIL";
+        $data->updated_by = Auth::user()->id;
+
+        $data->save();
     }
 }

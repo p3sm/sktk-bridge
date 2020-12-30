@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\SikiRegta;
+use App\PersonalRegTa;
 use App\PersonalRegTaSync;
 use App\PersonalRegTaApprove;
 use App\Http\Controllers\Controller;
@@ -122,6 +124,35 @@ class SikiRegtaController extends Controller
         //
     }
 
+    public function storeLocalRegTA($request, $id)
+    {
+        $user = User::find(Auth::user()->id);
+        $data = PersonalRegTa::find($id);
+        
+        if(!$data){
+            $data = new PersonalRegTa();
+            $data->ID_Registrasi_TK_Ahli = $id;
+            $data->ID_Personal = $request->ID_Personal;
+            $data->created_by = Auth::user()->id;
+        }
+
+        $data->ID_Sub_Bidang = $request->ID_Sub_Bidang;
+        $data->ID_Kualifikasi = $request->ID_Kualifikasi;
+        $data->ID_Asosiasi_Profesi = $request->ID_Asosiasi_Profesi;
+        $data->id_unit_sertifikasi = $request->id_unit_sertifikasi;
+        $data->id_permohonan = $request->id_permohonan;
+        $data->Tgl_Registrasi = $request->Tgl_Registrasi;
+        $data->ID_Propinsi_reg = $request->ID_Propinsi_reg;
+        $data->status_terbaru = $request->status_terbaru;
+        $data->diajukan = 1;
+        $data->diajukan_by = Auth::user()->id;
+        $data->updated_by = Auth::user()->id;
+
+        // dd($data);
+
+        $data->save();
+    }
+
     public function createSyncLog($reg, $sync)
     {
         if($reg->sync){
@@ -208,15 +239,15 @@ class SikiRegtaController extends Controller
         ));
         $response = curl_exec($curl);
 
-        // dd($response);
-
         // echo $response;
         // exit;
         
         if($obj = json_decode($response)){
             if($obj->response) {
-                if($this->createSyncLog($reg, $obj))
+                if($this->createSyncLog($reg, $obj)){
+                    $this->storeLocalRegTA($reg, $obj->ID_Registrasi_TK_Ahli);
                     return redirect()->back()->with('success', $obj->message);
+                }
             }
             return redirect()->back()->with('error', $obj->message);
         }

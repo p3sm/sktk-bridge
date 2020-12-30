@@ -110,7 +110,7 @@
                             <td>{{$result->tgl_registrasi}}</td>
                             <td>{{$result->created_at}}</td>
                             <td>{{($result->tipe_sertifikat == "SKA" ? $result->kualifikasi->Deskripsi_ahli : $result->kualifikasi->Deskripsi_trampil)}}</td>
-                            <td>Baru</td>
+                            <td>{{$result->id_permohonan == 1 ? "Baru" : ($result->id_permohonan == 2 ? "Perpanjangan" : "Perubahan")}}</td>
                             <td>{{number_format($result->dpp_kontribusi)}}</td>
                             <td>{{number_format($result->dpp_total)}}</td>
                           </tr>

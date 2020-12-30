@@ -16,8 +16,9 @@
 
     <!-- Main content -->
     <section class="content">
-
-      <iframe frameborder="0" style="border: 0; width: 100%; height: 600" height="600" src="{{url("vendor/filemanager/dialog.php?type=0&fldr=")}}">Your browser doesn't support iFrames.</iframe>
+      <div class="box">
+        <iframe frameborder="0" style="border: 0; width: 100%; height: 600" height="600" src="{{url("vendor/filemanager/dialog.php?type=0&fldr=")}}">Your browser doesn't support iFrames.</iframe>
+      </div>
 
     </section>
     <!-- /.content -->
