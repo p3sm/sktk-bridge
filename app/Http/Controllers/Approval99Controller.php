@@ -539,13 +539,26 @@ class Approval99Controller extends Controller
                                     ->where("id_asosiasi_profesi", $pengajuan->ID_Asosiasi_Profesi)->first();
 
         if($pengajuan->user->marketing_id){
-            $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $pengajuan->user->marketing->gol_harga_id)
+            if($pengajuan->user->role_id == 2){
+                $multi = $pengajuan->user->multiMarketing->where('asosiasi_id', $pengajuan->ID_Asosiasi_Profesi)->first();
+                $gol_harga_id = $multi->mktg->gol_harga_id;
+            } else {
+                $gol_harga_id = $pengajuan->user->marketing->gol_harga_id;
+            }
+            
+            
+            $golharga = TimMarketingGolHargaDetail::where("gol_harga_id", $gol_harga_id)
             ->where('id_permohonan', $pengajuan->id_permohonan)
             ->where('kualifikasi', $pengajuan->tipe_sertifikat)
             ->where('sub_kualifikasi', $pengajuan->ID_Kualifikasi)
             ->where('asosiasi_id', $pengajuan->ID_Asosiasi_Profesi)
             ->first();
-            $harga = $golharga->harga;
+            
+            if($golharga){
+                $harga = $golharga->harga;
+            } else {
+                $harga = 0;
+            }
         } else {
             $harga = 0;
         }
