@@ -95,6 +95,13 @@
 
                                 @endforeach --}}
                                 @foreach (App\TimMarketing::where("provinsi_id", $result->ID_Propinsi_reg)
+                                ->whereHas('produksi', function ($query) use($asosiasi) {
+                                    return $query->whereHas('pjk', function ($query) use($asosiasi) {
+                                      return $query->whereHas('badanUsaha', function ($query) use($asosiasi) {
+                                        return $query->where('asosiasi_id', $asosiasi);
+                                      });
+                                    });
+                                  })
                                 ->get() as $item)
 
                                 <option value="{{$item->id}}">{{$item->nama}}</option>

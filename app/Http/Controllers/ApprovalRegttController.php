@@ -87,6 +87,7 @@ class ApprovalRegttController extends Controller
         $data['response'] = $obj->response;
         $data['results'] = $obj->response > 0 ? $obj->result : [];
         $data['role'] = Auth::user()->role_id;
+        $data['asosiasi'] = Auth::user()->asosiasi->asosiasi_id;
 
     	return view('approval/regtt/list')->with($data);
     }
